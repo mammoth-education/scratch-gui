@@ -8,6 +8,10 @@ import {remixProject} from './reducers/project-state';
 import {setAppElement} from 'react-modal';
 import totallyNormalStrings from './lib/l10n.js';
 
+import Controls from '../containers/controls.jsx';
+import Blocks from '../containers/blocks.jsx';
+import HashParserHOC from '../lib/hash-parser-hoc.jsx';
+
 const guiReducers = {
     locales: LocalesReducer,
     scratchGui: GuiReducer,
@@ -17,6 +21,9 @@ const guiReducers = {
 export {
     GUI as default,
     AppStateHOC,
+    Controls,
+    Blocks,
+    HashParserHOC,
     setAppElement,
     guiReducers,
     guiInitialState,
