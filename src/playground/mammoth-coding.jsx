@@ -5,22 +5,9 @@ import { compose } from 'redux';
 import AppStateHOC from '../lib/app-state-hoc.jsx';
 import GUI from '../containers/gui.jsx';
 import HashParserHOC from '../lib/hash-parser-hoc.jsx';
-import log from '../lib/log.js';
 
 const onClickLogo = () => {
     window.location = 'https://scratch.mit.edu';
-};
-
-const handleTelemetryModalCancel = () => {
-    log('User canceled telemetry modal');
-};
-
-const handleTelemetryModalOptIn = () => {
-    log('User opted into telemetry');
-};
-
-const handleTelemetryModalOptOut = () => {
-    log('User opted out of telemetry');
 };
 
 export default appTarget => {
@@ -39,8 +26,11 @@ export default appTarget => {
     ReactDOM.render(
         <WrappedGui
             canEditTitle
-            isScratchDesktop
-            canSave={false}
+            canSave
+            canCreateCopy
+            locale="zh-cn"
+            tutorialButtonVisible={false}
+            canModifyCloudData={false}
             onClickLogo={onClickLogo}
         />,
         appTarget);

@@ -46,7 +46,53 @@ import gdxforInsetIconURL from './gdxfor/gdxfor-small.svg';
 import gdxforConnectionIconURL from './gdxfor/gdxfor-illustration.svg';
 import gdxforConnectionSmallIconURL from './gdxfor/gdxfor-small.svg';
 
+import kakaIconURL from './kaka/kaka.png';
+import kakaInsetIconURL from './kaka/kaka-small.svg';
+import kakaConnectionIconURL from './kaka/kaka-illustration.svg';
+import kakaConnectionSmallIconURL from './kaka/kaka-small.svg';
+import kakaConnectionTipIconURL from './wedo2/wedo-button-illustration.svg';
+
+let platform = "browser";
+if (window.cordova && window.cordova.platformId !== "browser") {
+    platform = window.cordova.platformId;
+}
+
 export default [
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="卡卡"
+                description="长毛象 卡卡 extension"
+                id="gui.extension.kaka.name"
+            />
+        ),
+        extensionId: 'kaka',
+        iconURL: kakaIconURL,
+        insetIconURL: kakaInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="积木套件"
+                description="Description for the 'Music' extension"
+                id="gui.extension.kaka.description"
+            />
+        ),
+        featured: true,
+        disabled: false,
+        bluetoothRequired: true,
+        launchPeripheralConnectionFlow: true,
+        useAutoScan: platform === "browser" ? true : false,
+        connectionIconURL: kakaConnectionIconURL,
+        connectionSmallIconURL: kakaConnectionSmallIconURL,
+        connectionTipIconURL: kakaConnectionTipIconURL,
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their WeDo."
+                id="gui.extension.wedo2.connectingMessage"
+            />
+        ),
+        helpLink: 'https://scratch.mit.edu/wedo'
+    },
     {
         name: (
             <FormattedMessage

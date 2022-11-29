@@ -317,3 +317,9 @@ $fade-out-distance: 15px;
 :global(.ReactModal__Body--open) {
     overflow: hidden;
 }
+
+.controlsWithOutStage {
+    position: absolute;
+    top: 58px;
+    right: 10px;
+}
