@@ -2,10 +2,20 @@ import {defineMessages} from 'react-intl';
 import sharedMessages from '../shared-messages';
 
 let messages = defineMessages({
-    meow: {
-        defaultMessage: 'Meow',
-        description: 'Name for the meow sound',
-        id: 'gui.defaultProject.meow'
+    hello: {
+        defaultMessage: 'Hello',
+        description: 'Name for the hello sound',
+        id: 'gui.defaultProject.hello'
+    },
+    happy: {
+        defaultMessage: 'Happy',
+        description: 'Name for the happy sound',
+        id: 'gui.defaultProject.happy'
+    },
+    angry: {
+        defaultMessage: 'Angry',
+        description: 'Name for the angry sound',
+        id: 'gui.defaultProject.angry'
     },
     variable: {
         defaultMessage: 'my variable',
@@ -74,19 +84,19 @@ const projectData = translateFunction => {
                 currentCostume: 0,
                 costumes: [
                     {
-                        assetId: 'bcf454acf82e4504149f7ffe07081dbc',
+                        assetId: 'e16824c5ba273352154ac3ffd9accb04', // 长毛象走路01
                         name: translator(messages.costume, {index: 1}),
                         bitmapResolution: 1,
-                        md5ext: 'bcf454acf82e4504149f7ffe07081dbc.svg',
+                        md5ext: 'e16824c5ba273352154ac3ffd9accb04.svg', // 长毛象走路01
                         dataFormat: 'svg',
                         rotationCenterX: 48,
                         rotationCenterY: 50
                     },
                     {
-                        assetId: '0fb9be3e8397c983338cb71dc84d0b25',
+                        assetId: '7e1e5f4fa01ec1ad46c35c0fd1f62f6a', // 长毛象走路02
                         name: translator(messages.costume, {index: 2}),
                         bitmapResolution: 1,
-                        md5ext: '0fb9be3e8397c983338cb71dc84d0b25.svg',
+                        md5ext: '7e1e5f4fa01ec1ad46c35c0fd1f62f6a.svg', // 长毛象走路02
                         dataFormat: 'svg',
                         rotationCenterX: 46,
                         rotationCenterY: 53
@@ -94,13 +104,31 @@ const projectData = translateFunction => {
                 ],
                 sounds: [
                     {
-                        assetId: '83c36d806dc92327b9e7049a565c6bff',
-                        name: translator(messages.meow),
+                        assetId: 'cbd998228640afe6d702c41f2484ac79',
+                        name: translator(messages.hello),
                         dataFormat: 'wav',
                         format: '',
                         rate: 22050,
                         sampleCount: 18688,
-                        md5ext: '83c36d806dc92327b9e7049a565c6bff.wav'
+                        md5ext: 'cbd998228640afe6d702c41f2484ac79.wav'
+                    },
+                    {
+                        assetId: '0952b63e05813a2f8f1a7c635e7b4584',
+                        name: translator(messages.happy),
+                        dataFormat: 'wav',
+                        format: '',
+                        rate: 22050,
+                        sampleCount: 18688,
+                        md5ext: '0952b63e05813a2f8f1a7c635e7b4584.wav'
+                    },
+                    {
+                        assetId: '403631b7bfeb0a45ae8a06db5d271aae',
+                        name: translator(messages.angry),
+                        dataFormat: 'wav',
+                        format: '',
+                        rate: 22050,
+                        sampleCount: 18688,
+                        md5ext: '403631b7bfeb0a45ae8a06db5d271aae.wav'
                     }
                 ],
                 volume: 100,
