@@ -8642,6 +8642,65 @@
         "blocks": {}
     },
     {
+        "name": "Mammoth",
+        "tags": [
+            "animals",
+            "elephant"
+        ],
+        "isStage": false,
+        "variables": {},
+        "costumes": [
+            {
+                "assetId": "e16824c5ba273352154ac3ffd9accb04",
+                "name": "mammoth-a",
+                "bitmapResolution": 1,
+                "md5ext": "e16824c5ba273352154ac3ffd9accb04.svg",
+                "dataFormat": "svg",
+                "rotationCenterX": 48,
+                "rotationCenterY": 50
+            },
+            {
+                "assetId": "7e1e5f4fa01ec1ad46c35c0fd1f62f6a",
+                "name": "mammoth-b",
+                "bitmapResolution": 1,
+                "md5ext": "7e1e5f4fa01ec1ad46c35c0fd1f62f6a.svg",
+                "dataFormat": "svg",
+                "rotationCenterX": 46,
+                "rotationCenterY": 53
+            }
+        ],
+        "sounds": [
+            {
+                "assetId": "cbd998228640afe6d702c41f2484ac79",
+                "name": "hello",
+                "dataFormat": "wav",
+                "format": "",
+                "rate": 22050,
+                "sampleCount": 18688,
+                "md5ext": "cbd998228640afe6d702c41f2484ac79.wav"
+            },
+            {
+                "assetId": "0952b63e05813a2f8f1a7c635e7b4584",
+                "name": "happy",
+                "dataFormat": "wav",
+                "format": "",
+                "rate": 22050,
+                "sampleCount": 18688,
+                "md5ext": "0952b63e05813a2f8f1a7c635e7b4584.wav"
+            },
+            {
+                "assetId": "403631b7bfeb0a45ae8a06db5d271aae",
+                "name": "angry",
+                "dataFormat": "wav",
+                "format": "",
+                "rate": 22050,
+                "sampleCount": 18688,
+                "md5ext": "403631b7bfeb0a45ae8a06db5d271aae.wav"
+            }
+        ],
+        "blocks": {}
+    },
+    {
         "name": "Marian",
         "tags": [
             "people"

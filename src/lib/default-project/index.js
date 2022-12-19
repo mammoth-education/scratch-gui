@@ -32,17 +32,17 @@ const defaultProject = translator => {
         dataFormat: 'WAV',
         data: new Uint8Array(popWav)
     }, {
-        id: 'cbd998228640afe6d702c41f2484ac79',
+        id: 'cbd998228640afe6d702c41f2484ac79', // 你好
         assetType: 'Sound',
         dataFormat: 'WAV',
         data: new Uint8Array(mammothHelloWav)
     }, {
-        id: '0952b63e05813a2f8f1a7c635e7b4584',
+        id: '0952b63e05813a2f8f1a7c635e7b4584', // 开心
         assetType: 'Sound',
         dataFormat: 'WAV',
         data: new Uint8Array(mammothHappyWav)
     }, {
-        id: '403631b7bfeb0a45ae8a06db5d271aae',
+        id: '403631b7bfeb0a45ae8a06db5d271aae', // 生气
         assetType: 'Sound',
         dataFormat: 'WAV',
         data: new Uint8Array(mammothAngryWav)

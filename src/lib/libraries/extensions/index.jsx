@@ -50,7 +50,6 @@ import kakaIconURL from './kaka/kaka.png';
 import kakaInsetIconURL from './kaka/kaka-small.svg';
 import kakaConnectionIconURL from './kaka/kaka-illustration.svg';
 import kakaConnectionSmallIconURL from './kaka/kaka-small.svg';
-import kakaConnectionTipIconURL from './wedo2/wedo-button-illustration.svg';
 
 let platform = "browser";
 if (window.cordova && window.cordova.platformId !== "browser") {
@@ -80,18 +79,18 @@ export default [
         disabled: false,
         bluetoothRequired: true,
         launchPeripheralConnectionFlow: true,
+        deviceNameEditable: true,
         useAutoScan: platform === "browser" ? true : false,
         connectionIconURL: kakaConnectionIconURL,
         connectionSmallIconURL: kakaConnectionSmallIconURL,
-        connectionTipIconURL: kakaConnectionTipIconURL,
         connectingMessage: (
             <FormattedMessage
                 defaultMessage="Connecting"
-                description="Message to help people connect to their WeDo."
-                id="gui.extension.wedo2.connectingMessage"
+                description="Message to help people connect to their Kaka."
+                id="gui.extension.kaka.connectingMessage"
             />
         ),
-        helpLink: 'https://scratch.mit.edu/wedo'
+        helpLink: 'https://scratch.mit.edu/wedo' // TODO
     },
     {
         name: (
@@ -210,7 +209,8 @@ export default [
                 id="gui.extension.makeymakey.description"
             />
         ),
-        featured: true
+        featured: true,
+        hidden: true,
     },
     {
         name: 'micro:bit',
@@ -240,7 +240,8 @@ export default [
                 id="gui.extension.microbit.connectingMessage"
             />
         ),
-        helpLink: 'https://scratch.mit.edu/microbit'
+        helpLink: 'https://scratch.mit.edu/microbit',
+        hidden: true,
     },
     {
         name: 'LEGO MINDSTORMS EV3',
@@ -270,7 +271,8 @@ export default [
                 id="gui.extension.ev3.connectingMessage"
             />
         ),
-        helpLink: 'https://scratch.mit.edu/ev3'
+        helpLink: 'https://scratch.mit.edu/ev3',
+        hidden: true,
     },
     {
         name: 'LEGO BOOST',
@@ -301,7 +303,8 @@ export default [
                 id="gui.extension.boost.connectingMessage"
             />
         ),
-        helpLink: 'https://scratch.mit.edu/boost'
+        helpLink: 'https://scratch.mit.edu/boost',
+        hidden: true,
     },
     {
         name: 'LEGO Education WeDo 2.0',
@@ -332,7 +335,8 @@ export default [
                 id="gui.extension.wedo2.connectingMessage"
             />
         ),
-        helpLink: 'https://scratch.mit.edu/wedo'
+        helpLink: 'https://scratch.mit.edu/wedo',
+        hidden: true,
     },
     {
         name: 'Go Direct Force & Acceleration',
@@ -362,6 +366,7 @@ export default [
                 id="gui.extension.gdxfor.connectingMessage"
             />
         ),
-        helpLink: 'https://scratch.mit.edu/vernier'
+        helpLink: 'https://scratch.mit.edu/vernier',
+        hidden: true,
     }
 ];
