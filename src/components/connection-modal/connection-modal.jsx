@@ -11,6 +11,8 @@ import ConnectingStep from './connecting-step.jsx';
 import ConnectedStep from './connected-step.jsx';
 import ErrorStep from './error-step.jsx';
 import UnavailableStep from './unavailable-step.jsx';
+import RenameDeviceStep from './rename-device-step.jsx';
+import RenamedDeviceStep from './renamed-device-step.jsx';
 
 import styles from './connection-modal.css';
 
@@ -19,7 +21,9 @@ const PHASES = keyMirror({
     connecting: null,
     connected: null,
     error: null,
-    unavailable: null
+    unavailable: null,
+    renameDevice: null,
+    renamedDevice: null
 });
 
 const ConnectionModalComponent = props => (
@@ -39,6 +43,8 @@ const ConnectionModalComponent = props => (
             {props.phase === PHASES.connected && <ConnectedStep {...props} />}
             {props.phase === PHASES.error && <ErrorStep {...props} />}
             {props.phase === PHASES.unavailable && <UnavailableStep {...props} />}
+            {props.phase === PHASES.renameDevice && <RenameDeviceStep {...props} />}
+            {props.phase === PHASES.renamedDevice && <RenamedDeviceStep {...props} />}
         </Box>
     </Modal>
 );

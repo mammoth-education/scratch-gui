@@ -26,6 +26,7 @@ const ConnectedStep = props => (
         </Box>
         <Box className={styles.bottomArea}>
             <Box className={classNames(styles.bottomAreaItem, styles.instructions)}>
+                <span>{props.deviceName}</span>
                 <FormattedMessage
                     defaultMessage="Connected"
                     description="Message indicating that a device was connected"
@@ -48,6 +49,16 @@ const ConnectedStep = props => (
                         id="gui.connection.disconnect"
                     />
                 </button>
+                {props.deviceNameEditable ? <button
+                    className={styles.connectionButton}
+                    onClick={props.onRenameDevice}
+                >
+                    <FormattedMessage
+                        defaultMessage="Rename Device"
+                        description="Rename device"
+                        id="gui.connection.rename-device"
+                    />
+                </button> : null}
                 <button
                     className={styles.connectionButton}
                     onClick={props.onCancel}
@@ -66,7 +77,10 @@ const ConnectedStep = props => (
 ConnectedStep.propTypes = {
     connectionIconURL: PropTypes.string.isRequired,
     onCancel: PropTypes.func,
-    onDisconnect: PropTypes.func
+    onDisconnect: PropTypes.func,
+    onRenameDevice: PropTypes.func.isRequired,
+    deviceNameEditable: PropTypes.bool,
+    deviceName: PropTypes.string.isRequired
 };
 
 export default ConnectedStep;

@@ -423,3 +423,22 @@
 .error-dot {
     background: $error-primary;
 }
+
+.device-name-input {
+    border: 1px dashed $ui-primary;
+    border-radius: $form-radius;
+    -webkit-border-radius: $form-radius;
+    -moz-border-radius: $form-radius;
+    /* background-color: $ui-white-transparent; */
+    background-clip: padding-box;
+    -webkit-background-clip: padding-box;
+    height: 2.5rem;
+    padding: .5rem;
+    font-weight: bold;
+    font-size: .8rem;
+}
+
+.device-name {
+    font-weight: bold;
+    font-size: 1rem;
+}
