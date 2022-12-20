@@ -1,24 +1,27 @@
 import React from "react";
 import style from "./stage-virtual-keyboard.css";
 import PropTypes from 'prop-types';
+import bindAll from "lodash.bindall";
 
 
 class VirtualKey extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      pressed: false,
       timeout: null,
       interval: null,
     };
-    this.pressKey = this.pressKey.bind(this);
-    this.releaseKey = this.releaseKey.bind(this);
-    this.onPressed = this.onPressed.bind(this);
-    this.onReleased = this.onReleased.bind(this);
-    this.onMove = this.onMove.bind(this);
+    bindAll(this, [
+      "pressKey",
+      "releaseKey",
+      "onPressed",
+      "onReleased",
+    ])
   }
 
-  pressKey(key) {
-    let event = new KeyboardEvent("keydown", { key: key });
+  pressKey(key, repeat=false) {
+    let event = new KeyboardEvent("keydown", { key: key, repeat: repeat });
     document.dispatchEvent(event);
   }
 
@@ -32,28 +35,35 @@ class VirtualKey extends React.Component {
     this.pressKey(this.props.keyName);
     let timeout = setTimeout(() => {
       let interval = setInterval(() => {
-        this.pressKey(this.props.keyName);
+        this.pressKey(this.props.keyName, true);
       }, 50);
       this.setState({ interval: interval });
     }, 500);
-    this.setState({ timeout: timeout });
+    this.setState({
+      pressed: true,
+      timeout: timeout
+    });
   }
 
-  onReleased() {
+  onReleased(e) {
+    if (this.state.pressed === false) {
+      return;
+    }
+    e.preventDefault();
     this.releaseKey(this.props.keyName);
     clearTimeout(this.state.timeout);
     clearInterval(this.state.interval);
-  }
-
-  onMove(e) {
-    if (e.buttons === 1) {
-      this.onPressed(e);
-    }
+    this.setState({
+      pressed: false,
+      timeout: null,
+      interval: null
+    });
   }
 
   render () {
     return (
       <button className={style.key}
+          onMouseLeave={this.onReleased}
           onMouseDown={this.onPressed}
           onMouseUp={this.onReleased}
           onTouchStart={this.onPressed}
