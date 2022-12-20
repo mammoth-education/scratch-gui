@@ -4,10 +4,11 @@ import classNames from 'classnames';
 import VM from 'scratch-vm';
 
 import Box from '../box/box.jsx';
-import {STAGE_DISPLAY_SIZES} from '../../lib/layout-constants.js';
+import { STAGE_DISPLAY_SIZES } from '../../lib/layout-constants.js';
 import StageHeader from '../../containers/stage-header.jsx';
 import Stage from '../../containers/stage.jsx';
 import Loader from '../loader/loader.jsx';
+import StageVirtualKeyboard from '../stage-virtual-keyboard/stage-virtual-keyboard.jsx';
 
 import styles from './stage-wrapper.css';
 
@@ -17,6 +18,7 @@ const StageWrapperComponent = function (props) {
         isRtl,
         isRendererSupported,
         loading,
+        isMobile,
         stageSize,
         vm
     } = props;
@@ -25,7 +27,7 @@ const StageWrapperComponent = function (props) {
         <Box
             className={classNames(
                 styles.stageWrapper,
-                {[styles.fullScreen]: isFullScreen}
+                { [styles.fullScreen]: isFullScreen }
             )}
             dir={isRtl ? 'rtl' : 'ltr'}
         >
@@ -36,15 +38,15 @@ const StageWrapperComponent = function (props) {
                 />
             </Box>
             <Box className={styles.stageCanvasWrapper}>
-                {
-                    isRendererSupported ?
-                        <Stage
-                            stageSize={stageSize}
-                            vm={vm}
-                        /> :
-                        null
-                }
+                {isRendererSupported ?
+                    <Stage
+                        stageSize={stageSize}
+                        isMobile={isMobile}
+                        vm={vm}
+                    />
+                    : null}
             </Box>
+            {isFullScreen ? <StageVirtualKeyboard /> : null}
             {loading ? (
                 <Loader isFullScreen={isFullScreen} />
             ) : null}
@@ -57,6 +59,7 @@ StageWrapperComponent.propTypes = {
     isRendererSupported: PropTypes.bool.isRequired,
     isRtl: PropTypes.bool.isRequired,
     loading: PropTypes.bool,
+    isMobile: PropTypes.bool,
     stageSize: PropTypes.oneOf(Object.keys(STAGE_DISPLAY_SIZES)).isRequired,
     vm: PropTypes.instanceOf(VM).isRequired
 };

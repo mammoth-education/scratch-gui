@@ -1,0 +1,49 @@
+@import "../../css/colors.css";
+
+
+.background {
+  /* background-color: red; */
+  height: 100%;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.key {
+  width: 3rem;
+  height: 3rem;
+  background-color: $motion-primary;
+  border-radius: 0.5rem;
+  margin: 0.1rem;
+  display: flex;
+  justify-content: center;
+}
+.key-icon {
+  width: 50%;
+  filter: invert(100%) sepia(6%) saturate(7464%) hue-rotate(192deg) brightness(105%) contrast(104%);
+}
+.key-up {
+  rotate: 0deg;
+}
+.key-down {
+  rotate: 180deg;
+}
+.key-left {
+  rotate: 270deg;
+}
+.key-right {
+  rotate: 90deg;
+}

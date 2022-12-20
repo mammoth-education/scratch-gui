@@ -1,4 +1,4 @@
-import layout, {STAGE_DISPLAY_SCALES, STAGE_SIZE_MODES, STAGE_DISPLAY_SIZES} from '../lib/layout-constants';
+import layout, {STAGE_DISPLAY_SCALES, STAGE_SIZE_MODES, STAGE_DISPLAY_SIZES, STAGE_VITUAL_KEYBOARD_WIDTH} from '../lib/layout-constants';
 
 /**
  * @typedef {object} StageDimensions
@@ -41,7 +41,7 @@ const resolveStageSize = (stageSizeMode, isFullSize) => {
  * @param {boolean} isFullScreen - true if full-screen mode is enabled.
  * @return {StageDimensions} - an object describing the dimensions of the stage.
  */
-const getStageDimensions = (stageSize, isFullScreen) => {
+const getStageDimensions = (stageSize, isFullScreen, isMobiile) => {
     const stageDimensions = {
         heightDefault: layout.standardStageHeight,
         widthDefault: layout.standardStageWidth,
@@ -61,7 +61,10 @@ const getStageDimensions = (stageSize, isFullScreen) => {
             stageDimensions.width = window.innerWidth;
             stageDimensions.height = stageDimensions.width * .75;
         }
-
+        if (isMobiile && stageDimensions.width + STAGE_VITUAL_KEYBOARD_WIDTH > window.innerWidth ) {
+            stageDimensions.width = window.innerWidth - STAGE_VITUAL_KEYBOARD_WIDTH;
+            stageDimensions.height = stageDimensions.width * .75;
+        }
         stageDimensions.scale = stageDimensions.width / stageDimensions.widthDefault;
     } else {
         stageDimensions.scale = STAGE_DISPLAY_SCALES[stageSize];

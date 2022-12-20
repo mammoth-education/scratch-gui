@@ -37,6 +37,8 @@ const STAGE_DISPLAY_SIZES = keyMirror({
     small: null
 });
 
+const STAGE_VITUAL_KEYBOARD_WIDTH = 300;
+
 // zoom level to start with
 const BLOCKS_DEFAULT_SCALE = 0.675;
 
@@ -49,12 +51,13 @@ export default {
     standardStageWidth: 480,
     standardStageHeight: 360,
     fullSizeMinWidth: 1096,
-    fullSizePaintMinWidth: 1250
+    fullSizePaintMinWidth: 1250,
 };
 
 export {
     BLOCKS_DEFAULT_SCALE,
     STAGE_DISPLAY_SCALES,
     STAGE_DISPLAY_SIZES,
-    STAGE_SIZE_MODES
+    STAGE_SIZE_MODES,
+    STAGE_VITUAL_KEYBOARD_WIDTH,
 };
