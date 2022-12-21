@@ -224,3 +224,39 @@
     margin: 0.5rem;
     vertical-align: middle;
 }
+
+.tab-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-grow: 1;
+    height: 1.8rem;
+}
+.tab {
+    width: 2rem;
+    background-color: $ui-white-transparent;
+    display: flex;
+    height: 1.8rem;
+    justify-content: center;
+    border: solid 1px $ui-black-transparent;
+}
+.tab img{
+    width: 80%;
+}
+.tab-left {
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+.tab-right {
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+.tab-middle {
+    border-left: none;
+    border-right: none;
+}
+.tab.active {
+    background-color: $ui-white;
+}

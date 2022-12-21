@@ -115,9 +115,7 @@ const GUIComponent = props => {
         onTelemetryModalOptOut,
         showComingSoon,
         soundsTabVisible,
-        stageAreaVisible,
         stageSizeMode,
-        tabListVisable,
         targetIsStage,
         telemetryModalVisible,
         tipsLibraryVisible,
@@ -129,20 +127,29 @@ const GUIComponent = props => {
         return <Box {...componentProps}>{children}</Box>;
     }
 
+    let isMobile = false;
+    if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android')) {
+        isMobile = true;
+    }
+
+    let isSmallDevice = false;
+    console.log('window.screen.width', window.screen.width)
+    if (window.screen.width < 1024) {
+        isSmallDevice = true;
+    }
+
     const tabClassNames = {
         tabs: styles.tabs,
         tab: classNames(tabStyles.reactTabsTab, styles.tab),
-        tabList: classNames(tabStyles.reactTabsTabList, styles.tabList),
+        tabList: classNames(tabStyles.reactTabsTabList, styles.tabList, isSmallDevice ? styles.tabListHide : null),
         tabPanel: classNames(tabStyles.reactTabsTabPanel, styles.tabPanel),
         tabPanelSelected: classNames(tabStyles.reactTabsTabPanelSelected, styles.isSelected),
-        tabSelected: classNames(tabStyles.reactTabsTabSelected, styles.isSelected)
+        tabSelected: classNames(tabStyles.reactTabsTabSelected, styles.isSelected),
     };
 
     if (isRendererSupported === null) {
         isRendererSupported = Renderer.isSupported();
     }
-
-    const isMobile = true;
 
     return (<MediaQuery minWidth={layout.fullSizeMinWidth}>{isFullSize => {
         const stageSize = resolveStageSize(stageSizeMode, isFullSize);
@@ -177,6 +184,46 @@ const GUIComponent = props => {
                             src={addExtensionIcon}
                         />
                     </button>
+                </Box>
+            )
+        }
+
+        const getStageAndTarget = () => {
+            let smallDeviceMainClass = "";
+            let smallDeviceContainerClass = "";
+            let smallDeviceTabClass = "";
+            if (isSmallDevice) {
+                if (activeTabIndex !== 0) {
+                    return null;
+                }
+                smallDeviceMainClass = styles.stageAndTargetSmallDeviceMain;
+                smallDeviceContainerClass = styles.stageAndTargetSmallDeviceContainer;
+                smallDeviceTabClass = styles.stageAndTargetSmallDeviceTab;
+            }
+            
+            return (
+                <Box className={smallDeviceContainerClass}>
+                    <Box className={smallDeviceTabClass}>
+
+                    </Box>
+                    <Box className={smallDeviceMainClass}>
+                        <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize])}>
+                            <StageWrapper
+                                isFullScreen={isFullScreen}
+                                isRendererSupported={isRendererSupported}
+                                isRtl={isRtl}
+                                isMobile={isMobile}
+                                stageSize={stageSize}
+                                vm={vm}
+                            />
+                            <Box className={styles.targetWrapper}>
+                                <TargetPane
+                                    stageSize={stageSize}
+                                    vm={vm}
+                                />
+                            </Box>
+                        </Box>
+                    </Box>
                 </Box>
             )
         }
@@ -262,6 +309,7 @@ const GUIComponent = props => {
                     className={styles.menuBarPosition}
                     enableCommunity={enableCommunity}
                     isShared={isShared}
+                    isSmallDevice={isSmallDevice}
                     logo={logo}
                     renderLogin={renderLogin}
                     showComingSoon={showComingSoon}
@@ -277,106 +325,90 @@ const GUIComponent = props => {
                     onShare={onShare}
                     onStartSelectingFileUpload={onStartSelectingFileUpload}
                     onToggleLoginOpen={onToggleLoginOpen}
+                    onClickCostumesTab={onActivateCostumesTab}
+                    onClickSoundsTab={onActivateSoundsTab}
+                    onTabSelect={onActivateTab}
+                    selectedTabIndex={activeTabIndex}
                 />
                 <Box className={styles.bodyWrapper}>
                     <Box className={styles.flexWrapper}>
                         <Box className={styles.editorWrapper}>
-                            {tabListVisable ? (
-                                <Tabs
-                                    forceRenderTabPanel
-                                    className={tabClassNames.tabs}
-                                    selectedIndex={activeTabIndex}
-                                    selectedTabClassName={tabClassNames.tabSelected}
-                                    selectedTabPanelClassName={tabClassNames.tabPanelSelected}
-                                    onSelect={onActivateTab}
-                                >
-                                    <TabList className={tabClassNames.tabList}>
-                                        <Tab className={tabClassNames.tab}>
-                                            <img
-                                                draggable={false}
-                                                src={codeIcon}
-                                            />
+                            <Tabs
+                                forceRenderTabPanel
+                                className={tabClassNames.tabs}
+                                selectedIndex={activeTabIndex}
+                                selectedTabClassName={tabClassNames.tabSelected}
+                                selectedTabPanelClassName={tabClassNames.tabPanelSelected}
+                                onSelect={onActivateTab}
+                            >
+                                <TabList className={tabClassNames.tabList}>
+                                    <Tab className={tabClassNames.tab}>
+                                        <img
+                                            draggable={false}
+                                            src={codeIcon}
+                                        />
+                                        <FormattedMessage
+                                            defaultMessage="Code"
+                                            description="Button to get to the code panel"
+                                            id="gui.gui.codeTab"
+                                        />
+                                    </Tab>
+                                    <Tab
+                                        className={tabClassNames.tab}
+                                        onClick={onActivateCostumesTab}
+                                    >
+                                        <img
+                                            draggable={false}
+                                            src={costumesIcon}
+                                        />
+                                        {targetIsStage ? (
                                             <FormattedMessage
-                                                defaultMessage="Code"
-                                                description="Button to get to the code panel"
-                                                id="gui.gui.codeTab"
+                                                defaultMessage="Backdrops"
+                                                description="Button to get to the backdrops panel"
+                                                id="gui.gui.backdropsTab"
                                             />
-                                        </Tab>
-                                        <Tab
-                                            className={tabClassNames.tab}
-                                            onClick={onActivateCostumesTab}
-                                        >
-                                            <img
-                                                draggable={false}
-                                                src={costumesIcon}
-                                            />
-                                            {targetIsStage ? (
-                                                <FormattedMessage
-                                                    defaultMessage="Backdrops"
-                                                    description="Button to get to the backdrops panel"
-                                                    id="gui.gui.backdropsTab"
-                                                />
-                                            ) : (
-                                                <FormattedMessage
-                                                    defaultMessage="Costumes"
-                                                    description="Button to get to the costumes panel"
-                                                    id="gui.gui.costumesTab"
-                                                />
-                                            )}
-                                        </Tab>
-                                        <Tab
-                                            className={tabClassNames.tab}
-                                            onClick={onActivateSoundsTab}
-                                        >
-                                            <img
-                                                draggable={false}
-                                                src={soundsIcon}
-                                            />
+                                        ) : (
                                             <FormattedMessage
-                                                defaultMessage="Sounds"
-                                                description="Button to get to the sounds panel"
-                                                id="gui.gui.soundsTab"
+                                                defaultMessage="Costumes"
+                                                description="Button to get to the costumes panel"
+                                                id="gui.gui.costumesTab"
                                             />
-                                        </Tab>
-                                    </TabList>
-                                    <TabPanel className={tabClassNames.tabPanel}>
-                                        {getBlocklyTab()}
-                                        {getExtensionButton()}
-                                        {stageAreaVisible ? (<Box className={styles.watermark}>
-                                            <Watermark />
-                                        </Box>) : null}
-                                    </TabPanel>
-                                    <TabPanel className={tabClassNames.tabPanel}>
-                                        {costumesTabVisible ? <CostumeTab vm={vm} /> : null}
-                                    </TabPanel>
-                                    <TabPanel className={tabClassNames.tabPanel}>
-                                        {soundsTabVisible ? <SoundTab vm={vm} /> : null}
-                                    </TabPanel>
-                                </Tabs>) : null}
-                            {!tabListVisable ? getBlocklyTab() : null}
-                            {!tabListVisable ? getExtensionButton() : null}
+                                        )}
+                                    </Tab>
+                                    <Tab
+                                        className={tabClassNames.tab}
+                                        onClick={onActivateSoundsTab}
+                                    >
+                                        <img
+                                            draggable={false}
+                                            src={soundsIcon}
+                                        />
+                                        <FormattedMessage
+                                            defaultMessage="Sounds"
+                                            description="Button to get to the sounds panel"
+                                            id="gui.gui.soundsTab"
+                                        />
+                                    </Tab>
+                                </TabList>
+                                <TabPanel className={tabClassNames.tabPanel}>
+                                    {getBlocklyTab()}
+                                    {getExtensionButton()}
+                                    <Box className={styles.watermark}>
+                                        <Watermark />
+                                    </Box>
+                                </TabPanel>
+                                <TabPanel className={tabClassNames.tabPanel}>
+                                    {costumesTabVisible ? <CostumeTab vm={vm} /> : null}
+                                </TabPanel>
+                                <TabPanel className={tabClassNames.tabPanel}>
+                                    {soundsTabVisible ? <SoundTab vm={vm} /> : null}
+                                </TabPanel>
+                            </Tabs>
                             {backpackVisible ? (
                                 <Backpack host={backpackHost} />
                             ) : null}
                         </Box>
-
-                        {stageAreaVisible ? (
-                            <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize])}>
-                                <StageWrapper
-                                    isFullScreen={isFullScreen}
-                                    isRendererSupported={isRendererSupported}
-                                    isRtl={isRtl}
-                                    isMobile={isMobile}
-                                    stageSize={stageSize}
-                                    vm={vm}
-                                />
-                                <Box className={styles.targetWrapper}>
-                                    <TargetPane
-                                        stageSize={stageSize}
-                                        vm={vm}
-                                    />
-                                </Box>
-                            </Box>) : <Controls className={styles.controlsWithOutStage} vm={vm}/>}
+                        {getStageAndTarget()}
                     </Box>
                 </Box>
                 <DragLayer />
@@ -442,9 +474,7 @@ GUIComponent.propTypes = {
     renderLogin: PropTypes.func,
     showComingSoon: PropTypes.bool,
     soundsTabVisible: PropTypes.bool,
-    stageAreaVisible: PropTypes.bool,
     stageSizeMode: PropTypes.oneOf(Object.keys(STAGE_SIZE_MODES)),
-    tabListVisable: PropTypes.bool,
     targetIsStage: PropTypes.bool,
     telemetryModalVisible: PropTypes.bool,
     tipsLibraryVisible: PropTypes.bool,
@@ -469,9 +499,7 @@ GUIComponent.defaultProps = {
     isShared: false,
     loading: false,
     showComingSoon: false,
-    stageAreaVisible: true,
     stageSizeMode: STAGE_SIZE_MODES.large,
-    tabListVisable: true,
 };
 
 const mapStateToProps = state => ({

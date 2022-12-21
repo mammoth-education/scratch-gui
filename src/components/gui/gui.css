@@ -193,6 +193,18 @@
     position: relative;
 }
 
+.stage-and-target-small-device-container {
+    width: 3rem;
+}
+.stage-and-target-small-device-tab {
+    width: 3rem;
+}
+
+.stage-and-target-small-device-main {
+    position:absolute;
+    left: 800px;
+}
+
 .stage-and-target-wrapper {
     /*
         Makes rows for children:
@@ -322,4 +334,9 @@ $fade-out-distance: 15px;
     position: absolute;
     top: 58px;
     right: 10px;
+}
+
+.tab-list-hide {
+    display: none;
+    height: 0;
 }

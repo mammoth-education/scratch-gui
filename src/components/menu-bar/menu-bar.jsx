@@ -74,6 +74,10 @@ import languageIcon from '../language-selector/language-icon.svg';
 import aboutIcon from './icon--about.svg';
 
 import scratchLogo from './scratch-logo.svg';
+import codeIcon from '../gui/icon--code.svg';
+import costumesIcon from '../gui/icon--costumes.svg';
+import soundsIcon from '../gui/icon--sounds.svg';
+
 
 import sharedMessages from '../../lib/shared-messages';
 
@@ -171,7 +175,10 @@ class MenuBar extends React.Component {
             'handleLanguageMouseUp',
             'handleRestoreOption',
             'getSaveToComputerHandler',
-            'restoreOptionMessage'
+            'restoreOptionMessage',
+            'onClickCodeTab',
+            'onClickCostumesTab',
+            'onClickSoundsTab',
         ]);
     }
     componentDidMount () {
@@ -334,6 +341,18 @@ class MenuBar extends React.Component {
             callback();
             this.props.onRequestCloseAbout();
         };
+    }
+    onClickCodeTab () {
+        this.props.onClickCodeTab();
+        this.props.onTabSelect(0);
+    }
+    onClickCostumesTab () {
+        this.props.onClickCostumesTab();
+        this.props.onTabSelect(1);
+    }
+    onClickSoundsTab () {
+        this.props.onClickSoundsTab();
+        this.props.onTabSelect(2);
     }
     render () {
         const saveNowMessage = (
@@ -617,8 +636,24 @@ class MenuBar extends React.Component {
                             </MenuBarItemTooltip>
                         ) : [])}
                     </div>
+                    <div className={classNames(styles.menuBarItem)}>
+                        {this.props.isSmallDevice ? (
+                            <div className={styles.tabList}>
+                                <div className={classNames(styles.tab, styles.tabLeft, this.props.selectedTabIndex === 0 ? styles.active: null)}
+                                    onClick={this.onClickCodeTab}>
+                                    <img draggable={false} src={codeIcon} />
+                                </div>
+                                <div className={classNames(styles.tab, styles.tabMiddle, this.props.selectedTabIndex === 1 ? styles.active: null)}
+                                    onClick={this.onClickCostumesTab}>
+                                    <img draggable={false} src={costumesIcon} />
+                                </div>
+                                <div className={classNames(styles.tab, styles.tabRight, this.props.selectedTabIndex === 2 ? styles.active: null)}
+                                    onClick={this.onClickSoundsTab}>
+                                    <img draggable={false} src={soundsIcon} />
+                                </div>
+                            </div>) : null}
+                    </div>
                 </div>
-
                 {/* show the proper UI in the account menu, given whether the user is
                 logged in, and whether a session is available to log in with */}
                 <div className={styles.accountInfoGroup}>
@@ -781,6 +816,7 @@ MenuBar.propTypes = {
     isShared: PropTypes.bool,
     isShowingProject: PropTypes.bool,
     isUpdating: PropTypes.bool,
+    isSmallDevice: PropTypes.bool,
     languageMenuOpen: PropTypes.bool,
     locale: PropTypes.string.isRequired,
     loginMenuOpen: PropTypes.bool,
@@ -804,6 +840,10 @@ MenuBar.propTypes = {
     onClickRemix: PropTypes.func,
     onClickSave: PropTypes.func,
     onClickSaveAsCopy: PropTypes.func,
+    onClickCodeTab: PropTypes.func,
+    onClickCostumesTab: PropTypes.func,
+    onClickSoundsTab: PropTypes.func,
+    onTabSelect: PropTypes.func,
     onLogOut: PropTypes.func,
     onOpenRegistration: PropTypes.func,
     onOpenTipLibrary: PropTypes.func,
@@ -826,12 +866,16 @@ MenuBar.propTypes = {
     showComingSoon: PropTypes.bool,
     userOwnsProject: PropTypes.bool,
     username: PropTypes.string,
+    selectedTabIndex: PropTypes.number,
     vm: PropTypes.instanceOf(VM).isRequired
 };
 
 MenuBar.defaultProps = {
     logo: scratchLogo,
-    onShare: () => {}
+    onShare: () => {},
+    onClickCodeTab: () => {},
+    onClickCostumesTab: () => {},
+    onClickSoundsTab: () => {},
 };
 
 const mapStateToProps = (state, ownProps) => {
