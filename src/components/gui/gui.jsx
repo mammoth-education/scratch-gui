@@ -31,6 +31,7 @@ import Alerts from '../../containers/alerts.jsx';
 import DragLayer from '../../containers/drag-layer.jsx';
 import ConnectionModal from '../../containers/connection-modal.jsx';
 import TelemetryModal from '../telemetry-modal/telemetry-modal.jsx';
+import UserProjectsModal from '../user-projects-modal/user-projects-modal.jsx';
 
 import layout, { STAGE_SIZE_MODES } from '../../lib/layout-constants';
 import { resolveStageSize } from '../../lib/screen-utils';
@@ -46,7 +47,12 @@ const messages = defineMessages({
         id: 'gui.gui.addExtension',
         description: 'Button to add an extension in the target pane',
         defaultMessage: 'Add Extension'
-    }
+    },
+    myProjects: {
+        id: 'gui.gui.myProjects',
+        description: 'Button to open the user projects modal',
+        defaultMessage: 'My Projects'
+    },
 });
 
 // Cache this value to only retrieve it once the first time.
@@ -94,6 +100,7 @@ const GUIComponent = props => {
         onClickAbout,
         onClickAccountNav,
         onCloseAccountNav,
+        onClickSaveLocally,
         onLogOut,
         onOpenRegistration,
         onToggleLoginOpen,
@@ -120,6 +127,7 @@ const GUIComponent = props => {
         telemetryModalVisible,
         tipsLibraryVisible,
         tutorialButtonVisible,
+        userProjectsModalVisible,
         vm,
         ...componentProps
     } = omit(props, 'dispatch');
@@ -133,7 +141,6 @@ const GUIComponent = props => {
     }
 
     let isSmallDevice = false;
-    console.log('window.screen.width', window.screen.width)
     if (window.screen.width < 1024) {
         isSmallDevice = true;
     }
@@ -293,6 +300,12 @@ const GUIComponent = props => {
                         onRequestClose={onRequestCloseBackdropLibrary}
                     />
                 ) : null}
+                {userProjectsModalVisible && isMobile ? (
+                    <UserProjectsModal
+                        vm={vm}
+                        title={intl.formatMessage(messages.myProjects)}
+                    />
+                ) : null}
                 <MenuBar
                     accountNavOpen={accountNavOpen}
                     authorId={authorId}
@@ -329,6 +342,9 @@ const GUIComponent = props => {
                     onClickSoundsTab={onActivateSoundsTab}
                     onTabSelect={onActivateTab}
                     selectedTabIndex={activeTabIndex}
+                    localProjectsVisable={true}
+                    editMenuVisible={false}
+                    onClickSaveLocally={onClickSaveLocally}
                 />
                 <Box className={styles.bodyWrapper}>
                     <Box className={styles.flexWrapper}>
@@ -455,6 +471,7 @@ GUIComponent.propTypes = {
     onActivateTab: PropTypes.func,
     onClickAccountNav: PropTypes.func,
     onClickLogo: PropTypes.func,
+    onClickSaveLocally: PropTypes.func,
     onCloseAccountNav: PropTypes.func,
     onExtensionButtonClick: PropTypes.func,
     onLogOut: PropTypes.func,
@@ -479,6 +496,7 @@ GUIComponent.propTypes = {
     telemetryModalVisible: PropTypes.bool,
     tipsLibraryVisible: PropTypes.bool,
     tutorialButtonVisible: PropTypes.bool,
+    userProjectsModalVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired
 };
 GUIComponent.defaultProps = {

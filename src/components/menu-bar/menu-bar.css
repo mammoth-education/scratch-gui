@@ -260,3 +260,16 @@
 .tab.active {
     background-color: $ui-white;
 }
+
+.save-button {
+    border: dashed 1px $ui-black-transparent;
+    border-left: none;
+    height: 2rem;
+    display: flex;
+    border-radius: 0 0.2rem 0.2rem 0;
+    justify-content: center;
+    background-color: $ui-white-transparent;
+}
+.save-button img {
+    width: 80%;
+}

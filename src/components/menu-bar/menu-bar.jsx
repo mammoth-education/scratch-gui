@@ -29,7 +29,7 @@ import DeletionRestorer from '../../containers/deletion-restorer.jsx';
 import TurboMode from '../../containers/turbo-mode.jsx';
 import MenuBarHOC from '../../containers/menu-bar-hoc.jsx';
 
-import {openTipsLibrary} from '../../reducers/modals';
+import {openTipsLibrary, openUserProjectsModal} from '../../reducers/modals';
 import {setPlayer} from '../../reducers/mode';
 import {
     autoUpdateProject,
@@ -72,6 +72,8 @@ import remixIcon from './icon--remix.svg';
 import dropdownCaret from './dropdown-caret.svg';
 import languageIcon from '../language-selector/language-icon.svg';
 import aboutIcon from './icon--about.svg';
+import gridIcon from './icon--grid.svg';
+import iconSave from './icon--save.svg';
 
 import scratchLogo from './scratch-logo.svg';
 import codeIcon from '../gui/icon--code.svg';
@@ -176,9 +178,10 @@ class MenuBar extends React.Component {
             'handleRestoreOption',
             'getSaveToComputerHandler',
             'restoreOptionMessage',
-            'onClickCodeTab',
-            'onClickCostumesTab',
-            'onClickSoundsTab',
+            'handleClickCodeTab',
+            'handleClickCostumesTab',
+            'handleClickSoundsTab',
+            'handleClickUserProjects',
         ]);
     }
     componentDidMount () {
@@ -342,17 +345,20 @@ class MenuBar extends React.Component {
             this.props.onRequestCloseAbout();
         };
     }
-    onClickCodeTab () {
+    handleClickCodeTab () {
         this.props.onClickCodeTab();
         this.props.onTabSelect(0);
     }
-    onClickCostumesTab () {
+    handleClickCostumesTab () {
         this.props.onClickCostumesTab();
         this.props.onTabSelect(1);
     }
-    onClickSoundsTab () {
+    handleClickSoundsTab () {
         this.props.onClickSoundsTab();
         this.props.onTabSelect(2);
+    }
+    handleClickUserProjects () {
+        this.props.onClickUserProjects();
     }
     render () {
         const saveNowMessage = (
@@ -500,54 +506,56 @@ class MenuBar extends React.Component {
                                 </MenuBarMenu>
                             </div>
                         )}
-                        <div
-                            className={classNames(styles.menuBarItem, styles.hoverable, {
-                                [styles.active]: this.props.editMenuOpen
-                            })}
-                            onMouseUp={this.props.onClickEdit}
-                        >
-                            <div className={classNames(styles.editMenu)}>
-                                <FormattedMessage
-                                    defaultMessage="Edit"
-                                    description="Text for edit dropdown menu"
-                                    id="gui.menuBar.edit"
-                                />
-                            </div>
-                            <MenuBarMenu
-                                className={classNames(styles.menuBarMenu)}
-                                open={this.props.editMenuOpen}
-                                place={this.props.isRtl ? 'left' : 'right'}
-                                onRequestClose={this.props.onRequestCloseEdit}
+                        {(this.props.editMenuVisable) && (
+                            <div
+                                className={classNames(styles.menuBarItem, styles.hoverable, {
+                                    [styles.active]: this.props.editMenuOpen
+                                })}
+                                onMouseUp={this.props.onClickEdit}
                             >
-                                <DeletionRestorer>{(handleRestore, {restorable, deletedItem}) => (
-                                    <MenuItem
-                                        className={classNames({[styles.disabled]: !restorable})}
-                                        onClick={this.handleRestoreOption(handleRestore)}
-                                    >
-                                        {this.restoreOptionMessage(deletedItem)}
-                                    </MenuItem>
-                                )}</DeletionRestorer>
-                                <MenuSection>
-                                    <TurboMode>{(toggleTurboMode, {turboMode}) => (
-                                        <MenuItem onClick={toggleTurboMode}>
-                                            {turboMode ? (
-                                                <FormattedMessage
-                                                    defaultMessage="Turn off Turbo Mode"
-                                                    description="Menu bar item for turning off turbo mode"
-                                                    id="gui.menuBar.turboModeOff"
-                                                />
-                                            ) : (
-                                                <FormattedMessage
-                                                    defaultMessage="Turn on Turbo Mode"
-                                                    description="Menu bar item for turning on turbo mode"
-                                                    id="gui.menuBar.turboModeOn"
-                                                />
-                                            )}
+                                <div className={classNames(styles.editMenu)}>
+                                    <FormattedMessage
+                                        defaultMessage="Edit"
+                                        description="Text for edit dropdown menu"
+                                        id="gui.menuBar.edit"
+                                    />
+                                </div>
+                                <MenuBarMenu
+                                    className={classNames(styles.menuBarMenu)}
+                                    open={this.props.editMenuOpen}
+                                    place={this.props.isRtl ? 'left' : 'right'}
+                                    onRequestClose={this.props.onRequestCloseEdit}
+                                >
+                                    <DeletionRestorer>{(handleRestore, {restorable, deletedItem}) => (
+                                        <MenuItem
+                                            className={classNames({[styles.disabled]: !restorable})}
+                                            onClick={this.handleRestoreOption(handleRestore)}
+                                        >
+                                            {this.restoreOptionMessage(deletedItem)}
                                         </MenuItem>
-                                    )}</TurboMode>
-                                </MenuSection>
-                            </MenuBarMenu>
-                        </div>
+                                    )}</DeletionRestorer>
+                                    <MenuSection>
+                                        <TurboMode>{(toggleTurboMode, {turboMode}) => (
+                                            <MenuItem onClick={toggleTurboMode}>
+                                                {turboMode ? (
+                                                    <FormattedMessage
+                                                        defaultMessage="Turn off Turbo Mode"
+                                                        description="Menu bar item for turning off turbo mode"
+                                                        id="gui.menuBar.turboModeOff"
+                                                    />
+                                                ) : (
+                                                    <FormattedMessage
+                                                        defaultMessage="Turn on Turbo Mode"
+                                                        description="Menu bar item for turning on turbo mode"
+                                                        id="gui.menuBar.turboModeOn"
+                                                    />
+                                                )}
+                                            </MenuItem>
+                                        )}</TurboMode>
+                                    </MenuSection>
+                                </MenuBarMenu>
+                            </div>
+                        )}
                     </div>
                     {this.props.tutorialButtonVisible ? (
                     <Divider className={classNames(styles.divider)} />) :null}
@@ -574,6 +582,9 @@ class MenuBar extends React.Component {
                                     className={classNames(styles.titleFieldGrowable)}
                                 />
                             </MenuBarItemTooltip>
+                            <div className={styles.saveButton} onClick={this.props.onClickSaveLocally}>
+                                <img draggable={false} src={iconSave} />
+                            </div>
                         </div>
                     ) : ((this.props.authorUsername && this.props.authorUsername !== this.props.username) ? (
                         <AuthorInfo
@@ -640,15 +651,15 @@ class MenuBar extends React.Component {
                         {this.props.isSmallDevice ? (
                             <div className={styles.tabList}>
                                 <div className={classNames(styles.tab, styles.tabLeft, this.props.selectedTabIndex === 0 ? styles.active: null)}
-                                    onClick={this.onClickCodeTab}>
+                                    onClick={this.handleClickCodeTab}>
                                     <img draggable={false} src={codeIcon} />
                                 </div>
                                 <div className={classNames(styles.tab, styles.tabMiddle, this.props.selectedTabIndex === 1 ? styles.active: null)}
-                                    onClick={this.onClickCostumesTab}>
+                                    onClick={this.handleClickCostumesTab}>
                                     <img draggable={false} src={costumesIcon} />
                                 </div>
                                 <div className={classNames(styles.tab, styles.tabRight, this.props.selectedTabIndex === 2 ? styles.active: null)}
-                                    onClick={this.onClickSoundsTab}>
+                                    onClick={this.handleClickSoundsTab}>
                                     <img draggable={false} src={soundsIcon} />
                                 </div>
                             </div>) : null}
@@ -657,11 +668,18 @@ class MenuBar extends React.Component {
                 {/* show the proper UI in the account menu, given whether the user is
                 logged in, and whether a session is available to log in with */}
                 <div className={styles.accountInfoGroup}>
-                    <div className={styles.menuBarItem}>
-                        {this.props.canSave && (
+                    {this.props.canSave && (
+                        <div className={classNames(styles.menuBarItem, styles.hoverable)}>
                             <SaveStatus />
-                        )}
-                    </div>
+                        </div>
+                    )}
+                    {this.props.localProjectsVisable && (
+                        <div className={classNames(styles.menuBarItem, styles.hoverable)}>
+                            <div onClick={this.handleClickUserProjects}>
+                                <img draggable={false} src={gridIcon} />
+                            </div>
+                        </div>
+                    )}
                     {this.props.sessionExists ? (
                         this.props.username ? (
                             // ************ user is logged in ************
@@ -809,6 +827,7 @@ MenuBar.propTypes = {
     className: PropTypes.string,
     confirmReadyToReplaceProject: PropTypes.func,
     editMenuOpen: PropTypes.bool,
+    editMenuVisable: PropTypes.bool,
     enableCommunity: PropTypes.bool,
     fileMenuOpen: PropTypes.bool,
     intl: intlShape,
@@ -819,6 +838,7 @@ MenuBar.propTypes = {
     isSmallDevice: PropTypes.bool,
     languageMenuOpen: PropTypes.bool,
     locale: PropTypes.string.isRequired,
+    localProjectsVisable: PropTypes.bool,
     loginMenuOpen: PropTypes.bool,
     logo: PropTypes.string,
     onClickAbout: PropTypes.oneOfType([
@@ -872,6 +892,7 @@ MenuBar.propTypes = {
 
 MenuBar.defaultProps = {
     logo: scratchLogo,
+    localProjectsVisable: false,
     onShare: () => {},
     onClickCodeTab: () => {},
     onClickCostumesTab: () => {},
@@ -920,7 +941,8 @@ const mapDispatchToProps = dispatch => ({
     onClickRemix: () => dispatch(remixProject()),
     onClickSave: () => dispatch(manualUpdateProject()),
     onClickSaveAsCopy: () => dispatch(saveProjectAsCopy()),
-    onSeeCommunity: () => dispatch(setPlayer(true))
+    onSeeCommunity: () => dispatch(setPlayer(true)),
+    onClickUserProjects: () => dispatch(openUserProjectsModal()),
 });
 
 export default compose(

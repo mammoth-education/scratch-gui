@@ -9,7 +9,8 @@ import {injectIntl, intlShape} from 'react-intl';
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 import {
     getIsError,
-    getIsShowingProject
+    getIsShowingProject,
+    setProjectId
 } from '../reducers/project-state';
 import {
     activateTab,
@@ -40,7 +41,13 @@ import cloudManagerHOC from '../lib/cloud-manager-hoc.jsx';
 import GUIComponent from '../components/gui/gui.jsx';
 import {setIsScratchDesktop} from '../lib/isScratchDesktop.js';
 
+import ProjectLocalStorage from '../lib/projectLocalStorage.js';
+
 class GUI extends React.Component {
+    constructor (props) {
+        super(props);
+        this.saveProjectLocally = this.saveProjectLocally.bind(this);
+    }
     componentDidMount () {
         setIsScratchDesktop(this.props.isScratchDesktop);
         this.props.onStorageInit(storage);
@@ -55,6 +62,16 @@ class GUI extends React.Component {
             // At this time the project view in www doesn't need to know when a project is unloaded
             this.props.onProjectLoaded();
         }
+    }
+    saveProjectLocally () {
+        let id = this.props.projectId;
+        if (id === null || id === undefined || id === 0 || id === '0') {
+            id = ProjectLocalStorage.generateId();
+            this.props.onUpdateProjectId(id);
+            console.log("Generated id: " + id);
+        }
+        const data = this.props.vm.toJSON();
+        ProjectLocalStorage.save(id, data);
     }
     render () {
         if (this.props.isError) {
@@ -86,6 +103,8 @@ class GUI extends React.Component {
             <GUIComponent
                 loading={fetchingProject || isLoading || loadingStateVisible}
                 {...componentProps}
+                onClickSaveLocally={this.saveProjectLocally}
+                onUpdateProjectData={this.saveProjectLocally}
             >
                 {children}
             </GUIComponent>
@@ -112,6 +131,7 @@ GUI.propTypes = {
     onVmInit: PropTypes.func,
     projectHost: PropTypes.string,
     projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    setProjectId: PropTypes.func,
     telemetryModalVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired
 };
@@ -150,6 +170,7 @@ const mapStateToProps = state => {
         ),
         telemetryModalVisible: state.scratchGui.modals.telemetryModal,
         tipsLibraryVisible: state.scratchGui.modals.tipsLibrary,
+        userProjectsModalVisible: state.scratchGui.modals.userProjectsModal,
         vm: state.scratchGui.vm
     };
 };
@@ -161,7 +182,8 @@ const mapDispatchToProps = dispatch => ({
     onActivateSoundsTab: () => dispatch(activateTab(SOUNDS_TAB_INDEX)),
     onRequestCloseBackdropLibrary: () => dispatch(closeBackdropLibrary()),
     onRequestCloseCostumeLibrary: () => dispatch(closeCostumeLibrary()),
-    onRequestCloseTelemetryModal: () => dispatch(closeTelemetryModal())
+    onRequestCloseTelemetryModal: () => dispatch(closeTelemetryModal()),
+    setProjectId: id => dispatch(setProjectId(id)),
 });
 
 const ConnectedGUI = injectIntl(connect(
