@@ -99,8 +99,8 @@ const GUIComponent = props => {
         renderLogin,
         onClickAbout,
         onClickAccountNav,
+        onClickSave,
         onCloseAccountNav,
-        onClickSaveLocally,
         onLogOut,
         onOpenRegistration,
         onToggleLoginOpen,
@@ -109,6 +109,7 @@ const GUIComponent = props => {
         onActivateTab,
         onClickLogo,
         onExtensionButtonClick,
+        onOpenProject,
         onProjectTelemetryEvent,
         onRequestCloseBackdropLibrary,
         onRequestCloseCostumeLibrary,
@@ -300,10 +301,11 @@ const GUIComponent = props => {
                         onRequestClose={onRequestCloseBackdropLibrary}
                     />
                 ) : null}
-                {userProjectsModalVisible && isMobile ? (
+                {userProjectsModalVisible ? (
                     <UserProjectsModal
                         vm={vm}
                         title={intl.formatMessage(messages.myProjects)}
+                        onOpenProject={onOpenProject}
                     />
                 ) : null}
                 <MenuBar
@@ -329,6 +331,7 @@ const GUIComponent = props => {
                     tutorialButtonVisible={tutorialButtonVisible}
                     onClickAbout={onClickAbout}
                     onClickAccountNav={onClickAccountNav}
+                    onClickSave={onClickSave}
                     onClickLogo={onClickLogo}
                     onCloseAccountNav={onCloseAccountNav}
                     onLogOut={onLogOut}
@@ -344,7 +347,6 @@ const GUIComponent = props => {
                     selectedTabIndex={activeTabIndex}
                     localProjectsVisable={true}
                     editMenuVisible={false}
-                    onClickSaveLocally={onClickSaveLocally}
                 />
                 <Box className={styles.bodyWrapper}>
                     <Box className={styles.flexWrapper}>
@@ -471,11 +473,12 @@ GUIComponent.propTypes = {
     onActivateTab: PropTypes.func,
     onClickAccountNav: PropTypes.func,
     onClickLogo: PropTypes.func,
-    onClickSaveLocally: PropTypes.func,
+    onClickSave: PropTypes.func,
     onCloseAccountNav: PropTypes.func,
     onExtensionButtonClick: PropTypes.func,
     onLogOut: PropTypes.func,
     onOpenRegistration: PropTypes.func,
+    onOpenProject: PropTypes.func,
     onRequestCloseBackdropLibrary: PropTypes.func,
     onRequestCloseCostumeLibrary: PropTypes.func,
     onRequestCloseTelemetryModal: PropTypes.func,

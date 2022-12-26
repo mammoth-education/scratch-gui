@@ -114,6 +114,11 @@ const initialState = {
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
 
+    // 查看当前的状态
+    // if (action.type.startsWith('scratch-gui/project-state/')) {
+    //     console.log('Project loading state:', action.type.split("/")[2]);
+    // }
+
     switch (action.type) {
     case DONE_CREATING_NEW:
         // We need to set project id since we just created new project on the server.

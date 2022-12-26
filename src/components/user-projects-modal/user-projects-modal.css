@@ -1,0 +1,25 @@
+@import "../../css/colors.css";
+@import "../../css/units.css";
+
+.modalContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+}
+.item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border: 1px solid $ui-black-transparent;
+    border-radius: 0.5rem;
+    background-color: $ui-white;
+    cursor: pointer;
+    max-width: 20rem;
+    max-height: 10rem;
+}

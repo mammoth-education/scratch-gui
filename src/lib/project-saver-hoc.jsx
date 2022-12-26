@@ -6,9 +6,8 @@ import VM from 'scratch-vm';
 
 import collectMetadata from '../lib/collect-metadata';
 import log from '../lib/log';
-import storage from '../lib/storage';
 import dataURItoBlob from '../lib/data-uri-to-blob';
-import saveProjectToServer from '../lib/save-project-to-server';
+import LocalStorage from './local-storage/local-storage';
 
 import {
     showAlertWithTimeout,
@@ -169,7 +168,10 @@ const ProjectSaverHOC = function (WrappedComponent) {
                 });
         }
         createNewProjectToStorage () {
-            return this.storeProject(null)
+            return this.storeProject(null, {
+                isNew: 1,
+                title: this.props.reduxProjectTitle
+            })
                 .then(response => {
                     this.props.onCreatedProject(response.id.toString(), this.props.loadingState);
                 })
@@ -229,7 +231,7 @@ const ProjectSaverHOC = function (WrappedComponent) {
             return Promise.all(this.props.vm.assets
                 .filter(asset => !asset.clean)
                 .map(
-                    asset => storage.store(
+                    asset => LocalStorage.store(
                         asset.assetType,
                         asset.dataFormat,
                         asset.data,
@@ -402,7 +404,7 @@ const ProjectSaverHOC = function (WrappedComponent) {
         onRemixing: () => {},
         onSetProjectThumbnailer: () => {},
         onSetProjectSaver: () => {},
-        onUpdateProjectData: saveProjectToServer
+        onUpdateProjectData: LocalStorage.saveProject
     };
     const mapStateToProps = (state, ownProps) => {
         const loadingState = state.scratchGui.projectState.loadingState;

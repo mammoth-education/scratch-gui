@@ -26,7 +26,6 @@ export default appTarget => {
     ReactDOM.render(
         <WrappedGui
             canEditTitle
-            canSave
             canCreateCopy
             locale="zh-cn"
             tutorialButtonVisible={false}

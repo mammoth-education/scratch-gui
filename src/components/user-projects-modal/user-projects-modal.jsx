@@ -6,25 +6,58 @@ import VM from 'scratch-vm';
 import {connect} from 'react-redux';
 import {closeUserProjectsModal} from '../../reducers/modals';
 
+import LocalStorage from '../../lib/local-storage/local-storage.js';
+
+import styles from './user-projects-modal.css';
+
 class UserProjectsModal extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'getUserProjectsFromLocal',
+            'createHandleOpenProject',
+            'createList',
         ]);
         this.state = {
-            userProjects: [],
+            projectList: null,
         };
     }
-    getUserProjectsFromLocal () {
-        const userProjects = JSON.parse(localStorage.getItem('userProjects'));
-        if (userProjects) {
-            this.setState({userProjects});
+    componentDidMount () {
+        this.setState({
+            projectList: LocalStorage.ProjectList,
+        });
+    }
+
+    createHandleOpenProject (id, name) {
+        return () => {
+            this.props.onOpenProject(id, name);
         }
     }
 
-    componentDidMount () {
-        this.getUserProjectsFromLocal();
+    createList () {
+        let projectList = LocalStorage.ProjectList;
+        return Object.keys(projectList).map((id) => (
+            <div 
+                className={styles.item}
+                key={id}
+                onMouseEnter={this.handleItemMouseEnter}
+                onMouseLeave={this.handleItemMouseLeave}
+            >
+                <div className={styles.itemName}>
+                    {projectList[id].name}
+                </div>
+                <div className={styles.itemDate}>
+                    {projectList[id].updateDate}
+                </div>
+                <div className={styles.itemAction}>
+                    <button
+                        className={styles.openButton}
+                        onClick={this.createHandleOpenProject(id, projectList[id].name)}
+                    >
+                        打开
+                    </button>
+                </div>
+            </div>
+        ));
     }
 
     render () {
@@ -35,25 +68,8 @@ class UserProjectsModal extends React.Component {
                 id="userProjectsModal"
                 onRequestClose={this.props.onClose}
             >
-                <div className="user-projects-modal-content">
-                    {this.state.userProjects.map((project, index) => (
-                        <div
-                            className="user-projects-modal-item"
-                            key={index}
-                            onMouseEnter={this.handleItemMouseEnter}
-                            onMouseLeave={this.handleItemMouseLeave}
-                        >
-                            <div className="user-projects-modal-item-title">
-                                {project.title}
-                            </div>
-                            <div className="user-projects-modal-item-description">
-                                {project.description}
-                            </div>
-                            <div className="user-projects-modal-item-date">
-                                {project.date}
-                            </div>
-                        </div>
-                    ))}
+                <div className={styles.modalContent}>
+                    {this.createList()}
                 </div>
             </Modal>
     )}
@@ -63,15 +79,15 @@ UserProjectsModal.propTypes = {
     vm: PropTypes.instanceOf(VM).isRequired,
     onClose: PropTypes.func.isRequired,
     title: PropTypes.string,
+    onOpenProject: PropTypes.func,
 }
 
 const mapStateToProps = state => ({
+    
 });
 
 const mapDispatchToProps = dispatch => ({
-    onClose: () => {
-        dispatch(closeUserProjectsModal());
-    },
+    onClose: () => { dispatch(closeUserProjectsModal()); },
 });
 
 export default connect(

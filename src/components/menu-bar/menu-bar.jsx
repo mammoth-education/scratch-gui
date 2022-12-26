@@ -582,7 +582,7 @@ class MenuBar extends React.Component {
                                     className={classNames(styles.titleFieldGrowable)}
                                 />
                             </MenuBarItemTooltip>
-                            <div className={styles.saveButton} onClick={this.props.onClickSaveLocally}>
+                            <div className={styles.saveButton} onClick={this.props.onClickSave}>
                                 <img draggable={false} src={iconSave} />
                             </div>
                         </div>
@@ -939,7 +939,6 @@ const mapDispatchToProps = dispatch => ({
     onRequestCloseAbout: () => dispatch(closeAboutMenu()),
     onClickNew: needSave => dispatch(requestNewProject(needSave)),
     onClickRemix: () => dispatch(remixProject()),
-    onClickSave: () => dispatch(manualUpdateProject()),
     onClickSaveAsCopy: () => dispatch(saveProjectAsCopy()),
     onSeeCommunity: () => dispatch(setPlayer(true)),
     onClickUserProjects: () => dispatch(openUserProjectsModal()),

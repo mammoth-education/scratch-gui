@@ -8,9 +8,11 @@ import {injectIntl, intlShape} from 'react-intl';
 
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 import {
+    setProjectId,
+    createProject,
+    manualUpdateProject,
     getIsError,
     getIsShowingProject,
-    setProjectId
 } from '../reducers/project-state';
 import {
     activateTab,
@@ -23,8 +25,11 @@ import {
     closeCostumeLibrary,
     closeBackdropLibrary,
     closeTelemetryModal,
-    openExtensionLibrary
+    openExtensionLibrary,
+    closeUserProjectsModal,
 } from '../reducers/modals';
+
+import { setProjectTitle } from '../reducers/project-title';
 
 import FontLoaderHOC from '../lib/font-loader-hoc.jsx';
 import LocalizationHOC from '../lib/localization-hoc.jsx';
@@ -40,14 +45,31 @@ import cloudManagerHOC from '../lib/cloud-manager-hoc.jsx';
 
 import GUIComponent from '../components/gui/gui.jsx';
 import {setIsScratchDesktop} from '../lib/isScratchDesktop.js';
-
-import ProjectLocalStorage from '../lib/projectLocalStorage.js';
+import bindAll from 'lodash.bindall';
 
 class GUI extends React.Component {
     constructor (props) {
         super(props);
-        this.saveProjectLocally = this.saveProjectLocally.bind(this);
+        bindAll(this, [
+            'onClickSave',
+            'onOpenProject',
+        ]);
     }
+
+    onClickSave () {
+        console.log('onClickSave');
+        if (this.props.projectId === null || this.props.projectId === undefined || this.props.projectId === 0 || this.props.projectId === '0') {
+            this.props.createProject();
+        }
+        this.props.manualUpdateProject();
+    }
+
+    onOpenProject (id, name) {
+        this.props.setProjectId(id);
+        this.props.setProjectTitle(name);
+        this.props.closeUserProjectsModal();
+    }
+
     componentDidMount () {
         setIsScratchDesktop(this.props.isScratchDesktop);
         this.props.onStorageInit(storage);
@@ -62,16 +84,6 @@ class GUI extends React.Component {
             // At this time the project view in www doesn't need to know when a project is unloaded
             this.props.onProjectLoaded();
         }
-    }
-    saveProjectLocally () {
-        let id = this.props.projectId;
-        if (id === null || id === undefined || id === 0 || id === '0') {
-            id = ProjectLocalStorage.generateId();
-            this.props.onUpdateProjectId(id);
-            console.log("Generated id: " + id);
-        }
-        const data = this.props.vm.toJSON();
-        ProjectLocalStorage.save(id, data);
     }
     render () {
         if (this.props.isError) {
@@ -102,9 +114,9 @@ class GUI extends React.Component {
         return (
             <GUIComponent
                 loading={fetchingProject || isLoading || loadingStateVisible}
+                onClickSave={this.onClickSave}
+                onOpenProject={this.onOpenProject}
                 {...componentProps}
-                onClickSaveLocally={this.saveProjectLocally}
-                onUpdateProjectData={this.saveProjectLocally}
             >
                 {children}
             </GUIComponent>
@@ -115,6 +127,7 @@ class GUI extends React.Component {
 GUI.propTypes = {
     assetHost: PropTypes.string,
     children: PropTypes.node,
+    closeUserProjectsModal: PropTypes.func,
     cloudHost: PropTypes.string,
     error: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     fetchingProject: PropTypes.bool,
@@ -132,6 +145,7 @@ GUI.propTypes = {
     projectHost: PropTypes.string,
     projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     setProjectId: PropTypes.func,
+    setProjectTitle: PropTypes.func,
     telemetryModalVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired
 };
@@ -176,6 +190,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
+    createProject: () => dispatch(createProject()),
+    closeUserProjectsModal: () => dispatch(closeUserProjectsModal()),
+    manualUpdateProject: () => dispatch(manualUpdateProject()),
     onExtensionButtonClick: () => dispatch(openExtensionLibrary()),
     onActivateTab: tab => dispatch(activateTab(tab)),
     onActivateCostumesTab: () => dispatch(activateTab(COSTUMES_TAB_INDEX)),
@@ -183,7 +200,8 @@ const mapDispatchToProps = dispatch => ({
     onRequestCloseBackdropLibrary: () => dispatch(closeBackdropLibrary()),
     onRequestCloseCostumeLibrary: () => dispatch(closeCostumeLibrary()),
     onRequestCloseTelemetryModal: () => dispatch(closeTelemetryModal()),
-    setProjectId: id => dispatch(setProjectId(id)),
+    setProjectId: (id) => { dispatch(setProjectId(id)); },
+    setProjectTitle: (title) => { dispatch(setProjectTitle(title)); },
 });
 
 const ConnectedGUI = injectIntl(connect(
