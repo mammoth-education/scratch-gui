@@ -7,7 +7,8 @@ import VM from 'scratch-vm';
 import collectMetadata from '../lib/collect-metadata';
 import log from '../lib/log';
 import dataURItoBlob from '../lib/data-uri-to-blob';
-import LocalStorage from './local-storage/local-storage';
+import storage from './storage';
+import saveProjectToLocal from './save-project-to-local';
 
 import {
     showAlertWithTimeout,
@@ -231,7 +232,7 @@ const ProjectSaverHOC = function (WrappedComponent) {
             return Promise.all(this.props.vm.assets
                 .filter(asset => !asset.clean)
                 .map(
-                    asset => LocalStorage.store(
+                    asset => storage.store(
                         asset.assetType,
                         asset.dataFormat,
                         asset.data,
@@ -404,7 +405,7 @@ const ProjectSaverHOC = function (WrappedComponent) {
         onRemixing: () => {},
         onSetProjectThumbnailer: () => {},
         onSetProjectSaver: () => {},
-        onUpdateProjectData: LocalStorage.saveProject
+        onUpdateProjectData: saveProjectToLocal,
     };
     const mapStateToProps = (state, ownProps) => {
         const loadingState = state.scratchGui.projectState.loadingState;
