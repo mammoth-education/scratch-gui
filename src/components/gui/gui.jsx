@@ -145,6 +145,7 @@ const GUIComponent = props => {
     if (window.screen.width < 1024) {
         isSmallDevice = true;
     }
+    // console.log("isSmallDevice", isSmallDevice);
 
     const tabClassNames = {
         tabs: styles.tabs,
@@ -161,80 +162,6 @@ const GUIComponent = props => {
 
     return (<MediaQuery minWidth={layout.fullSizeMinWidth}>{isFullSize => {
         const stageSize = resolveStageSize(stageSizeMode, isFullSize);
-
-        const getBlocklyTab = () => {
-            return (
-                <Box className={styles.blocksWrapper}>
-                    <Blocks
-                        canUseCloud={canUseCloud}
-                        grow={1}
-                        isVisible={blocksTabVisible}
-                        options={{
-                            media: `${basePath}static/blocks-media/`
-                        }}
-                        stageSize={stageSize}
-                        vm={vm}
-                    />
-                </Box>
-            )
-        }
-        const getExtensionButton = () => {
-            return (
-                <Box className={styles.extensionButtonContainer}>
-                    <button
-                        className={styles.extensionButton}
-                        title={intl.formatMessage(messages.addExtension)}
-                        onClick={onExtensionButtonClick}
-                    >
-                        <img
-                            className={styles.extensionButtonIcon}
-                            draggable={false}
-                            src={addExtensionIcon}
-                        />
-                    </button>
-                </Box>
-            )
-        }
-
-        const getStageAndTarget = () => {
-            let smallDeviceMainClass = "";
-            let smallDeviceContainerClass = "";
-            let smallDeviceTabClass = "";
-            if (isSmallDevice) {
-                if (activeTabIndex !== 0) {
-                    return null;
-                }
-                smallDeviceMainClass = styles.stageAndTargetSmallDeviceMain;
-                smallDeviceContainerClass = styles.stageAndTargetSmallDeviceContainer;
-                smallDeviceTabClass = styles.stageAndTargetSmallDeviceTab;
-            }
-            
-            return (
-                <Box className={smallDeviceContainerClass}>
-                    <Box className={smallDeviceTabClass}>
-
-                    </Box>
-                    <Box className={smallDeviceMainClass}>
-                        <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize])}>
-                            <StageWrapper
-                                isFullScreen={isFullScreen}
-                                isRendererSupported={isRendererSupported}
-                                isRtl={isRtl}
-                                isMobile={isMobile}
-                                stageSize={stageSize}
-                                vm={vm}
-                            />
-                            <Box className={styles.targetWrapper}>
-                                <TargetPane
-                                    stageSize={stageSize}
-                                    vm={vm}
-                                />
-                            </Box>
-                        </Box>
-                    </Box>
-                </Box>
-            )
-        }
 
         return isPlayerOnly ? (
             <StageWrapper
@@ -409,10 +336,52 @@ const GUIComponent = props => {
                                     </Tab>
                                 </TabList>
                                 <TabPanel className={tabClassNames.tabPanel}>
-                                    {getBlocklyTab()}
-                                    {getExtensionButton()}
+                                    <Box className={styles.blocksWrapper}>
+                                        <Blocks
+                                            canUseCloud={canUseCloud}
+                                            grow={1}
+                                            isVisible={blocksTabVisible}
+                                            options={{
+                                                media: `${basePath}static/blocks-media/`
+                                            }}
+                                            stageSize={stageSize}
+                                            vm={vm}
+                                        />
+                                    </Box>
+                                    <Box className={styles.extensionButtonContainer}>
+                                        <button
+                                            className={styles.extensionButton}
+                                            title={intl.formatMessage(messages.addExtension)}
+                                            onClick={onExtensionButtonClick}
+                                        >
+                                            <img
+                                                className={styles.extensionButtonIcon}
+                                                draggable={false}
+                                                src={addExtensionIcon}
+                                            />
+                                        </button>
+                                    </Box>
                                     <Box className={styles.watermark}>
                                         <Watermark />
+                                    </Box>
+                                    <Box className={styles.smallDeviceStagePanel}>
+                                        <Controls className={styles.flexVertical}/>
+                                    </Box>
+                                    <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize])}>
+                                        <StageWrapper
+                                            isFullScreen={isFullScreen}
+                                            isRendererSupported={isRendererSupported}
+                                            isRtl={isRtl}
+                                            isMobile={isMobile}
+                                            stageSize={stageSize}
+                                            vm={vm}
+                                        />
+                                        <Box className={styles.targetWrapper}>
+                                            <TargetPane
+                                                stageSize={stageSize}
+                                                vm={vm}
+                                            />
+                                        </Box>
                                     </Box>
                                 </TabPanel>
                                 <TabPanel className={tabClassNames.tabPanel}>
@@ -426,7 +395,6 @@ const GUIComponent = props => {
                                 <Backpack host={backpackHost} />
                             ) : null}
                         </Box>
-                        {getStageAndTarget()}
                     </Box>
                 </Box>
                 <DragLayer />

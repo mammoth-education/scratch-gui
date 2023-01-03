@@ -6,6 +6,7 @@
     flex-direction: column;
     flex-grow: 1;
     padding: calc(2 * $space);
+    justify-content: space-between;
 }
 
 .row {
@@ -19,7 +20,7 @@
 }
 
 .row + .row {
-    margin-top: calc(2 * $space);
+    /* margin-top: calc(2 * $space); */
 }
 
 .input-group {
@@ -63,9 +64,6 @@
     background: hsla(300, 53%, 60%, 0.15);
     border: 1px solid $ui-black-transparent;
     border-radius: 5px;
-
-    margin-top: 20px;
-    margin-bottom: 20px;
 }
 
 $border-radius: 0.25rem;

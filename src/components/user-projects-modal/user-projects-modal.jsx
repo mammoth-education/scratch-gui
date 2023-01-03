@@ -6,8 +6,6 @@ import VM from 'scratch-vm';
 import {connect} from 'react-redux';
 import {closeUserProjectsModal} from '../../reducers/modals';
 
-import LocalStorage from '../../lib/local-storage/local-storage.js';
-
 import styles from './user-projects-modal.css';
 
 class UserProjectsModal extends React.Component {
@@ -17,14 +15,6 @@ class UserProjectsModal extends React.Component {
             'createHandleOpenProject',
             'createList',
         ]);
-        this.state = {
-            projectList: null,
-        };
-    }
-    componentDidMount () {
-        this.setState({
-            projectList: LocalStorage.ProjectList,
-        });
     }
     createDateTime (tiem){
       var date = new Date(tiem);
@@ -44,7 +34,8 @@ class UserProjectsModal extends React.Component {
     }
 
     createList () {
-        let projectList = LocalStorage.ProjectList;
+        let projectList = localStorage.getItem('project-list') || "{}";
+        projectList = JSON.parse(projectList);
         return Object.keys(projectList).map((id) => (
             <div 
                 className={styles.item}

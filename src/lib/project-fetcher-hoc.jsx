@@ -21,7 +21,7 @@ import {
 } from '../reducers/editor-tab';
 
 import log from './log';
-import LocalStorage from './local-storage/local-storage';
+import storage from './storage';
 
 /* Higher Order Component to provide behavior for loading projects by id. If
  * there's no id, the default project is loaded.
@@ -59,8 +59,8 @@ const ProjectFetcherHOC = function (WrappedComponent) {
             }
         }
         fetchProject (projectId, loadingState) {
-            return LocalStorage
-                .load(LocalStorage.AssetType.Project, projectId, LocalStorage.DataFormat.JSON)
+            return storage
+                .load(storage.AssetType.Project, projectId, storage.DataFormat.JSON)
                 .then(projectAsset => {
                     if (projectAsset) {
                         this.props.onFetchedProjectData(projectAsset.data, loadingState);

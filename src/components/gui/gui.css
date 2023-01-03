@@ -13,6 +13,7 @@
 
 .body-wrapper * {
     box-sizing: border-box;
+    max-height: -webkit-fill-available;
 }
 
 .flex-wrapper {
@@ -193,18 +194,6 @@
     position: relative;
 }
 
-.stage-and-target-small-device-container {
-    width: 3rem;
-}
-.stage-and-target-small-device-tab {
-    width: 3rem;
-}
-
-.stage-and-target-small-device-main {
-    position:absolute;
-    left: 800px;
-}
-
 .stage-and-target-wrapper {
     /*
         Makes rows for children:
@@ -339,4 +328,37 @@ $fade-out-distance: 15px;
 .tab-list-hide {
     display: none;
     height: 0;
+}
+
+.small-device-stage-panel {
+    width: 3rem;
+    background-color: $ui-white;
+    border: 1px solid $ui-black-transparent;
+    border-radius: 0.5rem;
+    margin-left: 0.2rem;
+    padding: 0.5rem;
+    display: none;
+    flex-direction: column;
+}
+
+.flex-vertical {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* For Phone */
+@media screen and (max-width: $full-size) {
+    .small-device-stage-panel {
+        display: flex;
+    }
+    [dir="ltr"] .watermark {
+        right: 4.25rem;
+    }
+    
+    .stage-and-target-wrapper {
+        flex-direction: row;
+        position: absolute;
+        left: 100%;
+    }
 }
