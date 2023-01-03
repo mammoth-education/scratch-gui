@@ -26,7 +26,17 @@ class UserProjectsModal extends React.Component {
             projectList: LocalStorage.ProjectList,
         });
     }
-
+    createDateTime (tiem){
+      var date = new Date(tiem);
+      var Y = date.getFullYear() + '/';
+      var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '/';
+      var D = date.getDate() + ' ';
+      var h = date.getHours() + ':';
+      var m = date.getMinutes() + ':';
+      var s = date.getSeconds(); 
+      // Y+M+D+h+m+s
+      return Y+M+D
+    }
     createHandleOpenProject (id, name) {
         return () => {
             this.props.onOpenProject(id, name);
@@ -42,19 +52,28 @@ class UserProjectsModal extends React.Component {
                 onMouseEnter={this.handleItemMouseEnter}
                 onMouseLeave={this.handleItemMouseLeave}
             >
-                <div className={styles.itemName}>
-                    {projectList[id].name}
+                <div className={styles.itemImg}>
+                  图片
                 </div>
-                <div className={styles.itemDate}>
-                    {projectList[id].updateDate}
-                </div>
-                <div className={styles.itemAction}>
-                    <button
-                        className={styles.openButton}
-                        onClick={this.createHandleOpenProject(id, projectList[id].name)}
-                    >
-                        打开
-                    </button>
+                <div className={styles.itemDescribe}>
+                  <div className={styles.itemName}>
+                      {projectList[id].name}
+                  </div>
+                  <div className={styles.itemDate}>
+                      {projectList[id].updateDate}
+                  </div>
+                  <div className={styles.itemAction}>
+                      <button
+                          className={styles.openButton}
+                          onClick={this.createHandleOpenProject(id, projectList[id].name)}
+                      >
+                          打开
+                      </button>
+                      <button>删除</button>
+                  </div>
+                  <div className={styles.itemTime}>
+                    {this.createDateTime(projectList[id].createDate)}
+                  </div>
                 </div>
             </div>
         ));

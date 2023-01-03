@@ -7,7 +7,7 @@ import GUI from '../containers/gui.jsx';
 import HashParserHOC from '../lib/hash-parser-hoc.jsx';
 
 const onClickLogo = () => {
-    window.location = 'https://scratch.mit.edu';
+    // window.location = 'https://scratch.mit.edu';
 };
 
 export default appTarget => {
