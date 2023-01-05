@@ -75,7 +75,7 @@ import aboutIcon from './icon--about.svg';
 import gridIcon from './icon--grid.svg';
 import iconSave from './icon--save.svg';
 
-import scratchLogo from './scratch-logo.svg';
+import scratchLogo from './mammoth-logo.png';
 import codeIcon from '../gui/icon--code.svg';
 import costumesIcon from '../gui/icon--costumes.svg';
 import soundsIcon from '../gui/icon--sounds.svg';
