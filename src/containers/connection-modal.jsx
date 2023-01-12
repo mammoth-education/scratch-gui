@@ -18,6 +18,8 @@ class ConnectionModal extends React.Component {
             'handleConnecting',
             'handleDisconnect',
             'handleError',
+            'handleFlashFirmware',
+            'handleFlashFirmwareStart',
             'handleHelp',
             'handleRenameCancel',
             'handleRenameConfirm',
@@ -26,6 +28,7 @@ class ConnectionModal extends React.Component {
             'handleReconnect',
         ]);
         this.state = {
+            flashProgress: -1,
             deviceName: props.vm.getPeripheralIsConnected(props.extensionId) ?
                 props.vm.getPeripheralName(props.extensionId) : "",
             extension: extensionData.find(ext => ext.extensionId === props.extensionId),
@@ -160,6 +163,37 @@ class ConnectionModal extends React.Component {
             label: this.props.extensionId
         });
     }
+    handleFlashFirmware () {
+        this.setState({
+            phase: PHASES.flashingFirmware
+        });
+        analytics.event({
+            category: 'extensions',
+            action: 'flashFirmware',
+            label: this.props.extensionId
+        });
+    }
+    handleFlashFirmwareStart () {
+        this.props.vm.flashLatestFirmware(this.props.extensionId);
+        document.addEventListener("onFirmwareFlashProgress", (e) => {
+            let progress = e.detail;
+            if (progress === 100) {
+                this.setState({
+                    flashProgress: progress,
+                    phase: PHASES.flashedFirmware
+                });
+            } else {
+                this.setState({
+                    flashProgress: progress
+                });
+            }
+        });
+        analytics.event({
+            category: 'extensions',
+            action: 'flashFirmwareStart',
+            label: this.props.extensionId
+        });
+    }
     render () {
         return (
             <ConnectionModalComponent
@@ -168,15 +202,19 @@ class ConnectionModal extends React.Component {
                 connectionSmallIconURL={this.state.extension && this.state.extension.connectionSmallIconURL}
                 connectionTipIconURL={this.state.extension && this.state.extension.connectionTipIconURL}
                 extensionId={this.props.extensionId}
+                flashProgress={this.state.flashProgress}
                 name={this.state.extension && this.state.extension.name}
                 phase={this.state.phase}
                 title={this.props.extensionId}
                 useAutoScan={this.state.extension && this.state.extension.useAutoScan}
                 deviceNameEditable={this.state.extension && this.state.extension.deviceNameEditable}
+                firmwareFlashable={this.state.extension && this.state.extension.firmwareFlashable}
                 deviceName={this.state.deviceName}
                 onRenameDevice={this.handleRename}
                 vm={this.props.vm}
                 onCancel={this.handleCancel}
+                onFlashFirmware={this.handleFlashFirmware}
+                onFlashFirmwareStart={this.handleFlashFirmwareStart}
                 onRenameCancel={this.handleRenameCancel}
                 onRenameChanged={this.handleRenameChanged}
                 onRenameConfirm={this.handleRenameConfirm}

@@ -9,6 +9,7 @@ import Dots from './dots.jsx';
 
 import radarIcon from './icons/searching.png';
 import refreshIcon from './icons/refresh.svg';
+import flashFirmwareIcon from './icons/flash-firmware.svg';
 
 import styles from './connection-modal.css';
 
@@ -67,28 +68,36 @@ const ScanningStep = props => (
                 counter={0}
                 total={3}
             />
-            <button
-                className={classNames(styles.bottomAreaItem, styles.connectionButton)}
-                onClick={props.onRefresh}
-            >
-                <FormattedMessage
-                    defaultMessage="Refresh"
-                    description="Button in prompt for starting a search"
-                    id="gui.connection.search"
-                />
-                <img
-                    className={styles.buttonIconRight}
-                    src={refreshIcon}
-                />
-            </button>
+            <div className={classNames(styles.bottomAreaItem, styles.spaceAroundButtons)}>
+                {props.firmwareFlashable &&
+                    <button className={styles.connectionButton} onClick={props.onFlashFirmware}>
+                        <FormattedMessage
+                            defaultMessage="Flash Firmware"
+                            description="Flash Firmware"
+                            id="gui.connection.flash-firmware"
+                        />
+                        <img className={styles.buttonIconRight} src={flashFirmwareIcon} />
+                    </button>
+                }
+                <button className={styles.connectionButton} onClick={props.onRefresh}>
+                    <FormattedMessage
+                        defaultMessage="Refresh"
+                        description="Button in prompt for starting a search"
+                        id="gui.connection.search"
+                    />
+                    <img className={styles.buttonIconRight} src={refreshIcon} />
+                </button>
+            </div>
         </Box>
     </Box>
 );
 
 ScanningStep.propTypes = {
     connectionSmallIconURL: PropTypes.string,
+    firmwareFlashable: PropTypes.bool,
     onConnecting: PropTypes.func,
     onRefresh: PropTypes.func,
+    onFlashFirmware: PropTypes.func,
     peripheralList: PropTypes.arrayOf(PropTypes.shape({
         name: PropTypes.string,
         rssi: PropTypes.number,

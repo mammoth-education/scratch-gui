@@ -13,6 +13,8 @@ import ErrorStep from './error-step.jsx';
 import UnavailableStep from './unavailable-step.jsx';
 import RenameDeviceStep from './rename-device-step.jsx';
 import RenamedDeviceStep from './renamed-device-step.jsx';
+import FlashingFirmwareStep from './flashing-firmware-step.jsx';
+import FlashedFirmwareStep from './flashed-firmware-step.jsx';
 
 import styles from './connection-modal.css';
 
@@ -23,7 +25,9 @@ const PHASES = keyMirror({
     error: null,
     unavailable: null,
     renameDevice: null,
-    renamedDevice: null
+    renamedDevice: null,
+    flashingFirmware: null,
+    flashedFirmware: null,
 });
 
 const ConnectionModalComponent = props => (
@@ -45,6 +49,8 @@ const ConnectionModalComponent = props => (
             {props.phase === PHASES.unavailable && <UnavailableStep {...props} />}
             {props.phase === PHASES.renameDevice && <RenameDeviceStep {...props} />}
             {props.phase === PHASES.renamedDevice && <RenamedDeviceStep {...props} />}
+            {props.phase === PHASES.flashingFirmware && <FlashingFirmwareStep {...props} />}
+            {props.phase === PHASES.flashedFirmware && <FlashedFirmwareStep {...props} />}
         </Box>
     </Modal>
 );
@@ -53,8 +59,10 @@ ConnectionModalComponent.propTypes = {
     connectingMessage: PropTypes.node.isRequired,
     connectionSmallIconURL: PropTypes.string,
     connectionTipIconURL: PropTypes.string,
+    firmwareFlashable: PropTypes.bool,
     name: PropTypes.node,
     onCancel: PropTypes.func.isRequired,
+    onFlashFirmware: PropTypes.func,
     onHelp: PropTypes.func.isRequired,
     phase: PropTypes.oneOf(Object.keys(PHASES)).isRequired,
     title: PropTypes.string.isRequired,
