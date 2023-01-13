@@ -479,3 +479,32 @@
     border-radius: 0.5rem;
     background: $motion-primary;
 }
+
+.error-message {
+    width: 80%;
+    height: 8rem;
+    white-space: pre-line;
+    overflow-x: scroll;
+    background: $ui-white-transparent;
+    border-radius: 0.5rem;
+    border: 1px dashed $ui-black-transparent;
+    padding: 0.3rem;
+    -moz-user-select: text;
+    -khtml-user-select: text;
+    -webkit-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+.error-message::-webkit-scrollbar-track {
+	border-radius: 10px;
+	background-color: $ui-white-transparent;
+}
+.error-message::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+}
+.error-message::-webkit-scrollbar-thumb {
+	border-radius: 0.25rem;
+	background-color: $motion-tertiary;
+}

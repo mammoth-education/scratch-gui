@@ -26,7 +26,7 @@ const ConnectedStep = props => (
         </Box>
         <Box className={styles.bottomArea}>
             <Box className={classNames(styles.bottomAreaItem, styles.instructions)}>
-                <span>{props.deviceName}</span>
+                <span>{props.deviceName + " "}</span>
                 <FormattedMessage
                     defaultMessage="Connected"
                     description="Message indicating that a device was connected"
@@ -61,12 +61,12 @@ const ConnectedStep = props => (
                 </button> : null}
                 <button
                     className={styles.connectionButton}
-                    onClick={props.onCancel}
+                    onClick={props.onFlashFirmware}
                 >
                     <FormattedMessage
-                        defaultMessage="Go to Editor"
-                        description="Button to return to the editor"
-                        id="gui.connection.go-to-editor"
+                        defaultMessage="Check for Updates"
+                        description="check for update"
+                        id="gui.connection.check-for-updates"
                     />
                 </button>
             </div>

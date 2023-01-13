@@ -20,6 +20,10 @@ class ConnectionModal extends React.Component {
             'handleError',
             'handleFlashFirmware',
             'handleFlashFirmwareStart',
+            'handleFlashFirmwareMessage',
+            'handleFlashFirmwareProgress',
+            'handleFlashFirmwareError',
+            'handleFlashFirmwareDone',
             'handleHelp',
             'handleRenameCancel',
             'handleRenameConfirm',
@@ -28,7 +32,11 @@ class ConnectionModal extends React.Component {
             'handleReconnect',
         ]);
         this.state = {
+            latestFirmwareVersion: props.vm.getLatestFirmwareVersion(props.extensionId),
             flashProgress: -1,
+            flashMessage: '',
+            flashErrorMessage: '',
+            currentFirmwareVersion: null,
             deviceName: props.vm.getPeripheralIsConnected(props.extensionId) ?
                 props.vm.getPeripheralName(props.extensionId) : "",
             extension: extensionData.find(ext => ext.extensionId === props.extensionId),
@@ -98,6 +106,11 @@ class ConnectionModal extends React.Component {
     }
     handleConnected () {
         let name = this.props.vm.getPeripheralName(this.props.extensionId);
+        this.props.vm.getPeripheralFirmwareVersion(this.props.extensionId).then(version => {
+            this.setState({
+                currentFirmwareVersion: version
+            });
+        });
         this.setState({
             phase: PHASES.connected,
             deviceName: name
@@ -135,7 +148,7 @@ class ConnectionModal extends React.Component {
     handleRenameConfirm () {
         this.props.vm.renamePeripheral(this.props.extensionId, this.state.deviceName);
         this.setState({
-            phase: PHASES.renamedDevice
+            phase: PHASES.renameDeviceSuccess
         });
         analytics.event({
             category: 'extensions',
@@ -165,7 +178,8 @@ class ConnectionModal extends React.Component {
     }
     handleFlashFirmware () {
         this.setState({
-            phase: PHASES.flashingFirmware
+            phase: PHASES.flashFirmware,
+            latestFirmwareVersion: this.props.vm.getLatestFirmwareVersion(this.props.extensionId),
         });
         analytics.event({
             category: 'extensions',
@@ -173,21 +187,60 @@ class ConnectionModal extends React.Component {
             label: this.props.extensionId
         });
     }
+    handleFlashFirmwareProgress (e) {
+        let progress = e.detail;
+        this.setState({
+            flashProgress: progress
+        });
+        analytics.event({
+            category: 'extensions',
+            action: 'flashFirmwareProgress',
+            label: this.props.extensionId
+        });
+    }
+    handleFlashFirmwareMessage (e) {
+        let message = e.detail;
+        this.setState({
+            flashMessage: message
+        });
+        analytics.event({
+            category: 'extensions',
+            action: 'flashFirmwareMessage',
+            label: this.props.extensionId
+        });
+    }
+    handleFlashFirmwareError (e) {
+        let error = e.detail;
+        this.setState({
+            flashErrorMessage: error,
+            phase: PHASES.flasheFirmwareError
+        });
+        analytics.event({
+            category: 'extensions',
+            action: 'flashFirmwareError',
+            label: this.props.extensionId
+        });
+    }
+    handleFlashFirmwareDone (e) {
+        document.removeEventListener("onFlashFirmwareProgress", this.handleFlashFirmwareProgress);
+        document.removeEventListener("onFlashFirmwareMessage", this.handleFlashFirmwareMessage);
+        document.removeEventListener("onFlashFirmwareError", this.handleFlashFirmwareError);
+        document.removeEventListener("onFlashFirmwareDone", this.handleFlashFirmwareDone);
+        this.setState({
+            phase: PHASES.flasheFirmwareSuccess
+        });
+        analytics.event({
+            category: 'extensions',
+            action: 'flashFirmwareDone',
+            label: this.props.extensionId
+        });
+    }
     handleFlashFirmwareStart () {
         this.props.vm.flashLatestFirmware(this.props.extensionId);
-        document.addEventListener("onFirmwareFlashProgress", (e) => {
-            let progress = e.detail;
-            if (progress === 100) {
-                this.setState({
-                    flashProgress: progress,
-                    phase: PHASES.flashedFirmware
-                });
-            } else {
-                this.setState({
-                    flashProgress: progress
-                });
-            }
-        });
+        document.addEventListener("onFlashFirmwareProgress", this.handleFlashFirmwareProgress);
+        document.addEventListener("onFlashFirmwareMessage", this.handleFlashFirmwareMessage);
+        document.addEventListener("onFlashFirmwareError", this.handleFlashFirmwareError);
+        document.addEventListener("onFlashFirmwareDone", this.handleFlashFirmwareDone);
         analytics.event({
             category: 'extensions',
             action: 'flashFirmwareStart',
@@ -202,6 +255,10 @@ class ConnectionModal extends React.Component {
                 connectionSmallIconURL={this.state.extension && this.state.extension.connectionSmallIconURL}
                 connectionTipIconURL={this.state.extension && this.state.extension.connectionTipIconURL}
                 extensionId={this.props.extensionId}
+                currentFirmwareVersion={this.state.currentFirmwareVersion}
+                latestFirmwareVersion={this.state.latestFirmwareVersion}
+                flashErrorMessage={this.state.flashErrorMessage}
+                flashMessage={this.state.flashMessage}
                 flashProgress={this.state.flashProgress}
                 name={this.state.extension && this.state.extension.name}
                 phase={this.state.phase}

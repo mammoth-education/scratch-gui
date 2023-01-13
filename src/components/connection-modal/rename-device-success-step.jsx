@@ -7,7 +7,7 @@ import Box from '../box/box.jsx';
 import styles from './connection-modal.css';
 import classNames from 'classnames';
 
-const RenamedDeviceStep = props => (
+const RenameDeviceSuccessStep = props => (
     <Box className={styles.body}>
         <Box className={styles.activityArea}>
             <Box className={styles.centeredRow}>
@@ -36,9 +36,9 @@ const RenamedDeviceStep = props => (
     </Box>
 );
 
-RenamedDeviceStep.propTypes = {
+RenameDeviceSuccessStep.propTypes = {
     onReconnect: PropTypes.func.isRequired,
     deviceName: PropTypes.string.isRequired,
 };
 
-export default RenamedDeviceStep;
+export default RenameDeviceSuccessStep;

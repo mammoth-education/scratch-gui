@@ -7,7 +7,7 @@ import Box from '../box/box.jsx';
 import styles from './connection-modal.css';
 import classNames from 'classnames';
 
-const FlashedFirmwareStep = props => (
+const FlashFirmwareSuccessStep = props => (
     <Box className={styles.body}>
         <Box className={styles.activityArea}>
             <Box className={styles.spaceEvenlyColumn}>
@@ -21,7 +21,7 @@ const FlashedFirmwareStep = props => (
                 <FormattedMessage
                     defaultMessage="Flash Firmware Successfully! Scan for the device now!"
                     description="Flash Firmware Successfully tips"
-                    id="gui.connection.flash-firmware-successfully"
+                    id="gui.connection.flash-firmware-success-tips"
                 />
             </Box>
         </Box>
@@ -40,8 +40,8 @@ const FlashedFirmwareStep = props => (
     </Box>
 );
 
-FlashedFirmwareStep.propTypes = {
+FlashFirmwareSuccessStep.propTypes = {
     onScanning: PropTypes.func.isRequired,
 };
 
-export default FlashedFirmwareStep;
+export default FlashFirmwareSuccessStep;

@@ -7,24 +7,28 @@ import Box from '../box/box.jsx';
 import styles from './connection-modal.css';
 import classNames from 'classnames';
 
-const FlashingFirmwareStep = props => (
+const FlasheFirmwareErrorStep = props => (
     <Box className={styles.body}>
         <Box className={styles.activityArea}>
             <Box className={styles.spaceEvenlyColumn}>
                 <span className={styles.deviceName}>
                     <FormattedMessage
-                        defaultMessage="Flash Firmware"
-                        description="Flash Firmware"
-                        id="gui.connection.flash-firmware"
+                        defaultMessage="Flash Firmware Error"
+                        description="Flash Firmware Error"
+                        id="gui.connection.flash-firmware-error"
                     />
                 </span>
-                <Box className={styles.progressBarFrame}>
-                    <Box className={styles.progressBarValue} style={{width: `${props.flashProgress}%`}}>
-                    </Box>
-                </Box>
+                <span className={styles.errorMessage}>
+                    {props.flashErrorMessage}
+                </span>
             </Box>
         </Box>
         <Box className={styles.bottomArea}>
+            <FormattedMessage
+                defaultMessage="Make sure to connect the device to the computer and try again!"
+                description="Flash Firmware error tips"
+                id="gui.connection.flash-firmware-error-tips"
+            />
             <div className={classNames(styles.bottomAreaItem, styles.cornerButtons)}>
                 <button className={styles.connectionButton} onClick={props.onReconnect}>
                     <FormattedMessage
@@ -33,11 +37,14 @@ const FlashingFirmwareStep = props => (
                         id="gui.modal.back"
                     />
                 </button>
-                <button className={styles.connectionButton} onClick={props.onFlashFirmwareStart}>
+                <button
+                    className={classNames(styles.bottomAreaItem, styles.connectionButton)}
+                    onClick={props.onFlashFirmware}
+                >
                     <FormattedMessage
-                        defaultMessage="Flash"
-                        description="Flash (firmware)"
-                        id="gui.connection.flash"
+                        defaultMessage="Retry"
+                        description="Retry"
+                        id="gui.connection.retry"
                     />
                 </button>
             </div>
@@ -45,9 +52,9 @@ const FlashingFirmwareStep = props => (
     </Box>
 );
 
-FlashingFirmwareStep.propTypes = {
-    onFlashFirmwareStart: PropTypes.func.isRequired,
-    flashProgress: PropTypes.number,
+FlasheFirmwareErrorStep.propTypes = {
+    onScanning: PropTypes.func.isRequired,
+    flashErrorMessage: PropTypes.string,
 };
 
-export default FlashingFirmwareStep;
+export default FlasheFirmwareErrorStep;
