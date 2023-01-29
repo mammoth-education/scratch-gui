@@ -365,7 +365,7 @@ const GUIComponent = props => {
                                         <Watermark />
                                     </Box>
                                     <Box className={styles.smallDeviceStagePanel}>
-                                        <Controls className={styles.flexVertical}/>
+                                        <Controls className={styles.flexVertical} vm={vm}/>
                                     </Box>
                                     <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize])}>
                                         <StageWrapper
