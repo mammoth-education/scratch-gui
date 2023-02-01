@@ -177,15 +177,22 @@ class ConnectionModal extends React.Component {
         });
     }
     handleFlashFirmware () {
-        this.setState({
-            phase: PHASES.flashFirmware,
-            latestFirmwareVersion: this.props.vm.getLatestFirmwareVersion(this.props.extensionId),
-        });
-        analytics.event({
-            category: 'extensions',
-            action: 'flashFirmware',
-            label: this.props.extensionId
-        });
+        try {
+            // If we're not connected to a peripheral, close the websocket so we stop scanning.
+            if (!this.props.vm.getPeripheralIsConnected(this.props.extensionId)) {
+                this.props.vm.disconnectPeripheral(this.props.extensionId);
+            }
+        } finally {
+            this.setState({
+                phase: PHASES.flashFirmware,
+                latestFirmwareVersion: this.props.vm.getLatestFirmwareVersion(this.props.extensionId),
+            });
+            analytics.event({
+                category: 'extensions',
+                action: 'flashFirmware',
+                label: this.props.extensionId
+            });
+        }
     }
     handleFlashFirmwareProgress (e) {
         let progress = e.detail;
