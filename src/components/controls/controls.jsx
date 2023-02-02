@@ -8,7 +8,7 @@ import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
 
 import styles from './controls.css';
-
+// 停止，运行，全屏
 const messages = defineMessages({
     goTitle: {
         id: 'gui.controls.go',

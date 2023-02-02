@@ -35,6 +35,10 @@ const ProjectFetcherHOC = function (WrappedComponent) {
             bindAll(this, [
                 'fetchProject'
             ]);
+            storage.setProjectHost(props.projectHost);
+            storage.setProjectToken(props.projectToken);
+            storage.setAssetHost(props.assetHost);
+            storage.setTranslatorFunction(props.intl.formatMessage);
             // props.projectId might be unset, in which case we use our default;
             // or it may be set by an even higher HOC, and passed to us.
             // Either way, we now know what the initial projectId should be, so
@@ -48,6 +52,15 @@ const ProjectFetcherHOC = function (WrappedComponent) {
             }
         }
         componentDidUpdate (prevProps) {
+            if (prevProps.projectHost !== this.props.projectHost) {
+                storage.setProjectHost(this.props.projectHost);
+            }
+            if (prevProps.projectToken !== this.props.projectToken) {
+                storage.setProjectToken(this.props.projectToken);
+            }
+            if (prevProps.assetHost !== this.props.assetHost) {
+                storage.setAssetHost(this.props.assetHost);
+            }
             if (this.props.isFetchingWithId && !prevProps.isFetchingWithId) {
                 this.fetchProject(this.props.reduxProjectId, this.props.loadingState);
             }
@@ -123,7 +136,7 @@ const ProjectFetcherHOC = function (WrappedComponent) {
     };
     ProjectFetcherComponent.defaultProps = {
         // assetHost: 'https://assets.scratch.mit.edu',
-        assetHost: 'http://127.0.0.1:8601',
+        assetHost: './',
         projectHost: 'https://projects.scratch.mit.edu'
     };
 

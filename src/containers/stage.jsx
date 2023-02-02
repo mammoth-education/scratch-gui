@@ -409,6 +409,8 @@ class Stage extends React.Component {
         const {
             vm, // eslint-disable-line no-unused-vars
             onActivateColorPicker, // eslint-disable-line no-unused-vars
+            phoneTag,
+            isSmallStageSize,
             ...props
         } = this.props;
         return (
@@ -419,6 +421,8 @@ class Stage extends React.Component {
                 question={this.state.question}
                 onDoubleClick={this.handleDoubleClick}
                 onQuestionAnswered={this.handleQuestionAnswered}
+                isSmallStageSize={isSmallStageSize}
+                phoneTag={phoneTag}
                 {...props}
             />
         );
@@ -434,7 +438,8 @@ Stage.propTypes = {
     onDeactivateColorPicker: PropTypes.func,
     stageSize: PropTypes.oneOf(Object.keys(STAGE_DISPLAY_SIZES)).isRequired,
     useEditorDragStyle: PropTypes.bool,
-    vm: PropTypes.instanceOf(VM).isRequired
+    vm: PropTypes.instanceOf(VM).isRequired,
+    phoneTag:PropTypes.bool,
 };
 
 Stage.defaultProps = {

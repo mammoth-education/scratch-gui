@@ -112,6 +112,7 @@ const SpriteSelectorComponent = function (props) {
                 onExportSprite={onExportSprite}
                 onSelectSprite={onSelectSprite}
             />
+            {/* 选择一个角色 */}
             <ActionMenu
                 className={styles.addButton}
                 img={spriteIcon}

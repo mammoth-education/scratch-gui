@@ -41,6 +41,13 @@ const filterInlineAlerts = alertsList => (
 
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
+    
+    // 查看当前的状态
+    // if (action.type.startsWith('scratch-gui/alerts/')) {
+    //     console.log('Alerts action:', action);
+    //     console.log('Alerts state:', action.type.split("/")[2]);
+    // }
+
     switch (action.type) {
     case SHOW_ALERT: { // intended to show standard and inline alerts, but not extensions
         const alertId = action.alertId;

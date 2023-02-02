@@ -78,9 +78,11 @@ const ProjectSaverHOC = function (WrappedComponent) {
                 this.scheduleAutoSave();
             }
             if (this.props.isUpdating && !prevProps.isUpdating) {
+                console.log("Project-saver-hoc: updateProjectToStorage");
                 this.updateProjectToStorage();
             }
             if (this.props.isCreatingNew && !prevProps.isCreatingNew) {
+                console.log("Project-saver-hoc: createNewProjectToStorage");
                 this.createNewProjectToStorage();
             }
             if (this.props.isCreatingCopy && !prevProps.isCreatingCopy) {
@@ -154,7 +156,9 @@ const ProjectSaverHOC = function (WrappedComponent) {
         }
         updateProjectToStorage () {
             this.props.onShowSavingAlert();
-            return this.storeProject(this.props.reduxProjectId)
+            return this.storeProject(this.props.reduxProjectId, {
+                title: this.props.reduxProjectTitle
+            })
                 .then(() => {
                     // there's an http response object available here, but we don't need to examine
                     // it, because there are no values contained in it that we care about
@@ -169,12 +173,14 @@ const ProjectSaverHOC = function (WrappedComponent) {
                 });
         }
         createNewProjectToStorage () {
+            this.props.onShowSavingAlert();
             return this.storeProject(null, {
                 isNew: 1,
                 title: this.props.reduxProjectTitle
             })
                 .then(response => {
                     this.props.onCreatedProject(response.id.toString(), this.props.loadingState);
+                    this.props.onShowSaveSuccessAlert();
                 })
                 .catch(err => {
                     this.props.onShowAlert('creatingError');

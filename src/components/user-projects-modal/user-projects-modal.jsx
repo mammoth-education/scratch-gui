@@ -5,27 +5,31 @@ import Modal from '../../containers/modal.jsx';
 import VM from 'scratch-vm';
 import {connect} from 'react-redux';
 import {closeUserProjectsModal} from '../../reducers/modals';
-
+import UniversalPopup from '../universal-popup/universal-popup.jsx'
 import styles from './user-projects-modal.css';
-
+import { FormattedMessage } from 'react-intl';
+// 我的项目列表
 class UserProjectsModal extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
             'createHandleOpenProject',
             'createList',
+            'controlPopup'
         ]);
+        this.state = {flag:false,popupDisplay:false,content:"你确定删除所选数据？",deleteID:null,deleteName:null};
     }
     createDateTime (tiem){
       var date = new Date(tiem);
       var Y = date.getFullYear() + '/';
       var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '/';
-      var D = date.getDate() + ' ';
+      // var D = date.getDate() + ' ';
+      var D = date.getDate() < 10 ? "0" + date.getDate() + ' ' : date.getDate() + ' ';
       var h = date.getHours() + ':';
-      var m = date.getMinutes() + ':';
+      var m = date.getMinutes() < 10 ? "0" + (date.getMinutes()) : date.getMinutes();
       var s = date.getSeconds(); 
       // Y+M+D+h+m+s
-      return Y+M+D
+      return Y+M+D+h+m
     }
     createHandleOpenProject (id, name) {
         return () => {
@@ -33,6 +37,24 @@ class UserProjectsModal extends React.Component {
         }
     }
 
+    controlPopup (id,name) {
+      return ()=>{
+        console.log(id,name);
+        let popupDisplay = this.state.popupDisplay;
+        this.setState({popupDisplay:!popupDisplay,deleteID:id,deleteName:name})
+      }
+    }
+
+    determine = ()=> {
+      this.props.onDeleProject(this.state.deleteID,this.state.deleteName);
+      let popupDisplay = this.state.popupDisplay;
+      this.setState({popupDisplay:!popupDisplay,deleteID:null,deleteName:null})
+    }
+    cancel = () =>{
+      console.log("cancel");
+      let popupDisplay = this.state.popupDisplay;
+      this.setState({popupDisplay:!popupDisplay})
+    }
     createList () {
         let projectList = localStorage.getItem('project-list') || "{}";
         projectList = JSON.parse(projectList);
@@ -43,27 +65,35 @@ class UserProjectsModal extends React.Component {
                 onMouseEnter={this.handleItemMouseEnter}
                 onMouseLeave={this.handleItemMouseLeave}
             >
-                <div className={styles.itemImg}>
-                  图片
-                </div>
                 <div className={styles.itemDescribe}>
-                  <div className={styles.itemName}>
-                      {projectList[id].name}
-                  </div>
-                  <div className={styles.itemDate}>
-                      {projectList[id].updateDate}
+                  <div>
+                    <span className={styles.itemName}>
+                        {projectList[id].name}
+                    </span>
+                    <div className={styles.itemTime}>
+                      {this.createDateTime(projectList[id].updateDate)}
+                    </div>
+
                   </div>
                   <div className={styles.itemAction}>
                       <button
                           className={styles.openButton}
                           onClick={this.createHandleOpenProject(id, projectList[id].name)}
                       >
-                          打开
+                        <FormattedMessage
+                            defaultMessage="打开"
+                            description="打开"
+                            id="gui.gui.codeTab"
+                        />
                       </button>
-                      <button>删除</button>
-                  </div>
-                  <div className={styles.itemTime}>
-                    {this.createDateTime(projectList[id].createDate)}
+                      <button 
+                        onClick={this.controlPopup(id,projectList[id].name)}>
+                        <FormattedMessage
+                              defaultMessage="删除"
+                              description="删除"
+                              id="gui.gui.lostPeripheralConnection"
+                          />
+                      </button>
                   </div>
                 </div>
             </div>
@@ -81,7 +111,9 @@ class UserProjectsModal extends React.Component {
                 <div className={styles.modalContent}>
                     {this.createList()}
                 </div>
+                {this.state.popupDisplay ? <UniversalPopup determine={this.determine} cancel={this.cancel} content={this.state.content}/> : null}
             </Modal>
+            
     )}
 }
 
@@ -90,6 +122,7 @@ UserProjectsModal.propTypes = {
     onClose: PropTypes.func.isRequired,
     title: PropTypes.string,
     onOpenProject: PropTypes.func,
+    onDeleProject: PropTypes.func,
 }
 
 const mapStateToProps = state => ({

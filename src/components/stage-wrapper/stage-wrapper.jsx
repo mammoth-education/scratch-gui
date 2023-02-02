@@ -20,9 +20,12 @@ const StageWrapperComponent = function (props) {
         loading,
         isMobile,
         stageSize,
-        vm
+        vm,
+        isSmallDevice,
+        isSmallStageSize,
+        phoneTag
     } = props;
-
+    
     return (
         <Box
             className={classNames(
@@ -32,17 +35,21 @@ const StageWrapperComponent = function (props) {
             dir={isRtl ? 'rtl' : 'ltr'}
         >
             <Box className={styles.stageMenuWrapper}>
-                <StageHeader
+                {/* 舞台编辑 */}
+                {isSmallDevice ? null : <StageHeader
                     stageSize={stageSize}
                     vm={vm}
-                />
+                />}
             </Box>
-            <Box className={styles.stageCanvasWrapper}>
+            <Box className={styles.stageCanvasWrapper} style={{"margin-left":" 0.5rem"}}>
                 {isRendererSupported ?
                     <Stage
-                        stageSize={stageSize}
+                        stageSize={ stageSize}
                         isMobile={isMobile}
                         vm={vm}
+                        isSmallDevice={isSmallDevice}
+                        isSmallStageSize={isSmallStageSize}
+                        phoneTag={phoneTag}
                     />
                     : null}
             </Box>

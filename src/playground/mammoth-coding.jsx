@@ -22,7 +22,7 @@ export default appTarget => {
         // Warn before navigating away
         window.onbeforeunload = () => true;
     }
-
+    // 默认语言
     ReactDOM.render(
         <WrappedGui
             canEditTitle

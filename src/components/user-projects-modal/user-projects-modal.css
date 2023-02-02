@@ -16,7 +16,7 @@
     background-color: $ui-white;
     cursor: pointer;
     height: auto;
-    width: 20rem;
+    width: 15rem;
     margin: 0 3% 0.5rem 0;
 }
 .itemImg{
@@ -25,11 +25,30 @@
   background-color: red;
 }
 .itemDescribe{
-  margin-left: 1rem;
+  /* margin-left: 1rem; */
+  width: 100%;
+}
+.openButton{
+  margin-right: 1rem;
 }
 .itemDate{
   margin: 1rem 0;
 }
 .itemTime{
-  margin: 1rem 0 0 75%;
+  float: right;
+}
+.itemAction{
+  margin: 1rem 0;
+}
+
+.itemAction button {
+  padding: 0.6rem 0.75rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  background: $motion-primary;
+  border: $motion-primary;
+  color: white;
+  cursor: pointer;
 }

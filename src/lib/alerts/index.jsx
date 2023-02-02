@@ -142,7 +142,7 @@ const alerts = [
     },
     {
         alertId: 'saveSuccess',
-        alertType: AlertTypes.INLINE,
+        // alertType: AlertTypes.INLINE,
         clearList: ['saveSuccess', 'saving', 'savingError'],
         content: (
             <FormattedMessage
@@ -153,11 +153,12 @@ const alerts = [
         ),
         iconURL: successImage,
         level: AlertLevels.SUCCESS,
+        // level: AlertLevels.WARN,
         maxDisplaySecs: 3
     },
     {
         alertId: 'saving',
-        alertType: AlertTypes.INLINE,
+        // alertType: AlertTypes.INLINE,
         clearList: ['saveSuccess', 'saving', 'savingError'],
         content: (
             <FormattedMessage

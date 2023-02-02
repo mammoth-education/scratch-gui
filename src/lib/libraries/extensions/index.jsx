@@ -90,7 +90,8 @@ export default [
                 id="gui.extension.kaka.connectingMessage"
             />
         ),
-        helpLink: 'https://scratch.mit.edu/wedo' // TODO
+        // 帮助的链接
+        // helpLink: 'https://baidu.com' // TODO  
     },
     {
         name: (

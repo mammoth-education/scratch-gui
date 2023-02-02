@@ -8,7 +8,8 @@ import {setFullScreen} from '../reducers/mode';
 
 import {connect} from 'react-redux';
 
-import StageHeaderComponent from '../components/stage-header/stage-header.jsx';
+// import Fullscreen from '../../components/fullscreen.jsx'
+import Fullscreen from '../components/fullscreen/fullscreen.jsx'
 
 // eslint-disable-next-line react/prefer-stateless-function
 class StageHeader extends React.Component {
@@ -35,7 +36,7 @@ class StageHeader extends React.Component {
             ...props
         } = this.props;
         return (
-            <StageHeaderComponent
+            <Fullscreen
                 {...props}
                 onKeyPress={this.handleKeyPress}
             />
