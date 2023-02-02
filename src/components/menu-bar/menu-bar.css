@@ -269,6 +269,7 @@
     border-radius: 0 0.2rem 0.2rem 0;
     justify-content: center;
     background-color: $ui-white-transparent;
+    background-clip: padding-box;
 }
 .save-button img {
     width: 80%;
