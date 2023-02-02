@@ -54,6 +54,8 @@ import kakaConnectionSmallIconURL from './kaka/kaka-small.svg';
 let platform = "browser";
 if (window.cordova && window.cordova.platformId !== "browser") {
     platform = window.cordova.platformId;
+} else if (navigator.userAgent.indexOf("Electron/") > 0) {
+    platform = "electron";
 }
 
 export default [
@@ -80,6 +82,7 @@ export default [
         bluetoothRequired: true,
         launchPeripheralConnectionFlow: true,
         deviceNameEditable: true,
+        firmwareFlashable: true,
         useAutoScan: platform === "browser" ? true : false,
         connectionIconURL: kakaConnectionIconURL,
         connectionSmallIconURL: kakaConnectionSmallIconURL,

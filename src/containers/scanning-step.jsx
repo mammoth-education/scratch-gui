@@ -55,12 +55,14 @@ class ScanningStep extends React.Component {
         return (
             <ScanningStepComponent
                 connectionSmallIconURL={this.props.connectionSmallIconURL}
+                firmwareFlashable={this.props.firmwareFlashable}
                 peripheralList={this.state.peripheralList}
                 phase={this.state.phase}
                 scanning={this.state.scanning}
                 title={this.props.extensionId}
                 onConnected={this.props.onConnected}
                 onConnecting={this.props.onConnecting}
+                onFlashFirmware={this.props.onFlashFirmware}
                 onRefresh={this.handleRefresh}
             />
         );
@@ -69,9 +71,11 @@ class ScanningStep extends React.Component {
 
 ScanningStep.propTypes = {
     connectionSmallIconURL: PropTypes.string,
+    firmwareFlashable: PropTypes.bool,
     extensionId: PropTypes.string.isRequired,
     onConnected: PropTypes.func.isRequired,
     onConnecting: PropTypes.func.isRequired,
+    onFlashFirmware: PropTypes.func.isRequired,
     vm: PropTypes.instanceOf(VM).isRequired
 };
 

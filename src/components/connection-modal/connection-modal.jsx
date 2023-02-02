@@ -12,7 +12,10 @@ import ConnectedStep from './connected-step.jsx';
 import ErrorStep from './error-step.jsx';
 import UnavailableStep from './unavailable-step.jsx';
 import RenameDeviceStep from './rename-device-step.jsx';
-import RenamedDeviceStep from './renamed-device-step.jsx';
+import RenameDeviceSuccessStep from './rename-device-success-step.jsx';
+import FlashFirmwareStep from './flash-firmware-step.jsx';
+import FlashFirmwareSuccessStep from './flash-firmware-success-step.jsx';
+import FlashFirmwareErrorStep from './flash-firmware-error-step.jsx';
 
 import styles from './connection-modal.css';
 
@@ -23,7 +26,10 @@ const PHASES = keyMirror({
     error: null,
     unavailable: null,
     renameDevice: null,
-    renamedDevice: null
+    renameDeviceSuccess: null,
+    flashFirmware: null,
+    flasheFirmwareSuccess: null,
+    flashFirmwareError: null,
 });
 
 const ConnectionModalComponent = props => (
@@ -44,7 +50,10 @@ const ConnectionModalComponent = props => (
             {props.phase === PHASES.error && <ErrorStep {...props} />}
             {props.phase === PHASES.unavailable && <UnavailableStep {...props} />}
             {props.phase === PHASES.renameDevice && <RenameDeviceStep {...props} />}
-            {props.phase === PHASES.renamedDevice && <RenamedDeviceStep {...props} />}
+            {props.phase === PHASES.renameDeviceSuccess && <RenameDeviceSuccessStep {...props} />}
+            {props.phase === PHASES.flashFirmware && <FlashFirmwareStep {...props} />}
+            {props.phase === PHASES.flasheFirmwareSuccess && <FlashFirmwareSuccessStep {...props} />}
+            {props.phase === PHASES.flasheFirmwareError && <FlashFirmwareErrorStep {...props} />}
         </Box>
     </Modal>
 );
@@ -53,8 +62,10 @@ ConnectionModalComponent.propTypes = {
     connectingMessage: PropTypes.node.isRequired,
     connectionSmallIconURL: PropTypes.string,
     connectionTipIconURL: PropTypes.string,
+    firmwareFlashable: PropTypes.bool,
     name: PropTypes.node,
     onCancel: PropTypes.func.isRequired,
+    onFlashFirmware: PropTypes.func,
     onHelp: PropTypes.func.isRequired,
     phase: PropTypes.oneOf(Object.keys(PHASES)).isRequired,
     title: PropTypes.string.isRequired,
