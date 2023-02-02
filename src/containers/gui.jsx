@@ -53,7 +53,25 @@ class GUI extends React.Component {
         bindAll(this, [
             'onClickSave',
             'onOpenProject',
+            'onDeleProject',
+            'onSwitchStage',
+            'onSmallScreenDisplay',
         ]);
+    }
+
+    state = {phoneTag:false,smallScreenDisplay:true};
+    
+    onSwitchStage(){
+      let phoneTag = this.state.phoneTag;
+      this.setState({phoneTag:!phoneTag},()=>{
+        console.log(this.state.phoneTag);
+      });
+    }
+    onSmallScreenDisplay(){
+      let smallScreenDisplay = this.state.smallScreenDisplay;
+      this.setState({smallScreenDisplay:!smallScreenDisplay},()=>{
+        console.log(this.state.smallScreenDisplay);
+      });
     }
 
     onClickSave () {
@@ -61,6 +79,7 @@ class GUI extends React.Component {
         if (this.props.projectId === null || this.props.projectId === undefined || this.props.projectId === 0 || this.props.projectId === '0') {
             this.props.createProject();
         }
+        console.log('manualUpdateProject');
         this.props.manualUpdateProject();
     }
 
@@ -68,6 +87,17 @@ class GUI extends React.Component {
         this.props.setProjectId(id);
         this.props.setProjectTitle(name);
         this.props.closeUserProjectsModal();
+    }
+    onDeleProject (id, name) {
+      console.log("onDeleProject");
+      let projectList = JSON.parse(localStorage.getItem("project-list"));
+      for(let k in projectList){
+        if(k == id){
+          delete projectList[k]
+        }
+      }
+      localStorage.setItem("project-list", JSON.stringify(projectList));
+      // createHandleOpenProject
     }
 
     componentDidMount () {
@@ -116,6 +146,11 @@ class GUI extends React.Component {
                 loading={fetchingProject || isLoading || loadingStateVisible}
                 onClickSave={this.onClickSave}
                 onOpenProject={this.onOpenProject}
+                onDeleProject={this.onDeleProject}
+                onSwitchStage={this.onSwitchStage}
+                onSmallScreenDisplay={this.onSmallScreenDisplay}
+                phoneTag={this.state.phoneTag}
+                smallScreenDisplay={this.state.smallScreenDisplay}
                 {...componentProps}
             >
                 {children}
@@ -147,7 +182,9 @@ GUI.propTypes = {
     setProjectId: PropTypes.func,
     setProjectTitle: PropTypes.func,
     telemetryModalVisible: PropTypes.bool,
-    vm: PropTypes.instanceOf(VM).isRequired
+    vm: PropTypes.instanceOf(VM).isRequired,
+    phoneTag:PropTypes.bool,
+    smallScreenDisplay:PropTypes.bool,
 };
 
 GUI.defaultProps = {

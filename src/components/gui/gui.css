@@ -13,7 +13,7 @@
 
 .body-wrapper * {
     box-sizing: border-box;
-    max-height: -webkit-fill-available;
+    /* max-height: -webkit-fill-available; */
 }
 
 .flex-wrapper {
@@ -220,6 +220,7 @@
 
     padding-top: $space;
     min-height: 0; /* this makes it work in Firefox */
+    margin-left: $space;
 
     /*
         For making the sprite-selector a scrollable pane
@@ -286,7 +287,8 @@ $fade-out-distance: 15px;
 }
 
 [dir="ltr"] .watermark {
-    right: 1.25rem;
+    /* right: 1.25rem; */
+    right: 33.25rem;
 }
 
 [dir="rtl"] .watermark {
@@ -355,10 +357,28 @@ $fade-out-distance: 15px;
     [dir="ltr"] .watermark {
         right: 4.25rem;
     }
+    [dir="ltr"] .stageWrapper {
+        right: 3.25rem;
+    }
     
     .stage-and-target-wrapper {
         flex-direction: row;
         position: absolute;
-        left: 100%;
+        /* left: 100%; */
+        left: 5%;
     }
+}
+
+/* @media screen and (max-width: 896px){
+  .body-wrapper * {
+    max-height: -webkit-fill-available;
+  }
+
+} */
+
+.stageWrapper{
+  position: absolute;
+}
+.switch{
+  margin: 0.5rem 0;
 }

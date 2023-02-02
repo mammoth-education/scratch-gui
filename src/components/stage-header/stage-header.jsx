@@ -58,11 +58,12 @@ const StageHeaderComponent = function (props) {
         onSetStageUnFull,
         showBranding,
         stageSizeMode,
-        vm
+        vm,
     } = props;
 
     let header = null;
-
+    let  isSmallDevice = JSON.parse(localStorage.getItem("isSmallDevice"));
+    console.log(isSmallDevice);
     if (isFullScreen) {
         const stageDimensions = getStageDimensions(null, true);
         const stageButton = showBranding ? (
@@ -149,9 +150,9 @@ const StageHeaderComponent = function (props) {
         header = (
             <Box className={styles.stageHeaderWrapper}>
                 <Box className={styles.stageMenuWrapper}>
-                    <Controls vm={vm} />
+                  {!isSmallDevice ? <Controls vm={vm} /> : null}
                     <div className={styles.stageSizeRow}>
-                        {stageControls}
+                        {!isSmallDevice ? stageControls : null}
                         <div>
                             <Button
                                 className={styles.stageButton}

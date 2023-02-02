@@ -16,6 +16,7 @@ import CostumeTab from '../../containers/costume-tab.jsx';
 import TargetPane from '../../containers/target-pane.jsx';
 import SoundTab from '../../containers/sound-tab.jsx';
 import StageWrapper from '../../containers/stage-wrapper.jsx';
+import Stage from '../../containers/stage.jsx';
 import Loader from '../loader/loader.jsx';
 import Box from '../box/box.jsx';
 import MenuBar from '../menu-bar/menu-bar.jsx';
@@ -32,7 +33,7 @@ import DragLayer from '../../containers/drag-layer.jsx';
 import ConnectionModal from '../../containers/connection-modal.jsx';
 import TelemetryModal from '../telemetry-modal/telemetry-modal.jsx';
 import UserProjectsModal from '../user-projects-modal/user-projects-modal.jsx';
-
+import StageHeader from '../../containers/stage-header.jsx';
 import layout, { STAGE_SIZE_MODES } from '../../lib/layout-constants';
 import { resolveStageSize } from '../../lib/screen-utils';
 
@@ -41,6 +42,7 @@ import addExtensionIcon from './icon--extensions.svg';
 import codeIcon from './icon--code.svg';
 import costumesIcon from './icon--costumes.svg';
 import soundsIcon from './icon--sounds.svg';
+import stageDisplay from './icon--stageDisplay.svg';
 
 const messages = defineMessages({
     addExtension: {
@@ -53,6 +55,11 @@ const messages = defineMessages({
         description: 'Button to open the user projects modal',
         defaultMessage: 'My Projects'
     },
+    // fullscreenTitle:{
+    //   id: 'gui.stageHeader.fullscreenControl',
+    //   defaultMessage: 'Fullscreen',
+    //   description: 'Fullscreen button title'
+    // }
 });
 
 // Cache this value to only retrieve it once the first time.
@@ -110,6 +117,7 @@ const GUIComponent = props => {
         onClickLogo,
         onExtensionButtonClick,
         onOpenProject,
+        onDeleProject,
         onProjectTelemetryEvent,
         onRequestCloseBackdropLibrary,
         onRequestCloseCostumeLibrary,
@@ -129,7 +137,11 @@ const GUIComponent = props => {
         tipsLibraryVisible,
         tutorialButtonVisible,
         userProjectsModalVisible,
+        phoneTag,
+        smallScreenDisplay,
         vm,
+        onSwitchStage,
+        onSmallScreenDisplay,
         ...componentProps
     } = omit(props, 'dispatch');
     if (children) {
@@ -140,12 +152,18 @@ const GUIComponent = props => {
     if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android')) {
         isMobile = true;
     }
-
+    
     let isSmallDevice = false;
     if (window.screen.width < 1024) {
         isSmallDevice = true;
     }
-    // console.log("isSmallDevice", isSmallDevice);
+    
+    window.localStorage.setItem("isSmallDevice",isSmallDevice)
+    window.localStorage.setItem("phoneTag",phoneTag)
+    let isSmallStageSize = {height:200,width:260};
+    window.localStorage.setItem("isSmallStageSize",JSON.stringify(isSmallStageSize) )
+    let stageCss = {display : "flex",opacity : 0,zIndex: -1}
+    let stagseCss = {opacity : 1,"max-height":" -webkit-fill-available"}
 
     const tabClassNames = {
         tabs: styles.tabs,
@@ -159,10 +177,10 @@ const GUIComponent = props => {
     if (isRendererSupported === null) {
         isRendererSupported = Renderer.isSupported();
     }
-
+    
     return (<MediaQuery minWidth={layout.fullSizeMinWidth}>{isFullSize => {
         const stageSize = resolveStageSize(stageSizeMode, isFullSize);
-
+      
         return isPlayerOnly ? (
             <StageWrapper
                 isFullScreen={isFullScreen}
@@ -233,6 +251,7 @@ const GUIComponent = props => {
                         vm={vm}
                         title={intl.formatMessage(messages.myProjects)}
                         onOpenProject={onOpenProject}
+                        onDeleProject={onDeleProject}
                     />
                 ) : null}
                 <MenuBar
@@ -274,6 +293,8 @@ const GUIComponent = props => {
                     selectedTabIndex={activeTabIndex}
                     localProjectsVisable={true}
                     editMenuVisible={false}
+                    onSwitchStage={onSwitchStage}
+                    onSmallScreenDisplay={onSmallScreenDisplay}
                 />
                 <Box className={styles.bodyWrapper}>
                     <Box className={styles.flexWrapper}>
@@ -336,7 +357,10 @@ const GUIComponent = props => {
                                     </Tab>
                                 </TabList>
                                 <TabPanel className={tabClassNames.tabPanel}>
+                                    {/* block */}
+                                    {phoneTag ? null :
                                     <Box className={styles.blocksWrapper}>
+                                        
                                         <Blocks
                                             canUseCloud={canUseCloud}
                                             grow={1}
@@ -348,7 +372,10 @@ const GUIComponent = props => {
                                             vm={vm}
                                         />
                                     </Box>
-                                    <Box className={styles.extensionButtonContainer}>
+                                    }
+                                    {/* 添加拓展 */}
+                                    {phoneTag ? null :
+                                    <Box className={ styles.extensionButtonContainer}>
                                         <button
                                             className={styles.extensionButton}
                                             title={intl.formatMessage(messages.addExtension)}
@@ -361,28 +388,61 @@ const GUIComponent = props => {
                                             />
                                         </button>
                                     </Box>
+                                    }
                                     <Box className={styles.watermark}>
                                         <Watermark />
                                     </Box>
                                     <Box className={styles.smallDeviceStagePanel}>
-                                        <Controls className={styles.flexVertical} vm={vm}/>
-                                    </Box>
-                                    <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize])}>
-                                        <StageWrapper
-                                            isFullScreen={isFullScreen}
-                                            isRendererSupported={isRendererSupported}
-                                            isRtl={isRtl}
-                                            isMobile={isMobile}
-                                            stageSize={stageSize}
-                                            vm={vm}
+                                        <Controls vm={vm} className={styles.flexVertical}/>
+                                        {/* 全屏 */}
+                                        <StageHeader 
                                         />
-                                        <Box className={styles.targetWrapper}>
-                                            <TargetPane
-                                                stageSize={stageSize}
-                                                vm={vm}
-                                            />
-                                        </Box>
+                                        <button  className={styles.switch} onClick={onSwitchStage}>切换</button>
+                                        <img
+                                            draggable={false}
+                                            src={stageDisplay}
+                                            onClick={onSmallScreenDisplay}
+                                        />
                                     </Box>
+                                     {/* 移动端显示小屏舞台 */}
+                                     {!phoneTag ? 
+                                      <div className={styles.stageWrapper} style={phoneTag || !smallScreenDisplay ? stageCss : stagseCss}>
+                                      {isSmallDevice ? 
+                                        <Box className={styles.stageCanvasWrapper}>
+                                            <Stage
+                                              stageSize={ stageSize}
+                                              isMobile={isMobile}
+                                              vm={vm}
+                                              isSmallStageSize={"8rem"}
+                                              phoneTag={phoneTag}
+                                          />
+                                      </Box> : null}
+                                     </div> : null 
+                                    }
+                                     
+                                    {
+                                     !isSmallDevice || phoneTag ?
+                                    <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize])}
+                                    style={ phoneTag || !isSmallDevice ? stagseCss : stageCss}
+                                  >
+                                      <StageWrapper
+                                          isFullScreen={isFullScreen}
+                                          isRendererSupported={isRendererSupported}
+                                          isRtl={isRtl}
+                                          isMobile={isMobile}
+                                          stageSize={stageSize}
+                                          vm={vm}
+                                          isSmallDevice={isSmallDevice}
+                                      />
+                                      <Box className={styles.targetWrapper}>
+                                          <TargetPane
+                                              stageSize={stageSize}
+                                              vm={vm}
+                                          />
+                                      </Box>
+                                    </Box> : null
+                                    }
+                                    
                                 </TabPanel>
                                 <TabPanel className={tabClassNames.tabPanel}>
                                     {costumesTabVisible ? <CostumeTab vm={vm} /> : null}
@@ -401,7 +461,7 @@ const GUIComponent = props => {
             </Box>
         );
     }}</MediaQuery>);
-};
+  };
 
 GUIComponent.propTypes = {
     accountNavOpen: PropTypes.bool,
@@ -447,6 +507,7 @@ GUIComponent.propTypes = {
     onLogOut: PropTypes.func,
     onOpenRegistration: PropTypes.func,
     onOpenProject: PropTypes.func,
+    onDeleProject: PropTypes.func,
     onRequestCloseBackdropLibrary: PropTypes.func,
     onRequestCloseCostumeLibrary: PropTypes.func,
     onRequestCloseTelemetryModal: PropTypes.func,
@@ -468,7 +529,11 @@ GUIComponent.propTypes = {
     tipsLibraryVisible: PropTypes.bool,
     tutorialButtonVisible: PropTypes.bool,
     userProjectsModalVisible: PropTypes.bool,
-    vm: PropTypes.instanceOf(VM).isRequired
+    vm: PropTypes.instanceOf(VM).isRequired,
+    onSwitchStage: PropTypes.func,
+    onSmallScreenDisplay: PropTypes.func,
+    phoneTag:PropTypes.bool,
+    
 };
 GUIComponent.defaultProps = {
     backpackHost: null,

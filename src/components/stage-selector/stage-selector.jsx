@@ -94,6 +94,7 @@ const StageSelector = props => {
                 />
             </div>
             <div className={styles.count}>{backdropCount}</div>
+            {/* 选择一个背景 */}
             <ActionMenu
                 className={styles.addButton}
                 img={backdropIcon}

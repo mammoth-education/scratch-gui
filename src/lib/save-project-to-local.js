@@ -42,11 +42,18 @@ const saveProject = (id, data, options) => {
             id = newProject(options.title);
             let originalAsset = storage.load(storage.AssetType.Project, options.origialId, storage.DataFormat.JSON);
             data = originalAsset.data;
+        } else {
+            let projectList = JSON.parse(localStorage.getItem("project-list") || "{}");
+            if (projectList[id] && projectList[id].name !== options.title) {
+                projectList[id].name = options.title;
+            }
+            projectList[id].updateDate = Date.now();
+            localStorage.setItem("project-list", JSON.stringify(projectList));
         }
     } else {
-        let projectList = localStorage.getItem('project-list', "{}");
+        let projectList = localStorage.getItem('project-list') || "{}";
         projectList = JSON.parse(projectList);
-        projectList[id].updateDate = Date.now(),
+        projectList[id].updateDate = Date.now();
         localStorage.setItem("project-list", JSON.stringify(projectList));
     }
 

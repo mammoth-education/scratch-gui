@@ -674,8 +674,8 @@ class MenuBar extends React.Component {
                         </div>
                     )}
                     {this.props.localProjectsVisable && (
-                        <div className={classNames(styles.menuBarItem, styles.hoverable)}>
-                            <div onClick={this.handleClickUserProjects}>
+                        <div className={classNames(styles.menuBarItem, styles.hoverable)} onClick={this.handleClickUserProjects}>
+                            <div>
                                 <img draggable={false} src={gridIcon} />
                             </div>
                         </div>
