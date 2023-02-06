@@ -16,7 +16,7 @@
     background-color: $ui-white;
     cursor: pointer;
     height: auto;
-    width: 15rem;
+    /* width: 15rem; */
     margin: 0 3% 0.5rem 0;
 }
 .itemImg{
@@ -34,9 +34,9 @@
 .itemDate{
   margin: 1rem 0;
 }
-.itemTime{
+/* .itemTime{
   float: right;
-}
+} */
 .itemAction{
   margin: 1rem 0;
 }
