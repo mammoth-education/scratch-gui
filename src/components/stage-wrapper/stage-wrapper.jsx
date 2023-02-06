@@ -19,11 +19,12 @@ const StageWrapperComponent = function (props) {
         isRendererSupported,
         loading,
         isMobile,
+        isPreview,
         stageSize,
+        stageVisible,
         vm,
         isSmallDevice,
         isSmallStageSize,
-        phoneTag
     } = props;
     
     return (
@@ -34,26 +35,27 @@ const StageWrapperComponent = function (props) {
             )}
             dir={isRtl ? 'rtl' : 'ltr'}
         >
-            <Box className={styles.stageMenuWrapper}>
-                {/* 舞台编辑 */}
-                {isSmallDevice ? null : <StageHeader
+            {/* 预览窗口不显示，小设备全屏也不显示 */}
+            { (!isPreview || (!isSmallDevice && isFullScreen)) && <Box className={styles.stageMenuWrapper}>
+                <StageHeader
                     stageSize={stageSize}
+                    isSmallDevice={isSmallDevice}
                     vm={vm}
-                />}
-            </Box>
-            <Box className={styles.stageCanvasWrapper} style={{"margin-left":" 0.5rem"}}>
+                />
+            </Box> }
+            <Box className={classNames(styles.stageCanvasWrapper, stageVisible ? styles.show : styles.hide)}>
                 {isRendererSupported ?
                     <Stage
                         stageSize={ stageSize}
                         isMobile={isMobile}
+                        isPreview={isPreview}
                         vm={vm}
                         isSmallDevice={isSmallDevice}
                         isSmallStageSize={isSmallStageSize}
-                        phoneTag={phoneTag}
                     />
                     : null}
             </Box>
-            {isFullScreen ? <StageVirtualKeyboard /> : null}
+            {isFullScreen && <StageVirtualKeyboard />}
             {loading ? (
                 <Loader isFullScreen={isFullScreen} />
             ) : null}
@@ -67,8 +69,15 @@ StageWrapperComponent.propTypes = {
     isRtl: PropTypes.bool.isRequired,
     loading: PropTypes.bool,
     isMobile: PropTypes.bool,
+    isSmallDevice: PropTypes.bool,
+    isPreview: PropTypes.bool,
     stageSize: PropTypes.oneOf(Object.keys(STAGE_DISPLAY_SIZES)).isRequired,
+    stageVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired
 };
+
+StageWrapperComponent.defaultProps = {
+    stageVisible: true,
+}
 
 export default StageWrapperComponent;

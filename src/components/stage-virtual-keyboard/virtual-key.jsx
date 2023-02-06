@@ -2,6 +2,7 @@ import React from "react";
 import style from "./stage-virtual-keyboard.css";
 import PropTypes from 'prop-types';
 import bindAll from "lodash.bindall";
+import classNames from "classnames";
 
 
 class VirtualKey extends React.Component {
@@ -62,7 +63,10 @@ class VirtualKey extends React.Component {
 
   render () {
     return (
-      <button className={style.key}
+      <button className={classNames(
+        style.key,
+        this.state.pressed ? style.pressed : null
+      )}
           onMouseLeave={this.onReleased}
           onMouseDown={this.onPressed}
           onMouseUp={this.onReleased}

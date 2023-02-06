@@ -18,7 +18,8 @@ import {
     activateTab,
     BLOCKS_TAB_INDEX,
     COSTUMES_TAB_INDEX,
-    SOUNDS_TAB_INDEX
+    SOUNDS_TAB_INDEX,
+    STAGE_TAB_INDEX,
 } from '../reducers/editor-tab';
 
 import {
@@ -54,24 +55,19 @@ class GUI extends React.Component {
             'onClickSave',
             'onOpenProject',
             'onDeleProject',
-            'onSwitchStage',
-            'onSmallScreenDisplay',
+            'onToggleStagePreview',
         ]);
+        this.state = {
+            stagePreviewVisible: true,
+        };
     }
 
-    state = {phoneTag:false,smallScreenDisplay:true};
-    
-    onSwitchStage(){
-      let phoneTag = this.state.phoneTag;
-      this.setState({phoneTag:!phoneTag},()=>{
-        console.log(this.state.phoneTag);
-      });
-    }
-    onSmallScreenDisplay(){
-      let smallScreenDisplay = this.state.smallScreenDisplay;
-      this.setState({smallScreenDisplay:!smallScreenDisplay},()=>{
-        console.log(this.state.smallScreenDisplay);
-      });
+
+    onToggleStagePreview(){
+        let stagePreviewVisible = this.state.stagePreviewVisible;
+        this.setState({
+            stagePreviewVisible: !stagePreviewVisible,
+        });
     }
 
     onClickSave () {
@@ -147,10 +143,8 @@ class GUI extends React.Component {
                 onClickSave={this.onClickSave}
                 onOpenProject={this.onOpenProject}
                 onDeleProject={this.onDeleProject}
-                onSwitchStage={this.onSwitchStage}
-                onSmallScreenDisplay={this.onSmallScreenDisplay}
-                phoneTag={this.state.phoneTag}
-                smallScreenDisplay={this.state.smallScreenDisplay}
+                onToggleStagePreview={this.onToggleStagePreview}
+                stagePreviewVisible={this.state.stagePreviewVisible}
                 {...componentProps}
             >
                 {children}
@@ -183,8 +177,7 @@ GUI.propTypes = {
     setProjectTitle: PropTypes.func,
     telemetryModalVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired,
-    phoneTag:PropTypes.bool,
-    smallScreenDisplay:PropTypes.bool,
+    stagePreviewVisible:PropTypes.bool,
 };
 
 GUI.defaultProps = {
@@ -215,6 +208,7 @@ const mapStateToProps = state => {
         loadingStateVisible: state.scratchGui.modals.loadingProject,
         projectId: state.scratchGui.projectState.projectId,
         soundsTabVisible: state.scratchGui.editorTab.activeTabIndex === SOUNDS_TAB_INDEX,
+        stageTabVisible: state.scratchGui.editorTab.activeTabIndex === STAGE_TAB_INDEX,
         targetIsStage: (
             state.scratchGui.targets.stage &&
             state.scratchGui.targets.stage.id === state.scratchGui.targets.editingTarget
@@ -234,6 +228,7 @@ const mapDispatchToProps = dispatch => ({
     onActivateTab: tab => dispatch(activateTab(tab)),
     onActivateCostumesTab: () => dispatch(activateTab(COSTUMES_TAB_INDEX)),
     onActivateSoundsTab: () => dispatch(activateTab(SOUNDS_TAB_INDEX)),
+    onActivateStageTab: () => dispatch(activateTab(STAGE_TAB_INDEX)),
     onRequestCloseBackdropLibrary: () => dispatch(closeBackdropLibrary()),
     onRequestCloseCostumeLibrary: () => dispatch(closeCostumeLibrary()),
     onRequestCloseTelemetryModal: () => dispatch(closeTelemetryModal()),

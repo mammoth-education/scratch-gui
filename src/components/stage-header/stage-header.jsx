@@ -8,13 +8,12 @@ import VM from 'scratch-vm';
 import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import Controls from '../../containers/controls.jsx';
+import FullscreenButton from "./fullscreen-button.jsx";
 import {getStageDimensions} from '../../lib/screen-utils';
 import {STAGE_SIZE_MODES} from '../../lib/layout-constants';
 
-import fullScreenIcon from './icon--fullscreen.svg';
 import largeStageIcon from './icon--large-stage.svg';
 import smallStageIcon from './icon--small-stage.svg';
-import unFullScreenIcon from './icon--unfullscreen.svg';
 
 import scratchLogo from '../menu-bar/scratch-logo.svg';
 import styles from './stage-header.css';
@@ -30,39 +29,21 @@ const messages = defineMessages({
         description: 'Button to change stage size to small',
         id: 'gui.stageHeader.stageSizeSmall'
     },
-    fullStageSizeMessage: {
-        defaultMessage: 'Enter full screen mode',
-        description: 'Button to change stage size to full screen',
-        id: 'gui.stageHeader.stageSizeFull'
-    },
-    unFullStageSizeMessage: {
-        defaultMessage: 'Exit full screen mode',
-        description: 'Button to get out of full screen mode',
-        id: 'gui.stageHeader.stageSizeUnFull'
-    },
-    fullscreenControl: {
-        defaultMessage: 'Full Screen Control',
-        description: 'Button to enter/exit full screen mode',
-        id: 'gui.stageHeader.fullscreenControl'
-    }
 });
 
 const StageHeaderComponent = function (props) {
     const {
         isFullScreen,
         isPlayerOnly,
-        onKeyPress,
+        isSmallDevice,
         onSetStageLarge,
         onSetStageSmall,
-        onSetStageFull,
-        onSetStageUnFull,
         showBranding,
         stageSizeMode,
         vm,
     } = props;
 
     let header = null;
-    let  isSmallDevice = JSON.parse(localStorage.getItem("isSmallDevice"));
     console.log(isSmallDevice);
     if (isFullScreen) {
         const stageDimensions = getStageDimensions(null, true);
@@ -80,19 +61,7 @@ const StageHeaderComponent = function (props) {
                 </a>
             </div>
         ) : (
-            <Button
-                className={styles.stageButton}
-                onClick={onSetStageUnFull}
-                onKeyPress={onKeyPress}
-            >
-                <img
-                    alt={props.intl.formatMessage(messages.unFullStageSizeMessage)}
-                    className={styles.stageButtonIcon}
-                    draggable={false}
-                    src={unFullScreenIcon}
-                    title={props.intl.formatMessage(messages.fullscreenControl)}
-                />
-            </Button>
+            <FullscreenButton />
         );
         header = (
             <Box className={styles.stageHeaderWrapperOverlay}>
@@ -107,7 +76,7 @@ const StageHeaderComponent = function (props) {
         );
     } else {
         const stageControls =
-            isPlayerOnly ? (
+            isPlayerOnly || isSmallDevice ? (
                 []
             ) : (
                 <div className={styles.stageSizeToggleGroup}>
@@ -150,23 +119,10 @@ const StageHeaderComponent = function (props) {
         header = (
             <Box className={styles.stageHeaderWrapper}>
                 <Box className={styles.stageMenuWrapper}>
-                  {!isSmallDevice ? <Controls vm={vm} /> : null}
+                    <Controls vm={vm} />
                     <div className={styles.stageSizeRow}>
-                        {!isSmallDevice ? stageControls : null}
-                        <div>
-                            <Button
-                                className={styles.stageButton}
-                                onClick={onSetStageFull}
-                            >
-                                <img
-                                    alt={props.intl.formatMessage(messages.fullStageSizeMessage)}
-                                    className={styles.stageButtonIcon}
-                                    draggable={false}
-                                    src={fullScreenIcon}
-                                    title={props.intl.formatMessage(messages.fullscreenControl)}
-                                />
-                            </Button>
-                        </div>
+                        {stageControls}
+                        <FullscreenButton />
                     </div>
                 </Box>
             </Box>
@@ -185,11 +141,9 @@ StageHeaderComponent.propTypes = {
     intl: intlShape,
     isFullScreen: PropTypes.bool.isRequired,
     isPlayerOnly: PropTypes.bool.isRequired,
-    onKeyPress: PropTypes.func.isRequired,
-    onSetStageFull: PropTypes.func.isRequired,
+    isSmallDevice: PropTypes.bool,
     onSetStageLarge: PropTypes.func.isRequired,
     onSetStageSmall: PropTypes.func.isRequired,
-    onSetStageUnFull: PropTypes.func.isRequired,
     showBranding: PropTypes.bool.isRequired,
     stageSizeMode: PropTypes.oneOf(Object.keys(STAGE_SIZE_MODES)),
     vm: PropTypes.instanceOf(VM).isRequired

@@ -24,6 +24,8 @@ const StageComponent = props => {
     isColorPicking,
     isFullScreen,
     isMobile,
+    isPreview,
+    isSmallDevice,
     isStarted,
     colorInfo,
     micIndicator,
@@ -36,12 +38,9 @@ const StageComponent = props => {
     ...boxProps
   } = props;
   
-  const stageDimensions = getStageDimensions(stageSize, isFullScreen, isMobile);
-  let isSmallDevice = JSON.parse(localStorage.getItem("isSmallDevice"))
-  let phoneTag = JSON.parse(localStorage.getItem("phoneTag"))
-  let isSmallStageSize = JSON.parse(localStorage.getItem("isSmallStageSize"));
+  const stageDimensions = getStageDimensions(stageSize, isFullScreen, isMobile, isSmallDevice, isPreview);
+
   return (
-    
     <React.Fragment>
       <Box
         className={classNames(
@@ -56,16 +55,16 @@ const StageComponent = props => {
           )}
           // 舞台尺寸
           style={{
-            height: !phoneTag && isSmallDevice ? isSmallStageSize.height :stageDimensions.height,
-            width: !phoneTag && isSmallDevice ? isSmallStageSize.width :stageDimensions.width,
+            height: stageDimensions.height,
+            width: stageDimensions.width,
           }}
         >
           <DOMElementRenderer
             domElement={canvas}
             // 舞台画面尺寸
             style={{
-              height: !phoneTag && isSmallDevice ? isSmallStageSize.height :stageDimensions.height,
-              width: !phoneTag && isSmallDevice ? isSmallStageSize.width :stageDimensions.width,
+              height: stageDimensions.height,
+              width: stageDimensions.width,
             }}
             {...boxProps}
           />
@@ -98,8 +97,8 @@ const StageComponent = props => {
           <div
             className={styles.stageBottomWrapper}
             style={{
-              height: !phoneTag && isSmallDevice ? isSmallStageSize.height :stageDimensions.height,
-              width: !phoneTag && isSmallDevice ? isSmallStageSize.width :stageDimensions.width,
+              height: stageDimensions.height,
+              width: stageDimensions.width,
             }}
           >
             {micIndicator ? (
@@ -111,7 +110,7 @@ const StageComponent = props => {
             {question === null ? null : (
               <div
                 className={styles.questionWrapper}
-                style={{ width: !phoneTag && isSmallDevice ? isSmallStageSize.width :stageDimensions.width, }}
+                style={{ width: stageDimensions.width, }}
               >
                 {/* 问题回答框 */}
                 <Question
@@ -151,6 +150,8 @@ StageComponent.propTypes = {
   isColorPicking: PropTypes.bool,
   isFullScreen: PropTypes.bool.isRequired,
   isMobile: PropTypes.bool,
+  isPreview: PropTypes.bool,
+  isSmallDevice: PropTypes.bool,
   isStarted: PropTypes.bool,
   micIndicator: PropTypes.bool,
   onDeactivateColorPicker: PropTypes.func,

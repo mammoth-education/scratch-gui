@@ -241,6 +241,7 @@
     height: 1.8rem;
     justify-content: center;
     border: solid 1px $ui-black-transparent;
+    filter: saturate(1) brightness(0) invert(1);
 }
 .tab img{
     width: 80%;
@@ -259,6 +260,7 @@
 }
 .tab.active {
     background-color: $ui-white;
+    filter: none;
 }
 
 .save-button {

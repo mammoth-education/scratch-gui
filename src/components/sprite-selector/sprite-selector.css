@@ -125,3 +125,11 @@
     background: black;
     filter: opacity(15%) brightness(0%);
 }
+
+/* For Phone */
+@media screen and (max-width: $full-size) {
+    .sprite-selector {
+        border-radius: $space;
+        border: 1px solid $ui-black-transparent;
+    }
+}

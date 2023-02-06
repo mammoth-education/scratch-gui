@@ -79,6 +79,7 @@ import scratchLogo from './mammoth-logo.png';
 import codeIcon from '../gui/icon--code.svg';
 import costumesIcon from '../gui/icon--costumes.svg';
 import soundsIcon from '../gui/icon--sounds.svg';
+import stageIcon from '../gui/icon--stage.svg';
 
 
 import sharedMessages from '../../lib/shared-messages';
@@ -181,6 +182,7 @@ class MenuBar extends React.Component {
             'handleClickCodeTab',
             'handleClickCostumesTab',
             'handleClickSoundsTab',
+            'handleClickStageTab',
             'handleClickUserProjects',
         ]);
     }
@@ -357,6 +359,10 @@ class MenuBar extends React.Component {
         this.props.onClickSoundsTab();
         this.props.onTabSelect(2);
     }
+    handleClickStageTab () {
+        this.props.onClickStageTab();
+        this.props.onTabSelect(3);
+    }
     handleClickUserProjects () {
         this.props.onClickUserProjects();
     }
@@ -506,7 +512,7 @@ class MenuBar extends React.Component {
                                 </MenuBarMenu>
                             </div>
                         )}
-                        {(this.props.editMenuVisable) && (
+                        {(this.props.editMenuVisible) && (
                             <div
                                 className={classNames(styles.menuBarItem, styles.hoverable, {
                                     [styles.active]: this.props.editMenuOpen
@@ -658,9 +664,13 @@ class MenuBar extends React.Component {
                                     onClick={this.handleClickCostumesTab}>
                                     <img draggable={false} src={costumesIcon} />
                                 </div>
-                                <div className={classNames(styles.tab, styles.tabRight, this.props.selectedTabIndex === 2 ? styles.active: null)}
+                                <div className={classNames(styles.tab, styles.tabMiddle, this.props.selectedTabIndex === 2 ? styles.active: null)}
                                     onClick={this.handleClickSoundsTab}>
                                     <img draggable={false} src={soundsIcon} />
+                                </div>
+                                <div className={classNames(styles.tab, styles.tabRight, this.props.selectedTabIndex === 3 ? styles.active: null)}
+                                    onClick={this.handleClickStageTab}>
+                                    <img draggable={false} src={stageIcon} />
                                 </div>
                             </div>) : null}
                     </div>
@@ -673,7 +683,7 @@ class MenuBar extends React.Component {
                             <SaveStatus />
                         </div>
                     )}
-                    {this.props.localProjectsVisable && (
+                    {this.props.localProjectsVisible && (
                         <div className={classNames(styles.menuBarItem, styles.hoverable)} onClick={this.handleClickUserProjects}>
                             <div>
                                 <img draggable={false} src={gridIcon} />
@@ -838,7 +848,7 @@ MenuBar.propTypes = {
     isSmallDevice: PropTypes.bool,
     languageMenuOpen: PropTypes.bool,
     locale: PropTypes.string.isRequired,
-    localProjectsVisable: PropTypes.bool,
+    localProjectsVisible: PropTypes.bool,
     loginMenuOpen: PropTypes.bool,
     logo: PropTypes.string,
     onClickAbout: PropTypes.oneOfType([
@@ -892,7 +902,7 @@ MenuBar.propTypes = {
 
 MenuBar.defaultProps = {
     logo: scratchLogo,
-    localProjectsVisable: false,
+    localProjectsVisible: false,
     onShare: () => {},
     onClickCodeTab: () => {},
     onClickCostumesTab: () => {},

@@ -117,3 +117,11 @@ $header-height: calc($stage-menu-height - 2px);
     90% { box-shadow: 0 0 10px #7fff1e; }
     100% { box-shadow: none; }
 }
+
+/* For Phone */
+@media screen and (max-width: $full-size) {
+    .stage-selector {
+        border-radius: $space;
+        border: 1px solid $ui-black-transparent;
+    }
+}

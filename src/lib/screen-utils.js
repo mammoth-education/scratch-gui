@@ -16,7 +16,10 @@ const STAGE_DIMENSION_DEFAULTS = {
     fullScreenSpacingBorderAdjustment: 12,
     // referencing css/units.css,
     // menuHeightAdjustment = $stage-menu-height
-    menuHeightAdjustment: 44
+    menuHeightAdjustment: 44,
+    menuBarHeight: 48,
+    previewWidth: 240,
+    previewHeight: 180,
 };
 
 /**
@@ -39,9 +42,12 @@ const resolveStageSize = (stageSizeMode, isFullSize) => {
  * Retrieve info used to determine the actual stage size based on the current GUI and browser state.
  * @param {STAGE_DISPLAY_SIZES} stageSize - the current fully-resolved stage size.
  * @param {boolean} isFullScreen - true if full-screen mode is enabled.
+ * @param {boolean} isMobile - true if is mobile
+ * @param {boolean} isSmallDevice - true if is small screen device
+ * @param {boolean} isPreview - true if is small preview window
  * @return {StageDimensions} - an object describing the dimensions of the stage.
  */
-const getStageDimensions = (stageSize, isFullScreen, isMobiile) => {
+const getStageDimensions = (stageSize, isFullScreen, isMobile, isSmallDevice, isPreview) => {
     const stageDimensions = {
         heightDefault: layout.standardStageHeight,
         widthDefault: layout.standardStageWidth,
@@ -52,8 +58,10 @@ const getStageDimensions = (stageSize, isFullScreen, isMobiile) => {
 
     if (isFullScreen) {
         stageDimensions.height = window.innerHeight -
-            STAGE_DIMENSION_DEFAULTS.menuHeightAdjustment -
             STAGE_DIMENSION_DEFAULTS.fullScreenSpacingBorderAdjustment;
+        if (!isSmallDevice) {
+            stageDimensions.height -= STAGE_DIMENSION_DEFAULTS.menuHeightAdjustment;
+        }
 
         stageDimensions.width = stageDimensions.height + (stageDimensions.height / 3);
 
@@ -61,15 +69,28 @@ const getStageDimensions = (stageSize, isFullScreen, isMobiile) => {
             stageDimensions.width = window.innerWidth;
             stageDimensions.height = stageDimensions.width * .75;
         }
-        if (isMobiile && stageDimensions.width + STAGE_VITUAL_KEYBOARD_WIDTH > window.innerWidth ) {
+        if (isMobile && stageDimensions.width + STAGE_VITUAL_KEYBOARD_WIDTH > window.innerWidth ) {
             stageDimensions.width = window.innerWidth - STAGE_VITUAL_KEYBOARD_WIDTH;
             stageDimensions.height = stageDimensions.width * .75;
         }
         stageDimensions.scale = stageDimensions.width / stageDimensions.widthDefault;
     } else {
-        stageDimensions.scale = STAGE_DISPLAY_SCALES[stageSize];
-        stageDimensions.height = stageDimensions.scale * stageDimensions.heightDefault;
-        stageDimensions.width = stageDimensions.scale * stageDimensions.widthDefault;
+        if (isSmallDevice) {
+            if (isPreview) {
+                stageDimensions.height = STAGE_DIMENSION_DEFAULTS.previewHeight;
+                stageDimensions.width = STAGE_DIMENSION_DEFAULTS.previewWidth;
+            } else {
+                stageDimensions.height = window.innerHeight -
+                    STAGE_DIMENSION_DEFAULTS.menuHeightAdjustment -
+                    STAGE_DIMENSION_DEFAULTS.menuBarHeight -
+                    STAGE_DIMENSION_DEFAULTS.fullScreenSpacingBorderAdjustment;
+                stageDimensions.width = stageDimensions.height + (stageDimensions.height / 3);
+            }
+        } else {
+            stageDimensions.scale = STAGE_DISPLAY_SCALES[stageSize];
+            stageDimensions.height = stageDimensions.scale * stageDimensions.heightDefault;
+            stageDimensions.width = stageDimensions.scale * stageDimensions.widthDefault;
+        }
     }
 
     // Round off dimensions to prevent resampling/blurriness

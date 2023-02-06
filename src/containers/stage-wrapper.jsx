@@ -10,10 +10,9 @@ StageWrapper.propTypes = {
     isRendererSupported: PropTypes.bool.isRequired,
     stageSize: PropTypes.oneOf(Object.keys(STAGE_DISPLAY_SIZES)).isRequired,
     isMobile: PropTypes.bool,
+    isPreview: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired,
     isSmallDevice:PropTypes.bool,
-    phoneTag:PropTypes.bool,
-    
 };
 
 export default StageWrapper;

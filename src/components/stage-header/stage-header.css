@@ -50,7 +50,7 @@
 
 .stage-button {
     display: block;
-    border: 1px solid $ui-black-transparent;
+    /* border: 1px solid $ui-black-transparent; */
     border-radius: $form-radius;
     width: calc(2rem + 2px);
     height: calc(2rem + 2px);
@@ -93,4 +93,9 @@
 
 .stage-button-toggled-off {
     filter: saturate(0);
+}
+
+.stage-button-wrapper {
+    display: flex;
+    justify-content: center;
 }
