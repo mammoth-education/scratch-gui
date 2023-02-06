@@ -70,9 +70,7 @@ class UserProjectsModal extends React.Component {
                     <span className={styles.itemName}>
                         {projectList[id].name}
                     </span>
-                    <div className={styles.itemTime}>
-                      {this.createDateTime(projectList[id].updateDate)}
-                    </div>
+                    
 
                   </div>
                   <div className={styles.itemAction}>
@@ -91,10 +89,13 @@ class UserProjectsModal extends React.Component {
                         <FormattedMessage
                               defaultMessage="删除"
                               description="删除"
-                              id="gui.gui.lostPeripheralConnection"
+                              id="gui.soundEditor.delete"
                           />
                       </button>
                   </div>
+                  <div className={styles.itemTime}>
+                      {this.createDateTime(projectList[id].updateDate)}
+                    </div>
                 </div>
             </div>
         ));
