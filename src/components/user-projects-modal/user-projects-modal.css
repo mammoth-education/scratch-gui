@@ -1,7 +1,7 @@
 @import "../../css/colors.css";
 @import "../../css/units.css";
 
-.modalContent {
+.modal-content {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
@@ -10,7 +10,7 @@
 .item {
     display: flex;
     align-items: center;
-    padding: 0.5rem;
+    padding: 0.5rem 0.8rem;
     border: 1px solid $ui-black-transparent;
     border-radius: 0.5rem;
     background-color: $ui-white;
@@ -19,29 +19,14 @@
     /* width: 15rem; */
     margin: 0 3% 0.5rem 0;
 }
-.itemImg{
-  width: 40%;
-  height: 100%;
-  background-color: red;
-}
-.itemDescribe{
-  /* margin-left: 1rem; */
-  width: 100%;
-}
-.openButton{
-  margin-right: 1rem;
-}
-.itemDate{
-  margin: 1rem 0;
-}
-/* .itemTime{
-  float: right;
-} */
-.itemAction{
-  margin: 1rem 0;
+.item-action{
+  margin-left: 1rem;
+  display: flex;
+  align-content: center;
+  flex-wrap: wrap;
 }
 
-.itemAction button {
+.item-action button {
   padding: 0.6rem 0.75rem;
   border: none;
   border-radius: 0.25rem;
@@ -51,4 +36,26 @@
   border: $motion-primary;
   color: white;
   cursor: pointer;
+  margin-left: 0.5rem;
+  height: 2.5rem;
+}
+.item-action button.delete {
+  background: $red-primary;
+  border: $red-tertiary;
+}
+.item-name {
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 0 0 0.5rem 0;
+}
+.item-time {
+  font-size: 0.85rem;
+  margin: 0;
+}
+.item-describe{
+  /* margin-left: 1rem; */
+  width: 100%;
+  display: flex;
+  align-content: center;
+  flex-wrap: wrap;
 }
