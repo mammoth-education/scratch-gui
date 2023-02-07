@@ -226,7 +226,7 @@
 }
 
 .tab-list {
-    display: flex;
+    display: none;
     flex-direction: row;
     justify-content: flex-start;
     flex-wrap: nowrap;
@@ -275,4 +275,11 @@
 }
 .save-button img {
     width: 80%;
+}
+
+/* For Phone */
+@media screen and (max-width: $full-size) {
+    .tab-list {
+        display: flex;
+    }
 }

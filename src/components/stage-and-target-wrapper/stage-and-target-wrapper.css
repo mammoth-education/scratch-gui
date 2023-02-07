@@ -13,6 +13,7 @@
     */
     display: flex;
     flex-direction: column;
+    height: -webkit-fill-available;
     /* pad entire wrapper to the left and right; allow children to fill width */
     padding-left: $space;
     padding-right: $space;
@@ -38,7 +39,7 @@
     /* overflow: hidden; */
 }
 
-.stage-preview {
+.stage-and-target-wrapper.preview {
     right: 2.5rem;
     width: fit-content !important;
 }
@@ -58,5 +59,8 @@
     }
     .target-wrapper {
         padding-left: $space;
+    }
+    .target-wrapper.preview {
+        display: none;
     }
 }

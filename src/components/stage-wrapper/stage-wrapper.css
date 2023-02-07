@@ -34,6 +34,12 @@
     .stage-wrapper.full-screen {
         top: 0;
     }
+    .stage-menu-wrapper.full-screen {
+        display: none;
+    }
+    .stage-menu-wrapper.preview {
+        display: none;
+    }
 }
 
 .show {

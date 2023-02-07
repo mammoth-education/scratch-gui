@@ -43,11 +43,10 @@ const resolveStageSize = (stageSizeMode, isFullSize) => {
  * @param {STAGE_DISPLAY_SIZES} stageSize - the current fully-resolved stage size.
  * @param {boolean} isFullScreen - true if full-screen mode is enabled.
  * @param {boolean} isMobile - true if is mobile
- * @param {boolean} isSmallDevice - true if is small screen device
  * @param {boolean} isPreview - true if is small preview window
  * @return {StageDimensions} - an object describing the dimensions of the stage.
  */
-const getStageDimensions = (stageSize, isFullScreen, isMobile, isSmallDevice, isPreview) => {
+const getStageDimensions = (stageSize, isFullScreen, isMobile, isPreview) => {
     const stageDimensions = {
         heightDefault: layout.standardStageHeight,
         widthDefault: layout.standardStageWidth,
@@ -56,6 +55,11 @@ const getStageDimensions = (stageSize, isFullScreen, isMobile, isSmallDevice, is
         scale: 0
     };
 
+    let isSmallDevice = false;
+    if (window.screen.width < 1024 || window.innerWidth < 1024) {
+        isSmallDevice = true;
+    }
+    
     if (isFullScreen) {
         stageDimensions.height = window.innerHeight -
             STAGE_DIMENSION_DEFAULTS.fullScreenSpacingBorderAdjustment;
