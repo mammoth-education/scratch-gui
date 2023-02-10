@@ -25,7 +25,6 @@ const StageComponent = props => {
     isFullScreen,
     isMobile,
     isPreview,
-    isSmallDevice,
     isStarted,
     colorInfo,
     micIndicator,
@@ -38,7 +37,7 @@ const StageComponent = props => {
     ...boxProps
   } = props;
   
-  const stageDimensions = getStageDimensions(stageSize, isFullScreen, isMobile, isSmallDevice, isPreview);
+  const stageDimensions = getStageDimensions(stageSize, isFullScreen, isMobile, isPreview);
 
   return (
     <React.Fragment>
@@ -151,7 +150,6 @@ StageComponent.propTypes = {
   isFullScreen: PropTypes.bool.isRequired,
   isMobile: PropTypes.bool,
   isPreview: PropTypes.bool,
-  isSmallDevice: PropTypes.bool,
   isStarted: PropTypes.bool,
   micIndicator: PropTypes.bool,
   onDeactivateColorPicker: PropTypes.func,

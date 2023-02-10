@@ -61,7 +61,7 @@ class GUI extends React.Component {
             stagePreviewVisible: true,
         };
     }
-
+    
 
     onToggleStagePreview(){
         let stagePreviewVisible = this.state.stagePreviewVisible;
@@ -109,6 +109,9 @@ class GUI extends React.Component {
             // this only notifies container when a project changes from not yet loaded to loaded
             // At this time the project view in www doesn't need to know when a project is unloaded
             this.props.onProjectLoaded();
+        }
+        if(window.StatusBar){
+            StatusBar.hide()
         }
     }
     render () {

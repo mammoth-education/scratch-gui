@@ -23,7 +23,6 @@ const StageWrapperComponent = function (props) {
         stageSize,
         stageVisible,
         vm,
-        isSmallDevice,
         isSmallStageSize,
     } = props;
     
@@ -36,13 +35,16 @@ const StageWrapperComponent = function (props) {
             dir={isRtl ? 'rtl' : 'ltr'}
         >
             {/* 预览窗口不显示，小设备全屏也不显示 */}
-            { (!isPreview || (!isSmallDevice && isFullScreen)) && <Box className={styles.stageMenuWrapper}>
+            <Box className={classNames(
+                styles.stageMenuWrapper,
+                { [styles.fullScreen]: isFullScreen },
+                isPreview ? styles.preview : null,
+            )}>
                 <StageHeader
                     stageSize={stageSize}
-                    isSmallDevice={isSmallDevice}
                     vm={vm}
                 />
-            </Box> }
+            </Box>
             <Box className={classNames(styles.stageCanvasWrapper, stageVisible ? styles.show : styles.hide)}>
                 {isRendererSupported ?
                     <Stage
@@ -50,7 +52,6 @@ const StageWrapperComponent = function (props) {
                         isMobile={isMobile}
                         isPreview={isPreview}
                         vm={vm}
-                        isSmallDevice={isSmallDevice}
                         isSmallStageSize={isSmallStageSize}
                     />
                     : null}
@@ -69,7 +70,6 @@ StageWrapperComponent.propTypes = {
     isRtl: PropTypes.bool.isRequired,
     loading: PropTypes.bool,
     isMobile: PropTypes.bool,
-    isSmallDevice: PropTypes.bool,
     isPreview: PropTypes.bool,
     stageSize: PropTypes.oneOf(Object.keys(STAGE_DISPLAY_SIZES)).isRequired,
     stageVisible: PropTypes.bool,

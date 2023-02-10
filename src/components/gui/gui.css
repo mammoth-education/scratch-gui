@@ -291,11 +291,6 @@ $fade-out-distance: 15px;
     right: 10px;
 }
 
-.tab-list-hide {
-    display: none;
-    height: 0;
-}
-
 .small-device-stage-panel {
     display: none;
     flex-direction: column;
@@ -315,23 +310,6 @@ $fade-out-distance: 15px;
     align-items: center;
 }
 
-/* For Phone */
-@media screen and (max-width: $full-size) {
-    .small-device-stage-panel {
-        display: flex;
-    }
-    [dir="ltr"] .watermark {
-        right: 4.25rem;
-    }
-}
-
-/* @media screen and (max-width: 896px){
-  .body-wrapper * {
-    max-height: -webkit-fill-available;
-  }
-
-} */
-
 .stageWrapper{
     position: absolute;
 }
@@ -347,4 +325,22 @@ $fade-out-distance: 15px;
 .show-hide-stage-img {
     width: 1.5rem;
     height: 1.5rem;
+}
+
+.stage-and-target {
+    display: block;
+}
+
+/* For Phone */
+@media screen and (max-width: $full-size) {
+    .small-device-stage-panel {
+        display: flex;
+    }
+    [dir="ltr"] .watermark {
+        right: 4.25rem;
+    }
+    .tab-list {
+        display: none;
+        height: 0;
+    }
 }

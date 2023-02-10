@@ -654,7 +654,7 @@ class MenuBar extends React.Component {
                         ) : [])}
                     </div>
                     <div className={classNames(styles.menuBarItem)}>
-                        {this.props.isSmallDevice ? (
+                        {/* {this.props.isSmallDevic ? ( */}
                             <div className={styles.tabList}>
                                 <div className={classNames(styles.tab, styles.tabLeft, this.props.selectedTabIndex === 0 ? styles.active: null)}
                                     onClick={this.handleClickCodeTab}>
@@ -672,7 +672,8 @@ class MenuBar extends React.Component {
                                     onClick={this.handleClickStageTab}>
                                     <img draggable={false} src={stageIcon} />
                                 </div>
-                            </div>) : null}
+                            </div>
+                        {/* ) : null} */}
                     </div>
                 </div>
                 {/* show the proper UI in the account menu, given whether the user is
@@ -845,7 +846,6 @@ MenuBar.propTypes = {
     isShared: PropTypes.bool,
     isShowingProject: PropTypes.bool,
     isUpdating: PropTypes.bool,
-    isSmallDevice: PropTypes.bool,
     languageMenuOpen: PropTypes.bool,
     locale: PropTypes.string.isRequired,
     localProjectsVisible: PropTypes.bool,

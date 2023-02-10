@@ -17,14 +17,13 @@ const StageAndTargetWrapper = props => {
         isPreview,
         isRendererSupported,
         isRtl,
-        isSmallDevice,
         stageSize,
         stageVisible,
         vm,
         ...componentProps
     } = omit(props, 'dispatch');
     return (
-        <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize], isPreview ? styles.stagePreview : null)}>
+        <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize], isPreview ? styles.preview : null)}>
             <StageWrapper
                 isFullScreen={isFullScreen}
                 isRendererSupported={isRendererSupported}
@@ -33,11 +32,10 @@ const StageAndTargetWrapper = props => {
                 stageSize={stageSize}
                 stageVisible={stageVisible}
                 vm={vm}
-                isSmallDevice={isSmallDevice}
                 isPreview={isPreview}
                 {...props}
             />
-            { !isPreview && <Box className={styles.targetWrapper}>
+            { <Box className={classNames(styles.targetWrapper, isPreview ? styles.preview : null)}>
                 <TargetPane
                     stageSize={stageSize}
                     vm={vm}

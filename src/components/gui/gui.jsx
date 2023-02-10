@@ -154,14 +154,14 @@ const GUIComponent = props => {
     }
     
     let isSmallDevice = false;
-    if (window.screen.width < 1024) {
+    if (window.screen.width < 1024 || window.innerWidth < 1024) {
         isSmallDevice = true;
     }
     
     const tabClassNames = {
         tabs: styles.tabs,
         tab: classNames(tabStyles.reactTabsTab, styles.tab),
-        tabList: classNames(tabStyles.reactTabsTabList, styles.tabList, isSmallDevice ? styles.tabListHide : null),
+        tabList: classNames(tabStyles.reactTabsTabList, styles.tabList),
         tabPanel: classNames(tabStyles.reactTabsTabPanel, styles.tabPanel),
         tabPanelSelected: classNames(tabStyles.reactTabsTabPanelSelected, styles.isSelected),
         tabSelected: classNames(tabStyles.reactTabsTabSelected, styles.isSelected),
@@ -263,7 +263,6 @@ const GUIComponent = props => {
                     className={styles.menuBarPosition}
                     enableCommunity={enableCommunity}
                     isShared={isShared}
-                    isSmallDevice={isSmallDevice}
                     logo={logo}
                     renderLogin={renderLogin}
                     showComingSoon={showComingSoon}
@@ -394,17 +393,18 @@ const GUIComponent = props => {
                                         </button> }
                                     </Box>
                                     {/* 移动端显示舞台预览窗 */}
-                                    { !stageTabVisible && isSmallDevice && <StageAndTargetWrapper 
-                                        isFullScreen={isFullScreen}
-                                        isRendererSupported={isRendererSupported}
-                                        isRtl={isRtl}
-                                        isMobile={isMobile}
-                                        stageVisible={stagePreviewVisible}
-                                        stageSize={stageSize}
-                                        isPreview={true}
-                                        vm={vm}
-                                        isSmallDevice={isSmallDevice}
-                                    />}
+                                    {/* { isSmallDevice &&
+                                        <StageAndTargetWrapper 
+                                            isFullScreen={isFullScreen}
+                                            isRendererSupported={isRendererSupported}
+                                            isRtl={isRtl}
+                                            isMobile={isMobile}
+                                            stageVisible={stagePreviewVisible}
+                                            stageSize={stageSize}
+                                            isPreview={true}
+                                            vm={vm}
+                                        />
+                                    } */}
                                 </TabPanel>
                                 <TabPanel className={tabClassNames.tabPanel}>
                                     {costumesTabVisible && <CostumeTab vm={vm} />}
@@ -420,19 +420,20 @@ const GUIComponent = props => {
                                         isMobile={isMobile}
                                         stageSize={stageSize}
                                         vm={vm}
-                                        isSmallDevice={isSmallDevice}
                                     />}
                                 </TabPanel>
                             </Tabs>
-                            { !isSmallDevice && <StageAndTargetWrapper 
-                                isFullScreen={isFullScreen}
-                                isRendererSupported={isRendererSupported}
-                                isRtl={isRtl}
-                                isMobile={isMobile}
-                                stageSize={stageSize}
-                                vm={vm}
-                                isSmallDevice={isSmallDevice}
-                            />}
+                            { blocksTabVisible && <div className={styles.stageAndTarget} >
+                                <StageAndTargetWrapper 
+                                    isFullScreen={isFullScreen}
+                                    isRendererSupported={isRendererSupported}
+                                    isRtl={isRtl}
+                                    isMobile={isMobile}
+                                    stageSize={stageSize}
+                                    isPreview={isSmallDevice ? true : false}
+                                    vm={vm}
+                                />
+                            </div> }
                             { backpackVisible && <Backpack host={backpackHost} /> }
                         </Box>
                     </Box>

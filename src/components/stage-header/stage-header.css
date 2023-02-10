@@ -99,3 +99,10 @@
     display: flex;
     justify-content: center;
 }
+
+/* For Phone */
+@media screen and (max-width: $full-size) {
+    .stage-size-toggle-group {
+        display: none;
+    }
+};

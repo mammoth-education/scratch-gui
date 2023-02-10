@@ -12,7 +12,6 @@ StageWrapper.propTypes = {
     isMobile: PropTypes.bool,
     isPreview: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired,
-    isSmallDevice:PropTypes.bool,
 };
 
 export default StageWrapper;
