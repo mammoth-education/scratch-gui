@@ -34,7 +34,7 @@ const messages = defineMessages({
 class FullscreenButton extends React.Component {
     render() {
         return (
-            <div classname={styles.stageButtonWrapper}>
+            <div className={styles.stageButtonWrapper}>
                 { this.props.isFullScreen ? 
                     <Button
                         className={styles.stageButton}

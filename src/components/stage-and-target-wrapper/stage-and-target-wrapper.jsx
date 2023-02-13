@@ -41,7 +41,7 @@ const StageAndTargetWrapper = props => {
                 <TargetPane
                     stageSize={stageSize}
                     vm={vm}
-                    {...props}
+                    {...componentProps}
                 />
             </Box> }
         </Box>
@@ -55,7 +55,7 @@ StageAndTargetWrapper.propTypes = {
 
 StageAndTargetWrapper.defaultProps = {
     isPreview: false,
-    stageVisible: true,
+    stagePreviewVisible: true,
 }
 
 
