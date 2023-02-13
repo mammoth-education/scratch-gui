@@ -35,6 +35,7 @@ const StageHeaderComponent = function (props) {
     const {
         isFullScreen,
         isPlayerOnly,
+        isSmallDevice,
         onSetStageLarge,
         onSetStageSmall,
         showBranding,
@@ -64,10 +65,15 @@ const StageHeaderComponent = function (props) {
         header = (
             <Box className={styles.stageHeaderWrapperOverlay}>
                 <Box
-                    className={styles.stageMenuWrapper}
+                    className={classNames(
+                    styles.stageMenuWrapper, 
+                    isFullScreen ? styles.fullscreen : null)}
                     style={{width: stageDimensions.width}}
                 >
-                    <Controls vm={vm} />
+                    <Controls vm={vm} className={
+                        classNames(
+                            styles.controls,
+                            isFullScreen ? styles.fullscreen : null)}/>
                     {stageButton}
                 </Box>
             </Box>
@@ -135,6 +141,7 @@ StageHeaderComponent.propTypes = {
     intl: intlShape,
     isFullScreen: PropTypes.bool.isRequired,
     isPlayerOnly: PropTypes.bool.isRequired,
+    isSmallDevice: PropTypes.bool,
     onSetStageLarge: PropTypes.func.isRequired,
     onSetStageSmall: PropTypes.func.isRequired,
     showBranding: PropTypes.bool.isRequired,

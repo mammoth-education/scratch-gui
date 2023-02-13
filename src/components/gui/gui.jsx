@@ -55,11 +55,6 @@ const messages = defineMessages({
         description: 'Button to open the user projects modal',
         defaultMessage: 'My Projects'
     },
-    // fullscreenTitle:{
-    //   id: 'gui.stageHeader.fullscreenControl',
-    //   defaultMessage: 'Fullscreen',
-    //   description: 'Fullscreen button title'
-    // }
 });
 
 // Cache this value to only retrieve it once the first time.
@@ -149,12 +144,13 @@ const GUIComponent = props => {
     }
 
     let isMobile = false;
-    if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android')) {
+    if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android') ||
+        navigator.userAgent.indexOf('Mobile') > -1) {
         isMobile = true;
     }
     
     let isSmallDevice = false;
-    if (window.screen.width < 1024 || window.innerWidth < 1024) {
+    if (window.screen.width < layout.fullSizeMinWidth || window.innerWidth < layout.fullSizeMinWidth) {
         isSmallDevice = true;
     }
     
@@ -379,33 +375,20 @@ const GUIComponent = props => {
                                     <Box className={styles.watermark}>
                                         <Watermark />
                                     </Box>
-                                    <Box className={classNames(
+                                    { !isFullScreen && <Box className={classNames(
                                         styles.smallDeviceStagePanel,
                                         { [styles.fullScreen]: isFullScreen })
                                     }>
                                         <Controls vm={vm} className={styles.flexVertical}/>
                                         {/* 全屏切换按钮 */}
                                         <FullscreenButton />
-                                        {/* 显示隐藏舞台预览窗按钮, 舞台全屏时不显示*/}
-                                        { !isFullScreen && <button className={styles.showHideStage} onClick={onToggleStagePreview}>
+                                        {/* 显示隐藏舞台预览窗按钮*/}
+                                        <button className={styles.showHideStage} onClick={onToggleStagePreview}>
                                             <img className={styles.showHideStageImg} draggable={false}
                                                 src={stagePreviewVisible ? eyeSlashFillIcon : eyeFillIcon}
                                             />
-                                        </button> }
-                                    </Box>
-                                    {/* 移动端显示舞台预览窗 */}
-                                    {/* { isSmallDevice &&
-                                        <StageAndTargetWrapper 
-                                            isFullScreen={isFullScreen}
-                                            isRendererSupported={isRendererSupported}
-                                            isRtl={isRtl}
-                                            isMobile={isMobile}
-                                            stageVisible={stagePreviewVisible}
-                                            stageSize={stageSize}
-                                            isPreview={true}
-                                            vm={vm}
-                                        />
-                                    } */}
+                                        </button>
+                                    </Box> }
                                 </TabPanel>
                                 <TabPanel className={tabClassNames.tabPanel}>
                                     {costumesTabVisible && <CostumeTab vm={vm} />}
@@ -419,12 +402,13 @@ const GUIComponent = props => {
                                         isRendererSupported={isRendererSupported}
                                         isRtl={isRtl}
                                         isMobile={isMobile}
+                                        isSmallDevice={isSmallDevice}
                                         stageSize={stageSize}
                                         vm={vm}
                                     />}
                                 </TabPanel>
                             </Tabs>
-                            { blocksTabVisible && <div className={styles.stageAndTarget} >
+                            { blocksTabVisible && <div className={styles.stageAndTarget}>
                                 <StageAndTargetWrapper 
                                     isFullScreen={isFullScreen}
                                     isRendererSupported={isRendererSupported}
@@ -432,6 +416,8 @@ const GUIComponent = props => {
                                     isMobile={isMobile}
                                     stageSize={stageSize}
                                     isPreview={isSmallDevice ? true : false}
+                                    stagePreviewVisible={stagePreviewVisible}
+                                    isSmallDevice={isSmallDevice}
                                     vm={vm}
                                 />
                             </div> }

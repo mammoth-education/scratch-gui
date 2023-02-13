@@ -17,8 +17,9 @@ const StageAndTargetWrapper = props => {
         isPreview,
         isRendererSupported,
         isRtl,
+        isSmallDevice,
         stageSize,
-        stageVisible,
+        stagePreviewVisible,
         vm,
         ...componentProps
     } = omit(props, 'dispatch');
@@ -29,8 +30,9 @@ const StageAndTargetWrapper = props => {
                 isRendererSupported={isRendererSupported}
                 isRtl={isRtl}
                 isMobile={isMobile}
+                isSmallDevice={isSmallDevice}
                 stageSize={stageSize}
-                stageVisible={stageVisible}
+                stagePreviewVisible={stagePreviewVisible}
                 vm={vm}
                 isPreview={isPreview}
                 {...props}
@@ -48,7 +50,7 @@ const StageAndTargetWrapper = props => {
 
 StageAndTargetWrapper.propTypes = {
     isPreview: PropTypes.bool,
-    stageVisible: PropTypes.bool,
+    stagePreviewVisible: PropTypes.bool,
 }
 
 StageAndTargetWrapper.defaultProps = {

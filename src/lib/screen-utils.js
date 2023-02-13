@@ -56,8 +56,12 @@ const getStageDimensions = (stageSize, isFullScreen, isMobile, isPreview) => {
     };
 
     let isSmallDevice = false;
-    if (window.screen.width < 1024 || window.innerWidth < 1024) {
+    if (window.screen.width < layout.fullSizeMinWidth || window.innerWidth < layout.fullSizeMinWidth) {
         isSmallDevice = true;
+    }
+    let maxWidth = window.innerWidth;
+    if (isMobile) {
+        maxWidth -= STAGE_VITUAL_KEYBOARD_WIDTH;
     }
     
     if (isFullScreen) {
@@ -69,12 +73,8 @@ const getStageDimensions = (stageSize, isFullScreen, isMobile, isPreview) => {
 
         stageDimensions.width = stageDimensions.height + (stageDimensions.height / 3);
 
-        if (stageDimensions.width > window.innerWidth) {
-            stageDimensions.width = window.innerWidth;
-            stageDimensions.height = stageDimensions.width * .75;
-        }
-        if (isMobile && stageDimensions.width + STAGE_VITUAL_KEYBOARD_WIDTH > window.innerWidth ) {
-            stageDimensions.width = window.innerWidth - STAGE_VITUAL_KEYBOARD_WIDTH;
+        if (stageDimensions.width > maxWidth) {
+            stageDimensions.width = maxWidth;
             stageDimensions.height = stageDimensions.width * .75;
         }
         stageDimensions.scale = stageDimensions.width / stageDimensions.widthDefault;

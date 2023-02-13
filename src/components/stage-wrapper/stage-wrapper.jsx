@@ -20,8 +20,9 @@ const StageWrapperComponent = function (props) {
         loading,
         isMobile,
         isPreview,
+        isSmallDevice,
         stageSize,
-        stageVisible,
+        stagePreviewVisible,
         vm,
         isSmallStageSize,
     } = props;
@@ -41,11 +42,13 @@ const StageWrapperComponent = function (props) {
                 isPreview ? styles.preview : null,
             )}>
                 <StageHeader
+                    isSmallDevice={isSmallDevice}
                     stageSize={stageSize}
                     vm={vm}
                 />
             </Box>
-            <Box className={classNames(styles.stageCanvasWrapper, stageVisible ? styles.show : styles.hide)}>
+            <Box className={classNames(styles.stageCanvasWrapper, 
+                !stagePreviewVisible && !isFullScreen && isPreview ? styles.hide : styles.show)}>
                 {isRendererSupported ?
                     <Stage
                         stageSize={ stageSize}
@@ -56,7 +59,7 @@ const StageWrapperComponent = function (props) {
                     />
                     : null}
             </Box>
-            {isFullScreen && <StageVirtualKeyboard />}
+            {isFullScreen && isMobile && <StageVirtualKeyboard />}
             {loading ? (
                 <Loader isFullScreen={isFullScreen} />
             ) : null}
@@ -72,12 +75,12 @@ StageWrapperComponent.propTypes = {
     isMobile: PropTypes.bool,
     isPreview: PropTypes.bool,
     stageSize: PropTypes.oneOf(Object.keys(STAGE_DISPLAY_SIZES)).isRequired,
-    stageVisible: PropTypes.bool,
+    stagePreviewVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired
 };
 
 StageWrapperComponent.defaultProps = {
-    stageVisible: true,
+    stagePreviewVisible: true,
 }
 
 export default StageWrapperComponent;

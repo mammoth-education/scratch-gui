@@ -105,4 +105,20 @@
     .stage-size-toggle-group {
         display: none;
     }
+    .controls.fullscreen {
+        display: flex;
+        flex-direction: column;
+        width: min-content !important;
+    }
+    .stage-menu-wrapper.fullscreen {
+        display: flex;
+        margin: none;
+        justify-content: center;
+        flex-direction: column;
+        height: auto;
+        right: 0.5rem;
+        background: None;
+        position: fixed;
+        width: min-content !important;
+    }
 };

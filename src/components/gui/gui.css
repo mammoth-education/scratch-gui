@@ -298,12 +298,6 @@ $fade-out-distance: 15px;
     right: .6rem;
 }
 
-.small-device-stage-panel.full-screen {
-    z-index: calc($z-index-stage-wrapper-overlay + 1);
-    position: fixed;
-    top: 0.8rem;
-}
-
 .flex-vertical {
     flex-direction: column;
     justify-content: center;
