@@ -3,7 +3,7 @@
 
 .modal-content {
     width: 700px;
-    margin: 50px auto; /* This modal is taller than most, reduce top margin */
+    /*margin: 50px auto; /* This modal is taller than most, reduce top margin */
 }
 
 .body {
@@ -18,7 +18,7 @@
 
 /* Blocks workspace for custom procedure declaration editor */
 .workspace {
-    min-height: 200px;
+    min-height: 100px;
     position: relative;
 }
 
@@ -44,7 +44,8 @@
     background: white;
     border: 2px solid $ui-black-transparent;
     border-radius: $space;
-    padding: calc($space * 2);
+    /* padding: calc($space * 2); */
+    padding: calc($space);
     text-align: center;
     flex-grow: 1;
     cursor: pointer;
@@ -103,4 +104,22 @@
 
 [dir="rtl"] .button-row button + button {
     margin-right: 0.5rem;
+}
+@media only screen and (min-width: 1024px) {
+    .workspace {
+        min-height: 200px;
+    }
+    .modal-content {
+        margin: 50px auto; /* This modal is taller than most, reduce top margin */
+    }
+    .option-card {
+        padding: calc($space * 2);
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .modal-content {
+        height: 100%;
+        overflow: auto;
+    }
 }

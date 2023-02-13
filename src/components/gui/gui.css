@@ -251,8 +251,8 @@ $fade-out-distance: 15px;
 }
 
 [dir="ltr"] .watermark {
-    /* right: 1.25rem; */
-    right: 33.25rem;
+    right: 1.25rem;
+    /* right: 33.25rem; */
 }
 
 [dir="rtl"] .watermark {
