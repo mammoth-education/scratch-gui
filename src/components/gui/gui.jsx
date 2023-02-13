@@ -224,6 +224,7 @@ const GUIComponent = props => {
                 ) : null}
                 {connectionModalVisible ? (
                     <ConnectionModal
+                        isMobile={isMobile}
                         vm={vm}
                     />
                 ) : null}
