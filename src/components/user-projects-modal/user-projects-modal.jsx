@@ -7,8 +7,15 @@ import { connect } from 'react-redux';
 import { closeUserProjectsModal } from '../../reducers/modals';
 import UniversalPopup from '../universal-popup/universal-popup.jsx'
 import styles from './user-projects-modal.css';
-import { FormattedMessage } from 'react-intl';
-// 我的项目列表
+import { FormattedMessage ,defineMessages,injectIntl, intlShape} from 'react-intl';
+
+let content = <>
+    <FormattedMessage
+        defaultMessage="删除提示"
+        description="删除提示"
+        id="gui.project.deleteTips"
+    />
+</>
 class UserProjectsModal extends React.Component {
     constructor(props) {
         super(props);
@@ -90,7 +97,7 @@ class UserProjectsModal extends React.Component {
                             <FormattedMessage
                                 defaultMessage="打开"
                                 description="打开"
-                                id="gui.gui.openCode"
+                                id="gui.userProjectModel.openCode"
                             />
                         </button>
                     </div>
@@ -110,7 +117,7 @@ class UserProjectsModal extends React.Component {
                 <div className={styles.modalContent}>
                     {this.createList()}
                 </div>
-                {this.state.popupDisplay ? <UniversalPopup determine={this.determine} cancel={this.cancel} content={this.state.content} /> : null}
+                {this.state.popupDisplay ? <UniversalPopup determine={this.determine} cancel={this.cancel} content={content} /> : null}
             </Modal>
 
         )

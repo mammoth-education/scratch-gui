@@ -40,10 +40,15 @@
 }
 
 .stage-and-target-wrapper.preview {
-    right: 2.5rem;
+    /* right: 2.5rem; */
+    right: 6%;
     width: fit-content !important;
+    height: auto;
+    z-index: 1;
 }
-
+.previewHide{
+    z-index: -1;
+}
 /* For Phone */
 @media screen and (max-width: $full-size) {
     [dir="ltr"] .stageWrapper {
