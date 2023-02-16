@@ -40,6 +40,7 @@ import addExtensionIcon from './icon--extensions.svg';
 import codeIcon from './icon--code.svg';
 import costumesIcon from './icon--costumes.svg';
 import soundsIcon from './icon--sounds.svg';
+import stageIcon from './icon--stage.svg';
 import eyeFillIcon from './icon--eye-fill.svg';
 import eyeSlashFillIcon from './icon--eye-slash-fill.svg';
 import FullscreenButton from '../stage-header/fullscreen-button.jsx';
@@ -343,6 +344,22 @@ const GUIComponent = props => {
                                             id="gui.gui.soundsTab"
                                         />
                                     </Tab>
+                                    { isSmallDevice && 
+                                        <Tab
+                                            className={tabClassNames.tab}
+                                            onClick={onActivateStageTab}
+                                        >
+                                            <img
+                                                draggable={false}
+                                                src={stageIcon}
+                                            />
+                                            <FormattedMessage
+                                                defaultMessage="Stage"
+                                                description="Button to get to the stage panel"
+                                                id="gui.gui.stageTab"
+                                            />
+                                        </Tab>
+                                    }
                                 </TabList>
                                 <TabPanel className={tabClassNames.tabPanel}>
                                     {/* block */}
@@ -396,7 +413,7 @@ const GUIComponent = props => {
                                 <TabPanel className={tabClassNames.tabPanel}>
                                     {soundsTabVisible && <SoundTab vm={vm} />}
                                 </TabPanel>
-                                <TabPanel className={tabClassNames.tabPanel}>
+                                { isSmallDevice && <TabPanel className={tabClassNames.tabPanel}>
                                     {stageTabVisible && <StageAndTargetWrapper 
                                         isFullScreen={isFullScreen}
                                         isRendererSupported={isRendererSupported}
@@ -406,7 +423,7 @@ const GUIComponent = props => {
                                         stageSize={stageSize}
                                         vm={vm}
                                     />}
-                                </TabPanel>
+                                </TabPanel> }
                             </Tabs>
                             { blocksTabVisible && <div className={styles.stageAndTarget}>
                                 <StageAndTargetWrapper 

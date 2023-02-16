@@ -138,6 +138,11 @@ class GUI extends React.Component {
             fetchingProject,
             isLoading,
             loadingStateVisible,
+            createProject,
+            manualUpdateProject,
+            setProjectTitle,
+            setProjectId,
+            closeUserProjectsModal,
             ...componentProps
         } = this.props;
         return (
