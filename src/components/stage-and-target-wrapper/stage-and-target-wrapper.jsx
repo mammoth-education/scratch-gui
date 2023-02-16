@@ -24,7 +24,7 @@ const StageAndTargetWrapper = props => {
         ...componentProps
     } = omit(props, 'dispatch');
     return (
-        <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize], isPreview  && stagePreviewVisible ? styles.preview : styles.previewHide)}>
+        <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize], isPreview && stagePreviewVisible ? styles.preview : null)}>
             <StageWrapper
                 isFullScreen={isFullScreen}
                 isRendererSupported={isRendererSupported}
