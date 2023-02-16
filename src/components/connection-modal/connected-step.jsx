@@ -59,16 +59,18 @@ const ConnectedStep = props => (
                         id="gui.connection.rename-device"
                     />
                 </button> : null}
-                <button
-                    className={styles.connectionButton}
-                    onClick={props.onFlashFirmware}
-                >
-                    <FormattedMessage
-                        defaultMessage="Check for Updates"
-                        description="check for update"
-                        id="gui.connection.check-for-updates"
-                    />
-                </button>
+                { props.firmwareFlashable &&
+                    <button
+                        className={styles.connectionButton}
+                        onClick={props.onFlashFirmware}
+                    >
+                        <FormattedMessage
+                            defaultMessage="Check for Updates"
+                            description="check for update"
+                            id="gui.connection.check-for-updates"
+                        />
+                    </button>
+                }
             </div>
         </Box>
     </Box>

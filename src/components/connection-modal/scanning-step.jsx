@@ -69,7 +69,7 @@ const ScanningStep = props => (
                 total={3}
             />
             <div className={classNames(styles.bottomAreaItem, styles.spaceAroundButtons)}>
-                {props.firmwareFlashable && props.isMobile &&
+                {props.firmwareFlashable && !props.isMobile &&
                     <button className={styles.connectionButton} onClick={props.onFlashFirmware}>
                         <FormattedMessage
                             defaultMessage="Flash Firmware"
