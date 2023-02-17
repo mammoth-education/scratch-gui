@@ -52,13 +52,15 @@ const FlashFirmwareStep = props => (
                         id="gui.modal.back"
                     />
                 </button>
-                <button className={styles.connectionButton} onClick={props.onFlashFirmwareStart}>
-                    <FormattedMessage
-                        defaultMessage="Flash"
-                        description="Flash (firmware)"
-                        id="gui.connection.flash"
-                    />
-                </button>
+                { !props.isMobile &&
+                    <button className={styles.connectionButton} onClick={props.onFlashFirmwareStart}>
+                        <FormattedMessage
+                            defaultMessage="Flash"
+                            description="Flash (firmware)"
+                            id="gui.connection.flash"
+                        />
+                    </button>
+                }
             </div>
         </Box>
     </Box>
