@@ -17,9 +17,17 @@ const StageVirtualKeyboardComponent = props => {
                     <VirtualKey keyName="ArrowUp" icon={upArrowIcon} />
                 </div>
                 <div className={style.row}>
-                    <VirtualKey keyName="ArrowLeft" icon={leftArrowIcon} />
-                    <VirtualKey keyName="ArrowDown" icon={downArrowIcon} />
-                    <VirtualKey keyName="ArrowRight" icon={rightArrowIcon} />
+                    <div className={style.left}>
+                        <VirtualKey  keyName="ArrowLeft" icon={upArrowIcon} />
+                    </div>
+                    <div className={style.down}>
+                        <VirtualKey  keyName="ArrowDown" icon={upArrowIcon} />
+                    </div>
+                    <div className={style.right}>
+                        <VirtualKey  keyName="ArrowRight" icon={upArrowIcon} />
+                    </div>
+                    {/* <VirtualKey keyName="ArrowDown" icon={downArrowIcon} />
+                    <VirtualKey keyName="ArrowRight" icon={rightArrowIcon} /> */}
                 </div>
             </div>
         </div>

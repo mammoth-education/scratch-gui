@@ -87,12 +87,19 @@ class GUI extends React.Component {
     onDeleProject (id, name) {
       console.log("onDeleProject");
       let projectList = JSON.parse(localStorage.getItem("project-list"));
+      let assetProject = JSON.parse(localStorage.getItem("asset-Project"));
       for(let k in projectList){
         if(k == id){
           delete projectList[k]
         }
       }
+      for(let j in assetProject){
+        if(j == id){
+            delete assetProject[j]
+        }
+      }
       localStorage.setItem("project-list", JSON.stringify(projectList));
+      localStorage.setItem("asset-Project", JSON.stringify(assetProject));
       // createHandleOpenProject
     }
 

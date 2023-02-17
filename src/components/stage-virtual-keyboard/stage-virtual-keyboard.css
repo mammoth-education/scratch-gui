@@ -42,3 +42,12 @@
   width: 50%;
   filter: invert(100%) sepia(6%) saturate(7464%) hue-rotate(192deg) brightness(105%) contrast(104%);
 }
+.left{
+  transform: rotate(-90deg);
+}
+.down{
+  transform: rotate(-180deg);
+}
+.right{
+  transform: rotate(90deg);
+}
