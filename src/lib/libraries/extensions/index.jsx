@@ -93,8 +93,8 @@ export default [
                 id="gui.extension.kaka.connectingMessage"
             />
         ),
-        // 帮助的链接
-        // helpLink: 'https://baidu.com' // TODO  
+        // 帮助链接
+        helpLink: 'https://baidu.com' // TODO  
     },
     {
         name: (

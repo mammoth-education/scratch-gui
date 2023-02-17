@@ -9,16 +9,16 @@ const generateId = () => {
 const newProject = (name) => {
     name = name || "New Project";
     let id = generateId();
-    let projectList = localStorage.getItem('project-list') || "{}";
-    projectList = JSON.parse(projectList);
-    projectList[id] = {
-        id: id,
-        name: name,
-        createDate: Date.now(),
-        updateDate: Date.now(),
+    let time = Date.now();
+    return {
+        id:id,
+        description: {
+            id: id,
+            name: name,
+            createDate: time,
+            updateDate: time,
+        }
     }
-    localStorage.setItem("project-list", JSON.stringify(projectList));
-    return id;
 }
 
 /**
@@ -35,28 +35,25 @@ const newProject = (name) => {
  * @return {Promise} A promise that resolves when the network request resolves.
  */
 const saveProject = (id, data, options) => {
+    let projectList = localStorage.getItem('project-list') || "{}";
+    projectList = JSON.parse(projectList);
+    let description;
+
     if (options) {
-        if (options.isNew) {
-            id = newProject(options.title);
-        } else if (options.isCopy || options.isRemix) {
-            id = newProject(options.title);
-            let originalAsset = storage.load(storage.AssetType.Project, options.origialId, storage.DataFormat.JSON);
-            data = originalAsset.data;
+        if (options.isNew || options.isCopy || options.isRemix) {
+            ( {id, description} = newProject(options.title) );
+            projectList[id] = description;
         } else {
-            let projectList = JSON.parse(localStorage.getItem("project-list") || "{}");
-            if (projectList[id] && projectList[id].name !== options.title) {
-                projectList[id].name = options.title;
+            if (!projectList[id]) {
+                ( {id, description} = newProject(options.title) );
+                projectList[id] = description;
             }
-            projectList[id].updateDate = Date.now();
-            localStorage.setItem("project-list", JSON.stringify(projectList));
+            projectList[id].name = options.title;
         }
-    } else {
-        let projectList = localStorage.getItem('project-list') || "{}";
-        projectList = JSON.parse(projectList);
-        projectList[id].updateDate = Date.now();
-        localStorage.setItem("project-list", JSON.stringify(projectList));
     }
 
+    projectList[id].updateDate = Date.now();
+    localStorage.setItem("project-list", JSON.stringify(projectList));
     return storage.store(storage.AssetType.Project, storage.DataFormat.JSON, data, id);
 }
 
