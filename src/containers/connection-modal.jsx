@@ -262,6 +262,7 @@ class ConnectionModal extends React.Component {
                 connectionSmallIconURL={this.state.extension && this.state.extension.connectionSmallIconURL}
                 connectionTipIconURL={this.state.extension && this.state.extension.connectionTipIconURL}
                 extensionId={this.props.extensionId}
+                isMobile={this.props.isMobile}
                 currentFirmwareVersion={this.state.currentFirmwareVersion}
                 latestFirmwareVersion={this.state.latestFirmwareVersion}
                 flashErrorMessage={this.state.flashErrorMessage}
@@ -294,6 +295,7 @@ class ConnectionModal extends React.Component {
 }
 
 ConnectionModal.propTypes = {
+    isMobile: PropTypes.bool,
     extensionId: PropTypes.string.isRequired,
     onCancel: PropTypes.func.isRequired,
     vm: PropTypes.instanceOf(VM).isRequired

@@ -64,6 +64,7 @@ class ScanningStep extends React.Component {
                 onConnecting={this.props.onConnecting}
                 onFlashFirmware={this.props.onFlashFirmware}
                 onRefresh={this.handleRefresh}
+                isMobile={this.props.isMobile}
             />
         );
     }
@@ -73,6 +74,7 @@ ScanningStep.propTypes = {
     connectionSmallIconURL: PropTypes.string,
     firmwareFlashable: PropTypes.bool,
     extensionId: PropTypes.string.isRequired,
+    isMobile: PropTypes.bool,
     onConnected: PropTypes.func.isRequired,
     onConnecting: PropTypes.func.isRequired,
     onFlashFirmware: PropTypes.func.isRequired,
