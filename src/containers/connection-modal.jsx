@@ -220,6 +220,7 @@ class ConnectionModal extends React.Component {
         let error = e.detail;
         this.setState({
             flashErrorMessage: error,
+            flashProgress: 0,
             phase: PHASES.flasheFirmwareError
         });
         analytics.event({
@@ -234,7 +235,9 @@ class ConnectionModal extends React.Component {
         document.removeEventListener("onFlashFirmwareError", this.handleFlashFirmwareError);
         document.removeEventListener("onFlashFirmwareDone", this.handleFlashFirmwareDone);
         this.setState({
-            phase: PHASES.flasheFirmwareSuccess
+            phase: PHASES.flasheFirmwareSuccess,
+            flashProgress: 0,
+            flashMessage: ""
         });
         analytics.event({
             category: 'extensions',
@@ -248,6 +251,11 @@ class ConnectionModal extends React.Component {
         document.addEventListener("onFlashFirmwareMessage", this.handleFlashFirmwareMessage);
         document.addEventListener("onFlashFirmwareError", this.handleFlashFirmwareError);
         document.addEventListener("onFlashFirmwareDone", this.handleFlashFirmwareDone);
+        this.setState({
+            flashProgress: 0,
+            flashMessage: "",
+            flashErrorMessage: "",
+        });
         analytics.event({
             category: 'extensions',
             action: 'flashFirmwareStart',
@@ -262,6 +270,7 @@ class ConnectionModal extends React.Component {
                 connectionSmallIconURL={this.state.extension && this.state.extension.connectionSmallIconURL}
                 connectionTipIconURL={this.state.extension && this.state.extension.connectionTipIconURL}
                 extensionId={this.props.extensionId}
+                isMobile={this.props.isMobile}
                 currentFirmwareVersion={this.state.currentFirmwareVersion}
                 latestFirmwareVersion={this.state.latestFirmwareVersion}
                 flashErrorMessage={this.state.flashErrorMessage}
@@ -294,6 +303,7 @@ class ConnectionModal extends React.Component {
 }
 
 ConnectionModal.propTypes = {
+    isMobile: PropTypes.bool,
     extensionId: PropTypes.string.isRequired,
     onCancel: PropTypes.func.isRequired,
     vm: PropTypes.instanceOf(VM).isRequired

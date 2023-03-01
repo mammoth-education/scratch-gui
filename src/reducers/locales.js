@@ -19,6 +19,10 @@ const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
     case SELECT_LOCALE:
+        if (window.electron) {
+            window.electron.setLocale(action.locale);
+        }
+        window.localStorage.setItem('locale', action.locale);
         return Object.assign({}, state, {
             isRtl: isRtl(action.locale),
             locale: action.locale,
@@ -26,6 +30,10 @@ const reducer = function (state, action) {
             messages: state.messagesByLocale[action.locale]
         });
     case UPDATE_LOCALES:
+        if (window.electron) {
+            window.electron.setLocale(state.locale);
+        }
+        window.localStorage.setItem('locale', state.locale);
         return Object.assign({}, state, {
             isRtl: state.isRtl,
             locale: state.locale,
