@@ -338,3 +338,10 @@ $fade-out-distance: 15px;
         height: 0;
     }
 }
+@media screen and (min-width: $full-size) {
+    .stage-and-target{
+        width: 498px;
+    }
+}
+
+
