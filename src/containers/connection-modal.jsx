@@ -220,6 +220,7 @@ class ConnectionModal extends React.Component {
         let error = e.detail;
         this.setState({
             flashErrorMessage: error,
+            flashProgress: 0,
             phase: PHASES.flasheFirmwareError
         });
         analytics.event({
@@ -234,7 +235,9 @@ class ConnectionModal extends React.Component {
         document.removeEventListener("onFlashFirmwareError", this.handleFlashFirmwareError);
         document.removeEventListener("onFlashFirmwareDone", this.handleFlashFirmwareDone);
         this.setState({
-            phase: PHASES.flasheFirmwareSuccess
+            phase: PHASES.flasheFirmwareSuccess,
+            flashProgress: 0,
+            flashMessage: ""
         });
         analytics.event({
             category: 'extensions',
@@ -248,6 +251,11 @@ class ConnectionModal extends React.Component {
         document.addEventListener("onFlashFirmwareMessage", this.handleFlashFirmwareMessage);
         document.addEventListener("onFlashFirmwareError", this.handleFlashFirmwareError);
         document.addEventListener("onFlashFirmwareDone", this.handleFlashFirmwareDone);
+        this.setState({
+            flashProgress: 0,
+            flashMessage: "",
+            flashErrorMessage: "",
+        });
         analytics.event({
             category: 'extensions',
             action: 'flashFirmwareStart',
