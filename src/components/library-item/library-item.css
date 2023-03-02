@@ -204,9 +204,9 @@
     transform: translate(calc(-2 * $space), calc(2 * $space));
 }
 @media screen and (max-width: $full-size) {
-    .library-item{
+    /* .library-item{
         width: 150px;
         height: 150px;
         flex-basis: 149px;
-    }
+    } */
 }

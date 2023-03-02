@@ -63,6 +63,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
         }
         // step 1: this is where the upload process begins
         handleStartSelectingFileUpload () {
+            console.log("导入")
             this.createFileObjects(); // go to step 2
         }
         // step 2: create a FileReader and an <input> element, and issue a
@@ -76,7 +77,12 @@ const SBFileUploaderHOC = function (WrappedComponent) {
             this.fileReader.onload = this.onload;
             // create <input> element and add it to DOM
             this.inputElement = document.createElement('input');
-            this.inputElement.accept = '.sb,.sb2,.sb3';
+            if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android') ||
+                navigator.userAgent.indexOf('Mobile') > -1) {
+                this.inputElement.accept = 'sb,sb2,sb3';
+            }else{
+                this.inputElement.accept = '.sb,.sb2,.sb3';
+            }
             this.inputElement.style = 'display: none;';
             this.inputElement.type = 'file';
             this.inputElement.onchange = this.handleChange; // connects to step 3
@@ -84,6 +90,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
             // simulate a click to open file chooser dialog
             this.inputElement.click();
         }
+        // 读取导入的文件
         // step 3: user has picked a file using the file chooser dialog.
         // We don't actually load the file here, we only decide whether to do so.
         handleChange (e) {
@@ -95,6 +102,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 userOwnsProject
             } = this.props;
             const thisFileInput = e.target;
+            console.log("thisFileInput:",thisFileInput)
             if (thisFileInput.files) { // Don't attempt to load if no file was selected
                 this.fileToUpload = thisFileInput.files[0];
 

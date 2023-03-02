@@ -36,3 +36,10 @@
 .input-label {
     font-weight: bold;
 }
+
+
+@media screen and (max-width: $full-size) {
+    [dir="ltr"] .input-label{
+        margin: 0.2rem;
+    }
+}

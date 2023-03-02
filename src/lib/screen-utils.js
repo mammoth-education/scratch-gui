@@ -54,16 +54,10 @@ const getStageDimensions = (stageSize, isFullScreen, isMobile, isPreview) => {
         width: 0,
         scale: 0
     };
-
     let isSmallDevice = false;
     if (window.screen.width < layout.fullSizeMinWidth || window.innerWidth < layout.fullSizeMinWidth) {
         isSmallDevice = true;
     }
-    let maxWidth = window.innerWidth;
-    if (isMobile) {
-        maxWidth -= STAGE_VITUAL_KEYBOARD_WIDTH;
-    }
-    
     if (isFullScreen) {
         stageDimensions.height = window.innerHeight -
             STAGE_DIMENSION_DEFAULTS.fullScreenSpacingBorderAdjustment;
@@ -73,6 +67,11 @@ const getStageDimensions = (stageSize, isFullScreen, isMobile, isPreview) => {
 
         stageDimensions.width = stageDimensions.height + (stageDimensions.height / 3);
 
+        let maxWidth = window.innerWidth;
+        if (isMobile) {
+            maxWidth -= STAGE_VITUAL_KEYBOARD_WIDTH;
+        }
+    
         if (stageDimensions.width > maxWidth) {
             stageDimensions.width = maxWidth;
             stageDimensions.height = stageDimensions.width * .75;
@@ -89,6 +88,12 @@ const getStageDimensions = (stageSize, isFullScreen, isMobile, isPreview) => {
                     STAGE_DIMENSION_DEFAULTS.menuBarHeight -
                     STAGE_DIMENSION_DEFAULTS.fullScreenSpacingBorderAdjustment;
                 stageDimensions.width = stageDimensions.height + (stageDimensions.height / 3);
+                console.log(STAGE_DISPLAY_SCALES[stageSize])
+                let maxWidth = window.innerWidth - STAGE_DISPLAY_SCALES[stageSize] * stageDimensions.widthDefault;
+                if (stageDimensions.width > maxWidth) {
+                    stageDimensions.width = maxWidth;
+                    stageDimensions.height = stageDimensions.width * .75;
+                }
             }
         } else {
             stageDimensions.scale = STAGE_DISPLAY_SCALES[stageSize];

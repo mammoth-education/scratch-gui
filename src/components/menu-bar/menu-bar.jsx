@@ -79,7 +79,7 @@ import scratchLogo from './mammoth-logo.png';
 import codeIcon from '../gui/icon--code.svg';
 import costumesIcon from '../gui/icon--costumes.svg';
 import soundsIcon from '../gui/icon--sounds.svg';
-import stageIcon from '../gui/icon--stage.svg';
+import stageIcon from '../gui/icon--stage2.svg';
 
 
 import sharedMessages from '../../lib/shared-messages';
@@ -508,6 +508,16 @@ class MenuBar extends React.Component {
                                                 />
                                             </MenuItem>
                                         )}</SB3Downloader>
+                                        <div>
+                                            <MenuItem>
+                                                <FormattedMessage
+                                                    defaultMessage="Versions：1.3"
+                                                    description="Used to display the current version" // 显示当前版本
+                                                    id="当前版本：1.0"
+                                                />
+                                            </MenuItem>
+
+                                        </div>
                                     </MenuSection>
                                 </MenuBarMenu>
                             </div>

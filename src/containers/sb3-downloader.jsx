@@ -22,15 +22,82 @@ class SB3Downloader extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'downloadProject'
+            'downloadProject',
+            'writeDirectory',
+            'saveAs',
+            'saveFile',
+            'writeFile',
         ]);
     }
+      writeDirectory () {
+        var dirUri = cordova.file.dataDirectory;
+        console.log(dirUri);
+        window.resolveLocalFileSystemURL(dirUri, function (entry) {
+          entry.getDirectory("newFile", {
+            create: true,
+          }, function (dirEntry) {
+            dirEntry.getDirectory('project', { create: true }, function (subDirEntry) {
+            }, ()=>console.log("文件夹创建失败！"));
+          }, ()=>console.log("文件夹创建失败！"))
+        }, (e)=>console.log(e.toString()))
+      }
+      // 写入数据
+      saveAs (content, fileName) { 
+        var dirUri = cordova.file.dataDirectory;
+        var _this = this
+        window.resolveLocalFileSystemURL(dirUri, function (Entry) {
+          Entry.getDirectory("newFile", {
+            create: true,
+          }, function (dirEntry) {
+            dirEntry.getDirectory('project', { create: true }, function (subDirEntry) {
+              console.log("this:",_this)
+              _this.saveFile(subDirEntry, content, fileName);
+            }, ()=>console.log("文件夹创建失败！"));
+      
+          }, ()=>console.log("文件夹创建失败！"))
+        })
+        console.log(cordova.file.dataDirectory);
+      }
+      saveFile (dirEntry, fileData, fileName) {
+        let _this = this
+        dirEntry.getFile(
+          fileName, {
+          create: true,
+          exclusive: false
+        },
+          function (fileEntry) {
+            _this.writeFile(fileEntry, fileData);
+          }, (e)=>console.log('Failed create file: ' + e.toString()));
+      }
+
+      writeFile (fileEntry, dataObj) {
+        fileEntry.createWriter(function (fileWriter) {
+          fileWriter.onwriteend = function () {
+      
+          };
+          fileWriter.onerror = function (e) {
+            console.log('Failed file write: ' + e.toString());
+          };
+          fileWriter.write(dataObj);
+      
+        });
+      }
+ 
     downloadProject () {
         this.props.saveProjectSb3().then(content => {
             if (this.props.onSaveFinished) {
                 this.props.onSaveFinished();
             }
-            downloadBlob(this.props.projectFilename, content);
+            if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android')){
+                this.writeDirectory()
+                this.saveAs(content,this.props.projectFilename);
+                // path = cordova.file.dataDirectory
+                console.log(this)
+                let path = `${cordova.file.dataDirectory}/newFile/project/${this.props.projectFilename}`
+                window.plugins.socialsharing.share(null, null, path);
+            }else{
+                downloadBlob(this.props.projectFilename, content);
+            }
         });
     }
     render () {
