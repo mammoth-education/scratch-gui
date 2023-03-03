@@ -88,7 +88,6 @@ const getStageDimensions = (stageSize, isFullScreen, isMobile, isPreview) => {
                     STAGE_DIMENSION_DEFAULTS.menuBarHeight -
                     STAGE_DIMENSION_DEFAULTS.fullScreenSpacingBorderAdjustment;
                 stageDimensions.width = stageDimensions.height + (stageDimensions.height / 3);
-                console.log(STAGE_DISPLAY_SCALES[stageSize])
                 let maxWidth = window.innerWidth - STAGE_DISPLAY_SCALES[stageSize] * stageDimensions.widthDefault;
                 if (stageDimensions.width > maxWidth) {
                     stageDimensions.width = maxWidth;

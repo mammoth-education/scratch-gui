@@ -186,6 +186,8 @@ class MenuBar extends React.Component {
             'handleClickUserProjects',
         ]);
     }
+    
+    
     componentDidMount () {
         document.addEventListener('keydown', this.handleKeyPress);
     }
@@ -494,18 +496,31 @@ class MenuBar extends React.Component {
                                         <MenuItem
                                             onClick={this.props.onStartSelectingFileUpload}
                                         >
-                                            {this.props.intl.formatMessage(sharedMessages.loadFromComputerTitle)}
+                                            {this.props.isMobile ? 
+                                            <FormattedMessage
+                                                    defaultMessage="Load from your headers"
+                                                    description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
+                                                    id="gui.sharedMessages.loadFromHeaders"
+                                            /> : (this.props.intl.formatMessage(sharedMessages.loadFromComputerTitle))}
                                         </MenuItem>
                                         <SB3Downloader>{(className, downloadProjectCallback) => (
                                             <MenuItem
                                                 className={className}
                                                 onClick={this.getSaveToComputerHandler(downloadProjectCallback)}
                                             >
-                                                <FormattedMessage
-                                                    defaultMessage="Save to your computer"
-                                                    description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
-                                                    id="gui.menuBar.downloadToComputer"
-                                                />
+                                                {this.props.isMobile ?
+                                                    <FormattedMessage
+                                                        defaultMessage="Save to your equipment"
+                                                        description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
+                                                        id="gui.menuBar.mobileDownloadToComputer"
+                                                    />
+                                                    :
+                                                    <FormattedMessage
+                                                        defaultMessage="Save to your computer"
+                                                        description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
+                                                        id="gui.menuBar.downloadToComputer"
+                                                    />
+                                                }
                                             </MenuItem>
                                         )}</SB3Downloader>
                                         <div>

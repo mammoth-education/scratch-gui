@@ -102,7 +102,6 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 userOwnsProject
             } = this.props;
             const thisFileInput = e.target;
-            console.log("thisFileInput:",thisFileInput)
             if (thisFileInput.files) { // Don't attempt to load if no file was selected
                 this.fileToUpload = thisFileInput.files[0];
 
