@@ -10,6 +10,11 @@
     /* Hides negative space between edge of rounded corners + container, when selected */
     user-select: none;
 }
+.stage-canvas-wrappers {
+    /* Hides negative space between edge of rounded corners + container, when selected */
+    user-select: none;
+    margin-left: 2rem;
+}
 
 .stage-wrapper.full-screen {
     position: fixed;
