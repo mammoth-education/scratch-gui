@@ -295,7 +295,8 @@ $fade-out-distance: 15px;
     display: none;
     flex-direction: column;
     position: absolute;
-    right: .6rem;
+    /* right: .6rem; */
+    right: 1rem;
 }
 
 .flex-vertical {
@@ -315,6 +316,7 @@ $fade-out-distance: 15px;
     border: none;
     display: flex;
     justify-content: center;
+    outline: none;
 }
 .show-hide-stage-img {
     width: 1.5rem;
