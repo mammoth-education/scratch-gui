@@ -24,7 +24,7 @@ class UserProjectsModal extends React.Component {
             'createList',
             'controlPopup'
         ]);
-        this.state = { flag: false, popupDisplay: false, content: "你确定删除所选数据？", deleteID: null, deleteName: null };
+        this.state = { flag: false, popupDisplay: false, deleteID: null, deleteName: null };
     }
     createDateTime(tiem) {
         var date = new Date(tiem);

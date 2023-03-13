@@ -284,6 +284,7 @@ const GUIComponent = props => {
                     selectedTabIndex={activeTabIndex}
                     localProjectsVisible={true}
                     editMenuVisible={false}
+                    isMobile={isMobile}
                 />
                 <Box className={styles.bodyWrapper}>
                     <Box className={styles.flexWrapper}>

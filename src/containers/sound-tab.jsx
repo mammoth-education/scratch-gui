@@ -320,6 +320,32 @@ const mapDispatchToProps = dispatch => ({
         dispatch(openSoundLibrary());
     },
     onNewSoundFromRecordingClick: () => {
+        console.log("55555")
+        let isMobile = false;
+        if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android') ||
+            navigator.userAgent.indexOf('Mobile') > -1) {
+            isMobile = true;
+        }
+        if(isMobile){
+            //生成随机文件名
+           var fileName = "新的录音文件" + ".wav";
+            //设置文件路径，这里可以根据你的需求修改
+            var filePath = fileName;
+            //创建媒体对象
+            var mediaRec = new Media(filePath,
+                //成功回调
+                () => {
+                    console.log("recordAudio():Audio Success");
+                },
+                //失败回调
+                (err) => {
+                    console.log("recordAudio():Audio Error: " + err.code);
+                }
+            );
+            //开始录制音频  
+            mediaRec.startRecord();
+            mediaRec.stopRecord();
+        }
         dispatch(openSoundRecorder());
     },
     onRequestCloseSoundLibrary: () => {
