@@ -7,7 +7,16 @@ import analytics from '../lib/analytics';
 import extensionData from '../lib/libraries/extensions/index.jsx';
 import {connect} from 'react-redux';
 import {closeConnectionModal} from '../reducers/modals';
+import UniversalPopup from '../components/universal-popup/universal-popup.jsx';
+import { FormattedMessage} from 'react-intl';
 
+let content = <>
+    <FormattedMessage
+        defaultMessage="位置信息未打开提示"
+        description="位置信息未打开提示"
+        id="gui.bluetooth.alert"
+    />
+</>
 class ConnectionModal extends React.Component {
     constructor (props) {
         super(props);
@@ -30,6 +39,8 @@ class ConnectionModal extends React.Component {
             'handleRenameChanged',
             'handleRename',
             'handleReconnect',
+            "determine",
+            "cancel",
         ]);
         this.state = {
             latestFirmwareVersion: props.vm.getLatestFirmwareVersion(props.extensionId),
@@ -42,11 +53,28 @@ class ConnectionModal extends React.Component {
             extension: extensionData.find(ext => ext.extensionId === props.extensionId),
             phase: props.vm.getPeripheralIsConnected(props.extensionId) ?
                 PHASES.connected : PHASES.scanning,
+            settingPopup:false,
         };
     }
     componentDidMount () {
         this.props.vm.on('PERIPHERAL_CONNECTED', this.handleConnected);
         this.props.vm.on('PERIPHERAL_REQUEST_ERROR', this.handleError);
+        let isMobile = false;
+        if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android') ||
+            navigator.userAgent.indexOf('Mobile') > -1) {
+            isMobile = true;
+        }
+        if(isMobile){
+            if(Number(device.version) <= 11 && device.platform == "Android"){
+                cordova.plugins.diagnostic.isLocationEnabled((enabled) => {
+                    if(!enabled){
+                        this.setState({ settingPopup: true});
+                    }
+                }, (error) => {
+                    console.error("The following error occurred: "+error);
+                });
+            }
+        }
     }
     componentWillUnmount () {
         this.props.vm.removeListener('PERIPHERAL_CONNECTED', this.handleConnected);
@@ -262,42 +290,56 @@ class ConnectionModal extends React.Component {
             label: this.props.extensionId
         });
     }
+    determine(){
+        // Android 11 以下没有打开位置信息则跳转到设置中，需要手动打开
+        cordova.plugins.diagnostic.switchToLocationSettings();
+        this.setState({ settingPopup: false });
+    }
+    cancel(){
+        this.setState({ settingPopup: false });
+    }
     render () {
         return (
-            <ConnectionModalComponent
-                connectingMessage={this.state.extension && this.state.extension.connectingMessage}
-                connectionIconURL={this.state.extension && this.state.extension.connectionIconURL}
-                connectionSmallIconURL={this.state.extension && this.state.extension.connectionSmallIconURL}
-                connectionTipIconURL={this.state.extension && this.state.extension.connectionTipIconURL}
-                extensionId={this.props.extensionId}
-                isMobile={this.props.isMobile}
-                currentFirmwareVersion={this.state.currentFirmwareVersion}
-                latestFirmwareVersion={this.state.latestFirmwareVersion}
-                flashErrorMessage={this.state.flashErrorMessage}
-                flashMessage={this.state.flashMessage}
-                flashProgress={this.state.flashProgress}
-                name={this.state.extension && this.state.extension.name}
-                phase={this.state.phase}
-                title={this.props.extensionId}
-                useAutoScan={this.state.extension && this.state.extension.useAutoScan}
-                deviceNameEditable={this.state.extension && this.state.extension.deviceNameEditable}
-                firmwareFlashable={this.state.extension && this.state.extension.firmwareFlashable}
-                deviceName={this.state.deviceName}
-                onRenameDevice={this.handleRename}
-                vm={this.props.vm}
-                onCancel={this.handleCancel}
-                onFlashFirmware={this.handleFlashFirmware}
-                onFlashFirmwareStart={this.handleFlashFirmwareStart}
-                onRenameCancel={this.handleRenameCancel}
-                onRenameChanged={this.handleRenameChanged}
-                onRenameConfirm={this.handleRenameConfirm}
-                onReconnect={this.handleReconnect}
-                onConnected={this.handleConnected}
-                onConnecting={this.handleConnecting}
-                onDisconnect={this.handleDisconnect}
-                onHelp={this.handleHelp}
-                onScanning={this.handleScanning}
-            />
+            <>
+                {this.state.settingPopup ? <UniversalPopup content={content} determine={this.determine} cancel={this.cancel}/> :
+                
+                <ConnectionModalComponent
+                    connectingMessage={this.state.extension && this.state.extension.connectingMessage}
+                    connectionIconURL={this.state.extension && this.state.extension.connectionIconURL}
+                    connectionSmallIconURL={this.state.extension && this.state.extension.connectionSmallIconURL}
+                    connectionTipIconURL={this.state.extension && this.state.extension.connectionTipIconURL}
+                    extensionId={this.props.extensionId}
+                    isMobile={this.props.isMobile}
+                    currentFirmwareVersion={this.state.currentFirmwareVersion}
+                    latestFirmwareVersion={this.state.latestFirmwareVersion}
+                    flashErrorMessage={this.state.flashErrorMessage}
+                    flashMessage={this.state.flashMessage}
+                    flashProgress={this.state.flashProgress}
+                    name={this.state.extension && this.state.extension.name}
+                    phase={this.state.phase}
+                    title={this.props.extensionId}
+                    useAutoScan={this.state.extension && this.state.extension.useAutoScan}
+                    deviceNameEditable={this.state.extension && this.state.extension.deviceNameEditable}
+                    firmwareFlashable={this.state.extension && this.state.extension.firmwareFlashable}
+                    deviceName={this.state.deviceName}
+                    onRenameDevice={this.handleRename}
+                    vm={this.props.vm}
+                    onCancel={this.handleCancel}
+                    onFlashFirmware={this.handleFlashFirmware}
+                    onFlashFirmwareStart={this.handleFlashFirmwareStart}
+                    onRenameCancel={this.handleRenameCancel}
+                    onRenameChanged={this.handleRenameChanged}
+                    onRenameConfirm={this.handleRenameConfirm}
+                    onReconnect={this.handleReconnect}
+                    onConnected={this.handleConnected}
+                    onConnecting={this.handleConnecting}
+                    onDisconnect={this.handleDisconnect}
+                    onHelp={this.handleHelp}
+                    onScanning={this.handleScanning}
+                />
+                }
+            </>
+            
         );
     }
 }
