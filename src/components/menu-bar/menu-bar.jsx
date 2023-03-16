@@ -503,7 +503,7 @@ class MenuBar extends React.Component {
                                                     id="gui.sharedMessages.loadFromHeaders"
                                             /> : (this.props.intl.formatMessage(sharedMessages.loadFromComputerTitle))}
                                         </MenuItem>
-                                        <SB3Downloader>{(className, downloadProjectCallback) => (
+                                        <SB3Downloader >{(className, downloadProjectCallback) => (
                                             <MenuItem
                                                 className={className}
                                                 onClick={this.getSaveToComputerHandler(downloadProjectCallback)}
@@ -613,9 +613,12 @@ class MenuBar extends React.Component {
                                     className={classNames(styles.titleFieldGrowable)}
                                 />
                             </MenuBarItemTooltip>
-                            <div className={styles.saveButton} onClick={this.props.onClickSave}>
-                                <img draggable={false} src={iconSave} />
-                            </div>
+                            {/* 保存按钮 */}
+                            {this.props.isMobile ?  
+                                <div className={styles.saveButton} onClick={this.props.onClickSave}>
+                                    <img draggable={false} src={iconSave} />
+                                </div> : null
+                            }
                         </div>
                     ) : ((this.props.authorUsername && this.props.authorUsername !== this.props.username) ? (
                         <AuthorInfo
@@ -709,6 +712,7 @@ class MenuBar extends React.Component {
                             <SaveStatus />
                         </div>
                     )}
+                    {/* 项目列表按钮 */}
                     {this.props.localProjectsVisible && (
                         <div className={classNames(styles.menuBarItem, styles.hoverable)} onClick={this.handleClickUserProjects}>
                             <div>

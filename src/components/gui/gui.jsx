@@ -145,9 +145,11 @@ const GUIComponent = props => {
     }
 
     let isMobile = false;
+    let localProjectsVisible = false;
     if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android') ||
         navigator.userAgent.indexOf('Mobile') > -1) {
         isMobile = true;
+        localProjectsVisible = true;
     }
     
     let isSmallDevice = false;
@@ -282,7 +284,7 @@ const GUIComponent = props => {
                     onClickStageTab={onActivateStageTab}
                     onTabSelect={onActivateTab}
                     selectedTabIndex={activeTabIndex}
-                    localProjectsVisible={true}
+                    localProjectsVisible={localProjectsVisible}
                     editMenuVisible={false}
                     isMobile={isMobile}
                 />
