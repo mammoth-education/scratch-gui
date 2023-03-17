@@ -11,7 +11,7 @@ import {setProjectTitle} from '../reducers/project-title';
 
 const messages = defineMessages({
     defaultProjectTitle: {
-        id: 'gui.gui.defaultProjectTitle',
+        id: 'gui.gui.myProjects',
         description: 'Default title for project',
         defaultMessage: 'Scratch Project'
     }
