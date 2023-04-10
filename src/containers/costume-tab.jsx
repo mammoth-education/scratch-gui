@@ -144,6 +144,7 @@ class CostumeTab extends React.Component {
         this.props.vm.duplicateCostume(costumeIndex);
     }
     handleExportCostume (costumeIndex) {
+        console.log("导出角色");
         const item = this.props.vm.editingTarget.sprite.costumes[costumeIndex];
         const blob = new Blob([item.asset.data], {type: item.asset.assetType.contentType});
         downloadBlob(`${item.name}.${item.asset.dataFormat}`, blob);
@@ -248,13 +249,13 @@ class CostumeTab extends React.Component {
             isRtl,
             onNewLibraryBackdropClick,
             onNewLibraryCostumeClick,
-            vm
+            vm,
+            isMobile
         } = this.props;
 
         if (!vm.editingTarget) {
             return null;
         }
-
         const isStage = vm.editingTarget.isStage;
         const target = vm.editingTarget.sprite;
 
@@ -270,7 +271,9 @@ class CostumeTab extends React.Component {
             details: costume.size ? this.formatCostumeDetails(costume.size, costume.bitmapResolution) : null,
             dragPayload: costume
         })) : [];
+        const fileAccept = isMobile ? 'svg, png, bmp, jpg, jpeg, gif' :'.svg, .png, .bmp, .jpg, .jpeg, .gif';
         return (
+            // 选择一个造型
             <AssetPanel
                 buttons={[
                     {
@@ -282,7 +285,7 @@ class CostumeTab extends React.Component {
                         title: intl.formatMessage(addFileMessage),
                         img: fileUploadIcon,
                         onClick: this.handleFileUploadClick,
-                        fileAccept: '.svg, .png, .bmp, .jpg, .jpeg, .gif',
+                        fileAccept: fileAccept,
                         fileChange: this.handleCostumeUpload,
                         fileInput: this.setFileInput,
                         fileMultiple: true

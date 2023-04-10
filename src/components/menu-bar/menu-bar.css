@@ -283,3 +283,13 @@
         display: flex;
     }
 }
+
+.alerts-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    /* z-index: $z-index-alerts; */
+    position: absolute;
+    margin-top: 4px;
+    pointer-events: none;
+  }

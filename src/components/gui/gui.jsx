@@ -114,7 +114,7 @@ const GUIComponent = props => {
         onClickLogo,
         onExtensionButtonClick,
         onOpenProject,
-        onDeleProject,
+        onDeleteProject,
         onProjectTelemetryEvent,
         onRequestCloseBackdropLibrary,
         onRequestCloseCostumeLibrary,
@@ -244,7 +244,8 @@ const GUIComponent = props => {
                         vm={vm}
                         title={intl.formatMessage(messages.myProjects)}
                         onOpenProject={onOpenProject}
-                        onDeleProject={onDeleProject}
+                        onDeleteProject={onDeleteProject}
+                        alertsVisible = {alertsVisible}
                     />
                 ) : null}
                 <MenuBar
@@ -287,6 +288,7 @@ const GUIComponent = props => {
                     localProjectsVisible={localProjectsVisible}
                     editMenuVisible={false}
                     isMobile={isMobile}
+                    alertsVisible = {alertsVisible}
                 />
                 <Box className={styles.bodyWrapper}>
                     <Box className={styles.flexWrapper}>
@@ -411,10 +413,10 @@ const GUIComponent = props => {
                                     </Box> }
                                 </TabPanel>
                                 <TabPanel className={tabClassNames.tabPanel}>
-                                    {costumesTabVisible && <CostumeTab vm={vm} />}
+                                    {costumesTabVisible && <CostumeTab vm={vm} isMobile={isMobile}/>}
                                 </TabPanel>
                                 <TabPanel className={tabClassNames.tabPanel}>
-                                    {soundsTabVisible && <SoundTab vm={vm} />}
+                                    {soundsTabVisible && <SoundTab vm={vm}  isMobile={isMobile}/>}
                                 </TabPanel>
                                 { isSmallDevice && <TabPanel className={tabClassNames.tabPanel}>
                                     {stageTabVisible && <StageAndTargetWrapper 
@@ -496,7 +498,7 @@ GUIComponent.propTypes = {
     onLogOut: PropTypes.func,
     onOpenRegistration: PropTypes.func,
     onOpenProject: PropTypes.func,
-    onDeleProject: PropTypes.func,
+    onDeleteProject: PropTypes.func,
     onRequestCloseBackdropLibrary: PropTypes.func,
     onRequestCloseCostumeLibrary: PropTypes.func,
     onRequestCloseTelemetryModal: PropTypes.func,

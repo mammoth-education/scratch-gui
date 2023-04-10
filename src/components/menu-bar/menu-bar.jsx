@@ -4,7 +4,7 @@ import {compose} from 'redux';
 import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-intl';
 import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
-import bowser from 'bowser';
+import bowser, { version } from 'bowser';
 import React from 'react';
 
 import VM from 'scratch-vm';
@@ -31,6 +31,10 @@ import MenuBarHOC from '../../containers/menu-bar-hoc.jsx';
 
 import {openTipsLibrary, openUserProjectsModal} from '../../reducers/modals';
 import {setPlayer} from '../../reducers/mode';
+import {
+    showAlertWithTimeout,
+    showStandardAlert
+} from '../../reducers/alerts';
 import {
     autoUpdateProject,
     getIsUpdating,
@@ -80,6 +84,7 @@ import codeIcon from '../gui/icon--code.svg';
 import costumesIcon from '../gui/icon--costumes.svg';
 import soundsIcon from '../gui/icon--sounds.svg';
 import stageIcon from '../gui/icon--stage2.svg';
+import UniversalPopup from '../universal-popup/universal-popup.jsx'
 
 
 import sharedMessages from '../../lib/shared-messages';
@@ -184,7 +189,10 @@ class MenuBar extends React.Component {
             'handleClickSoundsTab',
             'handleClickStageTab',
             'handleClickUserProjects',
+            'onClickLogo',
+            'cancel'
         ]);
+        this.state={version:false};
     }
     
     
@@ -200,6 +208,7 @@ class MenuBar extends React.Component {
         // downloading or logging in first.
         // Note that if user is logged in and editing someone else's project,
         // they'll lose their work.
+        sessionStorage.removeItem("currentID");
         const readyToReplaceProject = this.props.confirmReadyToReplaceProject(
             this.props.intl.formatMessage(sharedMessages.replaceProjectWarning)
         );
@@ -258,11 +267,21 @@ class MenuBar extends React.Component {
     getSaveToComputerHandler (downloadProjectCallback) {
         return () => {
             this.props.onRequestCloseFile();
-            downloadProjectCallback();
-            if (this.props.onProjectTelemetryEvent) {
-                const metadata = collectMetadata(this.props.vm, this.props.projectTitle, this.props.locale);
-                this.props.onProjectTelemetryEvent('projectDidSave', metadata);
-            }
+            downloadProjectCallback().then((res) => {
+                // if(!exportNotation){
+                //     this.props.onClickSave();
+                // }
+                console.log("res",res)
+                if(res == "名称重复"){
+                    this.props.onShowAlert('duplicateNames');
+                }else{
+                    this.props.onShowSaveSuccessAlert();
+                }
+                if (this.props.onProjectTelemetryEvent) {
+                    const metadata = collectMetadata(this.props.vm, this.props.projectTitle, this.props.locale);
+                    this.props.onProjectTelemetryEvent('projectDidSave', metadata);
+                }
+            });
         };
     }
     handleLanguageMouseUp (e) {
@@ -368,6 +387,13 @@ class MenuBar extends React.Component {
     handleClickUserProjects () {
         this.props.onClickUserProjects();
     }
+    onClickLogo (){
+        let version = this.state.version
+        this.setState({version:!version})
+    }
+    cancel(){
+        this.setState({ version: false });
+    }
     render () {
         const saveNowMessage = (
             <FormattedMessage
@@ -412,6 +438,8 @@ class MenuBar extends React.Component {
         );
         // Show the About button only if we have a handler for it (like in the desktop app)
         const aboutButton = this.buildAboutMenu(this.props.onClickAbout);
+        let exportNotation = true;
+        let saveStatus = {saveProject:1,modifyProject:2,copyProject:3}
         return (
             <Box
                 className={classNames(
@@ -419,6 +447,8 @@ class MenuBar extends React.Component {
                     styles.menuBar
                 )}
             >
+                
+                {this.state.version ? <UniversalPopup content={version} cancel={this.cancel}/> : null}
                 <div className={styles.mainMenu}>
                     <div className={styles.fileGroup}>
                         <div className={classNames(styles.menuBarItem)}>
@@ -429,7 +459,7 @@ class MenuBar extends React.Component {
                                 })}
                                 draggable={false}
                                 src={this.props.logo}
-                                onClick={this.props.onClickLogo}
+                                onClick={this.onClickLogo}
                             />
                         </div>
                         {(this.props.canChangeLanguage) && (<div
@@ -480,11 +510,22 @@ class MenuBar extends React.Component {
                                                     {saveNowMessage}
                                                 </MenuItem>
                                             )}
-                                            {this.props.canCreateCopy && (
+                                            {/* copy项目 */}
+                                            {
+                                                this.props.canCreateCopy &&
+                                                <SB3Downloader saveStatus = {saveStatus.copyProject} >
+                                                    {(_, downloadProjectCallback) => (
+                                                            <MenuItem onClick={this.getSaveToComputerHandler(downloadProjectCallback)}>
+                                                            {createCopyMessage}
+                                                            </MenuItem>
+                                                    )}
+                                                </SB3Downloader> 
+                                            }
+                                            {/* {this.props.canCreateCopy && (
                                                 <MenuItem onClick={this.handleClickSaveAsCopy}>
                                                     {createCopyMessage}
                                                 </MenuItem>
-                                            )}
+                                            )} */}
                                             {this.props.canRemix && (
                                                 <MenuItem onClick={this.handleClickRemix}>
                                                     {remixMessage}
@@ -503,6 +544,7 @@ class MenuBar extends React.Component {
                                                     id="gui.sharedMessages.loadFromHeaders"
                                             /> : (this.props.intl.formatMessage(sharedMessages.loadFromComputerTitle))}
                                         </MenuItem>
+                                        {/*  导出项目 */}
                                         <SB3Downloader >{(className, downloadProjectCallback) => (
                                             <MenuItem
                                                 className={className}
@@ -523,16 +565,6 @@ class MenuBar extends React.Component {
                                                 }
                                             </MenuItem>
                                         )}</SB3Downloader>
-                                        <div>
-                                            <MenuItem>
-                                                <FormattedMessage
-                                                    defaultMessage="Versions：1.3"
-                                                    description="Used to display the current version" // 显示当前版本
-                                                    id="当前版本：1.0"
-                                                />
-                                            </MenuItem>
-
-                                        </div>
                                     </MenuSection>
                                 </MenuBarMenu>
                             </div>
@@ -614,11 +646,22 @@ class MenuBar extends React.Component {
                                 />
                             </MenuBarItemTooltip>
                             {/* 保存按钮 */}
-                            {this.props.isMobile ?  
+                            {
+                                this.props.isMobile ?
+                                <SB3Downloader saveStatus={saveStatus.saveProject}>
+                                    {(_, downloadProjectCallback) => (
+                                            <div className={styles.saveButton} onClick={this.getSaveToComputerHandler(downloadProjectCallback)}>
+                                                <img draggable={false} src={iconSave} />
+                                            </div>
+                                    )}
+                                </SB3Downloader> : null
+                            }
+                            
+                            {/* {this.props.isMobile ?  
                                 <div className={styles.saveButton} onClick={this.props.onClickSave}>
                                     <img draggable={false} src={iconSave} />
                                 </div> : null
-                            }
+                            } */}
                         </div>
                     ) : ((this.props.authorUsername && this.props.authorUsername !== this.props.username) ? (
                         <AuthorInfo
@@ -981,6 +1024,8 @@ const mapDispatchToProps = dispatch => ({
     onClickSaveAsCopy: () => dispatch(saveProjectAsCopy()),
     onSeeCommunity: () => dispatch(setPlayer(true)),
     onClickUserProjects: () => dispatch(openUserProjectsModal()),
+    onShowSaveSuccessAlert: () => showAlertWithTimeout(dispatch, 'saveSuccess'),
+    onShowAlert: alertType => dispatch(showStandardAlert(alertType)),
 });
 
 export default compose(

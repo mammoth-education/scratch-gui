@@ -56,8 +56,10 @@ const StageSelector = props => {
         onNewBackdropClick,
         onSurpriseBackdropClick,
         onEmptyBackdropClick,
+        isMobile,
         ...componentProps
     } = props;
+    let fileAccept = isMobile ? 'svg, png, bmp, jpg, jpeg, gif' : '.svg, .png, .bmp, .jpg, .jpeg, .gif';
     return (
         <Box
             className={classNames(styles.stageSelector, {
@@ -103,7 +105,7 @@ const StageSelector = props => {
                         title: intl.formatMessage(messages.addBackdropFromFile),
                         img: fileUploadIcon,
                         onClick: onBackdropFileUploadClick,
-                        fileAccept: '.svg, .png, .bmp, .jpg, .jpeg, .gif',
+                        fileAccept: fileAccept,
                         fileChange: onBackdropFileUpload,
                         fileInput: fileInputRef,
                         fileMultiple: true

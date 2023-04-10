@@ -39,6 +39,7 @@ const messages = defineMessages({
  *     <WrappedComponent />
  * </SBFileUploaderHOC>
  */
+let fileData = null
 const SBFileUploaderHOC = function (WrappedComponent) {
     class SBFileUploaderComponent extends React.Component {
         constructor (props) {
@@ -50,7 +51,8 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 'handleStartSelectingFileUpload',
                 'handleChange',
                 'onload',
-                'removeFileObjects'
+                'removeFileObjects',
+                'mobileImport'
             ]);
         }
         componentDidUpdate (prevProps) {
@@ -62,9 +64,16 @@ const SBFileUploaderHOC = function (WrappedComponent) {
             this.removeFileObjects();
         }
         // step 1: this is where the upload process begins
-        handleStartSelectingFileUpload () {
-            console.log("导入")
-            this.createFileObjects(); // go to step 2
+        // flag ： 判断是打开文件还是导入文件
+        handleStartSelectingFileUpload (name, flag) {
+            console.log("导入");
+            console.log(name, flag);
+            // 读取文件
+            if(flag){
+                this.mobileImport(name)
+            }else{
+                this.createFileObjects(); // go to step 2
+            }
         }
         // step 2: create a FileReader and an <input> element, and issue a
         // pseudo-click to it. That will open the file chooser dialog.
@@ -149,11 +158,14 @@ const SBFileUploaderHOC = function (WrappedComponent) {
             if (!matches) return '';
             return matches[1].substring(0, 100); // truncate project title to max 100 chars
         }
+        
         // step 6: attached as a handler on our FileReader object; called when
         // file upload raw data is available in the reader
         onload () {
             if (this.fileReader) {
                 this.props.onLoadingStarted();
+                console.log(this.fileReader)
+                console.log(this.fileReader.result)
                 const filename = this.fileToUpload && this.fileToUpload.name;
                 let loadingSuccess = false;
                 this.props.vm.loadProject(this.fileReader.result)
@@ -169,7 +181,10 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                         alert(this.props.intl.formatMessage(messages.loadError)); // eslint-disable-line no-alert
                     })
                     .then(() => {
+                        console.log("this.props.loadingState：",this.props.loadingState)
                         this.props.onLoadingFinished(this.props.loadingState, loadingSuccess);
+                        // 这里是强行将this.props.loadingState改成LOADING_VM_FILE_UPLOAD才能打开项目；
+                        // this.props.onLoadingFinished("LOADING_VM_FILE_UPLOAD", loadingSuccess);
                         // go back to step 7: whether project loading succeeded
                         // or failed, reset file objects
                         this.removeFileObjects();
@@ -186,6 +201,44 @@ const SBFileUploaderHOC = function (WrappedComponent) {
             this.inputElement = null;
             this.fileReader = null;
             this.fileToUpload = null;
+        }
+        // step 8: 执行打开项目时，如果是移动端则进入这里
+        mobileImport(name){
+            let url = cordova.file.externalDataDirectory;
+            if(cordova.platformId == "ios"){
+                url = cordova.file.documentsDirectory;
+            }
+            url = url + "MyProject/" + name;
+            const {
+                intl,
+                isShowingWithoutId,
+                loadingState,
+                projectChanged,
+                userOwnsProject
+            } = this.props;
+            window.resolveLocalFileSystemURL(url,
+                (fileEntry) => {
+                    fileEntry.file((file) => {
+                        this.fileReader = new FileReader();
+                        this.fileReader.onload = this.onload;
+                        this.fileToUpload = file;
+                        let uploadAllowed = true;
+                        if (userOwnsProject || (projectChanged && isShowingWithoutId)) {
+                            uploadAllowed = confirm( // eslint-disable-line no-alert
+                                intl.formatMessage(sharedMessages.replaceProjectWarning)
+                            );
+                        }
+                        if (uploadAllowed) {
+                            // cues step 4
+                            this.props.requestProjectUpload(loadingState);
+                        }
+                        this.fileReader.readAsArrayBuffer(file);
+                    });
+                }, (e)=>{
+                    console.log("FileSystem Error");
+                    console.dir(e);
+                }
+            );
         }
         render () {
             const {

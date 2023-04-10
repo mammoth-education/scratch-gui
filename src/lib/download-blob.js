@@ -7,6 +7,13 @@ export default (filename, blob) => {
         navigator.msSaveOrOpenBlob(blob, filename);
         return;
     }
+    
+    if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android')){
+        writeDirectory();
+        saveAs(blob,filename);
+        let path = `${cordova.file.dataDirectory}/newFile/project/${filename}`
+        window.plugins.socialsharing.share(null, null, path);
+    }
 
     if ('download' in HTMLAnchorElement.prototype) {
         const url = window.URL.createObjectURL(blob);
@@ -29,5 +36,54 @@ export default (filename, blob) => {
         };
         reader.readAsDataURL(blob);
     }
+    function writeDirectory () {
+        var dirUri = cordova.file.dataDirectory;
+        window.resolveLocalFileSystemURL(dirUri, function (entry) {
+          entry.getDirectory("newFile", {
+            create: true,
+          }, function (dirEntry) {
+            dirEntry.getDirectory('project', { create: true }, function (subDirEntry) {
+              // createFile(subDirEntry, "fileInNewSubDir.txt");
+            }, ()=>console.log("文件夹创建失败！"));
+          }, ()=>console.log("文件夹创建失败！"))
+        }, (e)=>console.log(e.toString()))
+    }
+      // 写入数据
+    function saveAs (content, fileName) { 
+        var dirUri = cordova.file.dataDirectory;
+        window.resolveLocalFileSystemURL(dirUri, function (Entry) {
+          Entry.getDirectory("newFile", {
+            create: true,
+          }, function (dirEntry) {
+            dirEntry.getDirectory('project', { create: true }, function (subDirEntry) {
+              saveFile(subDirEntry, content, fileName);
+            }, ()=>console.log("文件夹创建失败！"));
+      
+          }, ()=>console.log("文件夹创建失败！"))
+        })
+        console.log(cordova.file.dataDirectory);
+    }
+    function saveFile (dirEntry, fileData, fileName) {
+        dirEntry.getFile(
+          fileName, {
+          create: true,
+          exclusive: false
+        },
+          function (fileEntry) {
+            writeFile(fileEntry, fileData);
+          }, (e)=>console.log('Failed create file: ' + e.toString()));
+    }
 
+    function writeFile (fileEntry, dataObj) {
+        fileEntry.createWriter(function (fileWriter) {
+          fileWriter.onwriteend = function () {
+      
+          };
+          fileWriter.onerror = function (e) {
+            console.log('Failed file write: ' + e.toString());
+          };
+          fileWriter.write(dataObj);
+      
+        });
+    }
 };

@@ -41,6 +41,7 @@ const StageAndTargetWrapper = props => {
                 <TargetPane
                     stageSize={stageSize}
                     vm={vm}
+                    isMobile={isMobile}
                     {...componentProps}
                 />
             </Box> }

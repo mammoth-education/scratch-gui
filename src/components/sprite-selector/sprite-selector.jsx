@@ -67,6 +67,7 @@ const SpriteSelectorComponent = function (props) {
         spriteFileInput,
         sprites,
         stageSize,
+        isMobile,
         ...componentProps
     } = props;
     let selectedSprite = sprites[selectedId];
@@ -75,6 +76,7 @@ const SpriteSelectorComponent = function (props) {
         selectedSprite = {};
         spriteInfoDisabled = true;
     }
+    let fileAccept = isMobile ? 'svg, png, bmp, jpg, jpeg, sprite2, sprite3, gif' : '.svg, .png, .bmp, .jpg, .jpeg, .sprite2, .sprite3, .gif';
     return (
         <Box
             className={styles.spriteSelector}
@@ -118,13 +120,13 @@ const SpriteSelectorComponent = function (props) {
                 img={spriteIcon}
                 moreButtons={[
                     {
-                        title: intl.formatMessage(messages.addSpriteFromFile),
+                        title: intl.formatMessage(messages.addSpriteFromFile), //子按钮的标题
                         img: fileUploadIcon,
-                        onClick: onFileUploadClick,
-                        fileAccept: '.svg, .png, .bmp, .jpg, .jpeg, .sprite2, .sprite3, .gif',
-                        fileChange: onSpriteUpload,
-                        fileInput: spriteFileInput,
-                        fileMultiple: true
+                        onClick: onFileUploadClick, 
+                        fileAccept: fileAccept, //文件限制
+                        fileChange: onSpriteUpload, //上传完成的回调
+                        fileInput: spriteFileInput, //上传文件的 input 元素
+                        fileMultiple: true //是否支持多个文件上传
                     }, {
                         title: intl.formatMessage(messages.addSpriteFromSurprise),
                         img: surpriseIcon,

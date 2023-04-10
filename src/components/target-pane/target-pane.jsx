@@ -45,6 +45,7 @@ const TargetPane = ({
     stageSize,
     sprites,
     vm,
+    isMobile,
     ...componentProps
 }) => (
     <div
@@ -77,6 +78,8 @@ const TargetPane = ({
             onSelectSprite={onSelectSprite}
             onSpriteUpload={onSpriteUpload}
             onSurpriseSpriteClick={onSurpriseSpriteClick}
+            isMobile={isMobile}
+
         />
         <div className={styles.stageSelectorWrapper}>
             {stage.id && <StageSelector
@@ -88,6 +91,7 @@ const TargetPane = ({
                 id={stage.id}
                 selected={stage.id === editingTarget}
                 onSelect={onSelectSprite}
+                isMobile={isMobile}
             />}
             <div>
                 {spriteLibraryVisible ? (

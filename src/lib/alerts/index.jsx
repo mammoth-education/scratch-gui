@@ -120,9 +120,42 @@ const alerts = [
                 defaultMessage="Could not create the project. Please try again!"
                 description="Message indicating that project could not be created"
                 id="gui.alerts.creatingError"
+                // 保存error
             />
         ),
         level: AlertLevels.WARN
+    },
+    {
+        alertId: 'duplicateNames',
+        clearList: ['createSuccess', 'creating', 'createCopySuccess', 'creatingCopy',
+            'createRemixSuccess', 'creatingRemix', 'saveSuccess', 'saving'],
+        closeButton: true,
+        content: (
+            <FormattedMessage
+                defaultMessage="Could not create the project. Please try again!"
+                description="Message indicating that project could not be created"
+                id="gui.alerts.duplicateNames"
+                // 名称重复error
+            />
+        ),
+        level: AlertLevels.WARN
+    },
+    {
+        alertId: 'deletedSuccessfully',
+        // alertType: AlertTypes.INLINE,
+        clearList: [],
+        content: (
+            <FormattedMessage
+                defaultMessage="Could not create the project. Please try again!"
+                description="Message indicating that project could not be created"
+                id="gui.alerts.deletedSuccessfully"
+                // 删除成功提示
+            />
+        ),
+        iconURL: successImage,
+        level: AlertLevels.SUCCESS,
+        // level: AlertLevels.WARN,
+        maxDisplaySecs: 3
     },
     {
         alertId: 'savingError',
@@ -133,8 +166,8 @@ const alerts = [
         closeButton: false,
         content: (
             <FormattedMessage
-                defaultMessage="Project could not save."
-                description="Message indicating that project could not be saved"
+                defaultMessage="Item removed successfully."
+                description="Message indicating successful item deletion"
                 id="gui.alerts.savingError"
             />
         ),

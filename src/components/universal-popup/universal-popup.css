@@ -9,11 +9,12 @@
     z-index: 510;
     background-color: hsla(215, 100%, 65%, 0.9);
 }
+
 .boos{
   width: 480px;
-  background-color: white;
+  /* background-color: white; */
   outline: none;
-  /* border: 4px solid hsla(0, 100%, 100%, 0.25); */
+  border: 4px solid hsla(0, 100%, 100%, 0.25);
   padding: 0;
   border-radius: 0.5rem;
   color: hsla(225, 15%, 40%, 1);
@@ -25,11 +26,15 @@
   
 }
 .header{
-  height: 2.5rem;
+  height: 2.8rem;
   background-color: hsla(163, 85%, 40%, 1);
+  display: flex;
+  align-items: center;
+  justify-content: end;
 }
 .middle{
-  margin: 1rem 0;
+  padding: 1rem 0;
+  background: white;
   text-align: center;
   font-size: 22px;
 }
@@ -38,7 +43,7 @@
   width: 6rem;
   padding: 0.6rem 0.75rem;
   border: none;
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
   font-weight: 600;
   font-size: 0.85rem;
   background: $motion-primary;
@@ -49,4 +54,10 @@
 }
 .middle p{
   font-size: 1.2rem;
+}
+.closeButton{
+  width: 1.75rem;
+  height: 1.75rem;
+  float: right;
+  margin-right: 2%;
 }

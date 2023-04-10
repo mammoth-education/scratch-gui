@@ -50,8 +50,10 @@ const ProjectSaverHOC = function (WrappedComponent) {
             bindAll(this, [
                 'getProjectThumbnail',
                 'leavePageConfirm',
-                'tryToAutoSave'
+                'tryToAutoSave',
+                'getProjectList'
             ]);
+            this.state = {projectNameList:[]};
         }
         componentWillMount () {
             if (typeof window === 'object') {
@@ -67,6 +69,13 @@ const ProjectSaverHOC = function (WrappedComponent) {
             this.props.onSetProjectSaver(this.tryToAutoSave);
         }
         componentDidUpdate (prevProps) {
+            // this.getProjectList().then((res) => {
+            //     let projectNameList = res;
+            //     this.setState({ projectNameList:projectNameList });
+            // }).catch((error) => {
+            //     console.log(error);
+            // });
+            
             if (!this.props.isAnyCreatingNewState && prevProps.isAnyCreatingNewState) {
                 this.reportTelemetryEvent('projectWasCreated');
             }
@@ -86,6 +95,7 @@ const ProjectSaverHOC = function (WrappedComponent) {
                 this.createNewProjectToStorage();
             }
             if (this.props.isCreatingCopy && !prevProps.isCreatingCopy) {
+                console.log("Project-saver-hoc: createCopyToStorage");
                 this.createCopyToStorage();
             }
             if (this.props.isRemixing && !prevProps.isRemixing) {
@@ -183,11 +193,17 @@ const ProjectSaverHOC = function (WrappedComponent) {
                     this.props.onShowSaveSuccessAlert();
                 })
                 .catch(err => {
-                    this.props.onShowAlert('creatingError');
+                    console.log("err",err)
+                    if(err == "name conflict"){
+                        this.props.onShowAlert('duplicateNames');
+                    }else{
+                        this.props.onShowAlert('creatingError');
+                    }
                     this.props.onProjectError(err);
                 });
         }
         createCopyToStorage () {
+            console.log("Copy");
             this.props.onShowCreatingCopyAlert();
             return this.storeProject(null, {
                 originalId: this.props.reduxProjectId,
@@ -312,7 +328,32 @@ const ProjectSaverHOC = function (WrappedComponent) {
                 // to report telemetry should not block saving
             }
         }
-
+        getProjectList() {
+            return new Promise((resolve, reject) => {
+                let url = cordova.file.externalDataDirectory;
+                if(cordova.platformId == "ios"){
+                    url = cordova.file.documentsDirectory;
+                }
+                window.resolveLocalFileSystemURL(url + "MyProject", function(dirEntry) {
+                    // use dirEntry.createReader to get directory reader
+                    var dirReader = dirEntry.createReader();
+                    // use dirReader.readEntries to get FileList
+                    dirReader.readEntries(function(files) {
+                    // loop through files
+                    var projectList = [];
+                    for (var i = 0; i < files.length; i++) {
+                        // get each file entry
+                        projectList.push(files[i].name.replace(".sb3",""));
+                    }
+                    resolve(projectList);
+                    }, function(err) {
+                    reject(err);
+                    });
+                }, function(err) {
+                    reject(err);
+                });
+            });
+        }
         render () {
             const {
                 /* eslint-disable no-unused-vars */

@@ -29,7 +29,9 @@ const AlertComponent = ({
     onSaveNow,
     onReconnect,
     showReconnect
-}) => (
+}) => {
+    let deviceName = localStorage.getItem("deviceName")
+return(
     <Box
         className={classNames(styles.alert, styles[level])}
     >
@@ -58,7 +60,7 @@ const AlertComponent = ({
                     id="gui.alerts.lostPeripheralConnection"
                     values={{
                         extensionName: (
-                            `${extensionName}`
+                            `${deviceName}`
                         )
                     }}
                 />
@@ -116,6 +118,7 @@ const AlertComponent = ({
         </div>
     </Box>
 );
+}
 
 AlertComponent.propTypes = {
     closeButton: PropTypes.bool,

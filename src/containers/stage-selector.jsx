@@ -102,6 +102,7 @@ class StageSelector extends React.Component {
         this.handleNewBackdrop(emptyCostume(this.props.intl.formatMessage(sharedMessages.backdrop, {index: 1})));
     }
     handleBackdropUpload (e) {
+        console.log("上传背景")
         const storage = this.props.vm.runtime.storage;
         this.props.onShowImporting();
         handleFileUpload(e.target, (buffer, fileType, fileName, fileIndex, fileCount) => {
@@ -172,6 +173,7 @@ class StageSelector extends React.Component {
                 onMouseEnter={this.handleMouseEnter}
                 onMouseLeave={this.handleMouseLeave}
                 onSurpriseBackdropClick={this.handleSurpriseBackdrop}
+                isMobile={this.props.isMobile}
                 {...componentProps}
             />
         );

@@ -54,7 +54,7 @@ class GUI extends React.Component {
         bindAll(this, [
             'onClickSave',
             'onOpenProject',
-            'onDeleProject',
+            'onDeleteProject',
             'onToggleStagePreview',
         ]);
         this.state = {
@@ -75,32 +75,45 @@ class GUI extends React.Component {
         if (this.props.projectId === null || this.props.projectId === undefined || this.props.projectId === 0 || this.props.projectId === '0') {
             this.props.createProject();
         }
+        
         console.log('manualUpdateProject');
         this.props.manualUpdateProject();
     }
 
-    onOpenProject (id, name) {
-        this.props.setProjectId(id);
-        this.props.setProjectTitle(name);
+    onOpenProject (id,name) {
+        let flag = true;
+        let currentID = {name:name,id:id};
+        sessionStorage.setItem("currentID", JSON.stringify(currentID));
+        this.props.onStartSelectingFileUpload(name,flag);
+        console.log("onOpenProject");
+
+        // this.props.setProjectId(id);
+        // this.props.setProjectTitle(name);
+        // this.props.createProject();
         this.props.closeUserProjectsModal();
     }
-    onDeleProject (id, name) {
-      console.log("onDeleProject");
-      let projectList = JSON.parse(localStorage.getItem("project-list"));
-      let assetProject = JSON.parse(localStorage.getItem("asset-Project"));
-      for(let k in projectList){
-        if(k == id){
-          delete projectList[k]
+    onDeleteProject (id,name) {
+        console.log("onDeleteProject");
+        let projectList = JSON.parse(localStorage.getItem("project-list"));
+        for(let k in projectList){
+            if(k == id){
+              delete projectList[k]
+            }
         }
-      }
-      for(let j in assetProject){
-        if(j == id){
-            delete assetProject[j]
+        localStorage.setItem("project-list", JSON.stringify(projectList));
+        let projectName = "MyProject/" + name + ".sb3"
+        // 删除文件
+        let url = cordova.file.externalDataDirectory;
+        if(cordova.platformId == "ios"){
+            url = cordova.file.documentsDirectory;
         }
-      }
-      localStorage.setItem("project-list", JSON.stringify(projectList));
-      localStorage.setItem("asset-Project", JSON.stringify(assetProject));
-      // createHandleOpenProject
+        window.resolveLocalFileSystemURL(url + projectName, function(fileEntry) {
+            fileEntry.remove(function() {
+                console.log("文件已成功删除");
+            }, function(error) {
+                console.log("无法删除文件: " + error.message);
+            });
+        });
     }
 
     componentDidMount () {
@@ -157,7 +170,7 @@ class GUI extends React.Component {
                 loading={fetchingProject || isLoading || loadingStateVisible}
                 onClickSave={this.onClickSave}
                 onOpenProject={this.onOpenProject}
-                onDeleProject={this.onDeleProject}
+                onDeleteProject={this.onDeleteProject}
                 onToggleStagePreview={this.onToggleStagePreview}
                 stagePreviewVisible={this.state.stagePreviewVisible}
                 {...componentProps}

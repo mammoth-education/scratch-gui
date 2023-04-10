@@ -59,13 +59,8 @@ class ConnectionModal extends React.Component {
     componentDidMount () {
         this.props.vm.on('PERIPHERAL_CONNECTED', this.handleConnected);
         this.props.vm.on('PERIPHERAL_REQUEST_ERROR', this.handleError);
-        let isMobile = false;
-        if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android') ||
-            navigator.userAgent.indexOf('Mobile') > -1) {
-            isMobile = true;
-        }
-        if(isMobile){
-            if(Number(device.version) <= 11 && device.platform == "Android"){
+        if(this.props.isMobile){
+            if(parseInt(device.version) <= 11 && device.platform == "Android"){
                 cordova.plugins.diagnostic.isLocationEnabled((enabled) => {
                     if(!enabled){
                         this.setState({ settingPopup: true});
@@ -299,9 +294,10 @@ class ConnectionModal extends React.Component {
         this.setState({ settingPopup: false });
     }
     render () {
+        localStorage.setItem("deviceName",this.state.deviceName)
         return (
             <>
-                {this.state.settingPopup ? <UniversalPopup content={content} determine={this.determine} cancel={this.cancel}/> :
+                {this.state.settingPopup ? <UniversalPopup content={content} determine={this.determine} cancel={this.cancel} buttonShow={true}/> :
                 
                 <ConnectionModalComponent
                     connectingMessage={this.state.extension && this.state.extension.connectingMessage}

@@ -6,6 +6,9 @@
     flex-wrap: wrap;
     width: 100%;
     padding: 1rem;
+    height: calc(100% - $library-header-height);
+    overflow-y: auto;
+    align-content: flex-start;
 }
 .item {
     display: flex;
@@ -15,8 +18,9 @@
     border-radius: 0.5rem;
     background-color: $ui-white;
     cursor: pointer;
-    height: auto;
-    /* width: 15rem; */
+    /* max-width: 19rem; */
+    width: 19rem;
+    height: 4rem;
     margin: 0 3% 0.5rem 0;
 }
 .item-action{
@@ -45,8 +49,12 @@
 }
 .item-name {
   font-weight: 600;
+  max-width: 8rem;
   font-size: 1rem;
   margin: 0 0 0.5rem 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .item-time {
   font-size: 0.85rem;
@@ -58,4 +66,17 @@
   display: flex;
   align-content: center;
   flex-wrap: wrap;
+  justify-content: space-between;
+
+}
+/* Alerts */
+
+.alerts-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  /* z-index: $z-index-alerts; */
+  position: absolute;
+  margin-top: 4px;
+  pointer-events: none;
 }

@@ -90,6 +90,7 @@ class SoundTab extends React.Component {
     }
 
     handleExportSound (soundIndex) {
+        console.log("导出声音");
         const item = this.props.vm.editingTarget.sprite.sounds[soundIndex];
         const blob = new Blob([item.asset.data], {type: item.asset.assetType.contentType});
         downloadBlob(`${item.name}.${item.asset.dataFormat}`, blob);
@@ -129,6 +130,8 @@ class SoundTab extends React.Component {
     }
 
     handleSoundUpload (e) {
+        console.log(this.props.isMobile)
+        console.log("上传声音");
         const storage = this.props.vm.runtime.storage;
         const targetId = this.props.vm.editingTarget.id;
         this.props.onShowImporting();
@@ -218,7 +221,9 @@ class SoundTab extends React.Component {
                 id: 'gui.soundTab.addSoundFromLibrary'
             }
         });
-
+        
+        const fileAccept = this.props.isMobile ? 'wav,mo3' : '.wav, .mp3';
+        // 选择一个声音
         return (
             <AssetPanel
                 buttons={[{
@@ -229,7 +234,7 @@ class SoundTab extends React.Component {
                     title: intl.formatMessage(messages.fileUploadSound),
                     img: fileUploadIcon,
                     onClick: this.handleFileUploadClick,
-                    fileAccept: '.wav, .mp3',
+                    fileAccept: fileAccept,
                     fileChange: this.handleSoundUpload,
                     fileInput: this.setFileInput,
                     fileMultiple: true
@@ -320,31 +325,59 @@ const mapDispatchToProps = dispatch => ({
         dispatch(openSoundLibrary());
     },
     onNewSoundFromRecordingClick: () => {
-        console.log("55555")
-        let isMobile = false;
-        if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android') ||
-            navigator.userAgent.indexOf('Mobile') > -1) {
-            isMobile = true;
-        }
-        if(isMobile){
-            //生成随机文件名
-           var fileName = "新的录音文件" + ".wav";
-            //设置文件路径，这里可以根据你的需求修改
-            var filePath = fileName;
-            //创建媒体对象
-            var mediaRec = new Media(filePath,
-                //成功回调
-                () => {
-                    console.log("recordAudio():Audio Success");
-                },
-                //失败回调
-                (err) => {
-                    console.log("recordAudio():Audio Error: " + err.code);
+        if (device.platform === 'iOS') {
+            // 在 iOS 上检查录音权限
+            cordova.plugins.diagnostic.isMicrophoneAuthorized(function(authorized){
+                if (authorized) {
+                    // 录音权限已授权
+                    console.log("录音权限已授权");
+                    // 在这里可以执行录音相关的操作
+                } else {
+                    // 录音权限未授权，请求获取权限
+                    cordova.plugins.diagnostic.requestMicrophoneAuthorization(function(status){
+                        if (status === cordova.plugins.diagnostic.permissionStatus.GRANTED) {
+                            // 用户授权了录音权限
+                            console.log("用户授权了录音权限");
+                            // 在这里可以执行录音相关的操作
+                        } else {
+                            // 用户未授权录音权限
+                            console.log("用户未授权录音权限");
+                        }
+                    }, function(error){
+                        console.error("请求录音权限时出现错误", error);
+                    });
                 }
-            );
-            //开始录制音频  
-            mediaRec.startRecord();
-            mediaRec.stopRecord();
+            }, function(error){
+                console.error("获取录音权限时出现错误", error);
+            });
+        } else if (device.platform === 'Android') {
+            // 在 Android 上检查录音权限
+            cordova.plugins.diagnostic.isMicrophoneAuthorized(function(authorized){
+                if (authorized) {
+                    // 录音权限已授权
+                    console.log("录音权限已授权");
+                    // 在这里可以执行录音相关的操作
+                } else {
+                    // 录音权限未授权，请求获取权限
+                    cordova.plugins.diagnostic.requestMicrophoneAuthorization(function(status){
+                        if (status === cordova.plugins.diagnostic.permissionStatus.GRANTED) {
+                            // 用户授权了录音权限
+                            console.log("用户授权了录音权限");
+                            // 在这里可以执行录音相关的操作
+                        } else {
+                            // 用户未授权录音权限
+                            console.log("用户未授权录音权限");
+                        }
+                    }, function(error){
+                        console.error("请求录音权限时出现错误", error);
+                    });
+                }
+            }, function(error){
+                console.error("获取录音权限时出现错误", error);
+            });
+        } else {
+            // 其他平台不支持录音
+            console.log("当前平台不支持录音");
         }
         dispatch(openSoundRecorder());
     },

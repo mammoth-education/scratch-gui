@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import styles from './universal-popup.css';
+import CloseButton from '../close-button/close-button.jsx';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 
 export default class UniversalPopup extends Component {
   constructor(props){
@@ -12,23 +14,28 @@ export default class UniversalPopup extends Component {
     return (
       <div className={styles.box}>
         <div className={styles.boos}>
-          <div className={styles.header}></div>
+          <div className={styles.header}>
+            <div className={styles.closeButton} onClick={this.props.cancel}>
+              <CloseButton></CloseButton>
+            </div>
+          </div>
           <div className={styles.middle}>
             <p>{this.props.content}</p>
-            <button onClick={this.props.determine}>
+            {this.props.buttonShow ? <button onClick={this.props.determine}>
               <FormattedMessage
-                defaultMessage="删除"
-                description="删除"
+                defaultMessage="确定"
+                description="确定"
                 id="gui.prompt.ok"
               />
-            </button>
-            <button onClick={this.props.cancel}>
+            </button> : null}
+            {this.props.buttonShow ? <button onClick={this.props.cancel}>
               <FormattedMessage
-                defaultMessage="删除"
-                description="删除"
+                defaultMessage="取消"
+                description="取消"
                 id="gui.prompt.cancel"
               />
-            </button>
+            </button> : null}
+            
           </div>
 
         </div>
@@ -36,3 +43,8 @@ export default class UniversalPopup extends Component {
     )
   }
 }
+UniversalPopup.propTypes = {
+  cancel: PropTypes.func,
+  determine: PropTypes.func,
+  buttonShow: PropTypes.bool,
+};

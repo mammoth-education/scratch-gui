@@ -8,7 +8,10 @@ import { closeUserProjectsModal } from '../../reducers/modals';
 import UniversalPopup from '../universal-popup/universal-popup.jsx'
 import styles from './user-projects-modal.css';
 import { FormattedMessage ,defineMessages,injectIntl, intlShape} from 'react-intl';
-
+import Alerts from '../../containers/alerts.jsx';
+import {
+    showAlertWithTimeout,
+} from '../../reducers/alerts';
 let content = <>
     <FormattedMessage
         defaultMessage="删除提示"
@@ -22,12 +25,25 @@ class UserProjectsModal extends React.Component {
         bindAll(this, [
             'createHandleOpenProject',
             'createList',
-            'controlPopup'
+            'controlPopup',
+            'reflashList',
         ]);
-        this.state = { flag: false, popupDisplay: false, deleteID: null, deleteName: null };
+        this.state = { popupDisplay: false, deleteName: null ,projectList:[],};
     }
-    createDateTime(tiem) {
-        var date = new Date(tiem);
+    componentDidMount(){
+        // 在这里调用 getProjectList 的原因是 getProjectList 是异步操作的，导致无法第一时间获取文件目录从而渲染是空的
+        // this.reflashList();
+    }
+    reflashList() {
+        this.getProjectList().then((res) => {
+            let projectList = res;
+            this.setState({ projectList:projectList });
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+    createDateTime(time) {
+        var date = new Date(time);
         var Y = date.getFullYear() + '/';
         var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '/';
         // var D = date.getDate() + ' ';
@@ -40,6 +56,7 @@ class UserProjectsModal extends React.Component {
     }
     createHandleOpenProject(id, name) {
         return () => {
+            name += ".sb3";
             this.props.onOpenProject(id, name);
         }
     }
@@ -52,9 +69,12 @@ class UserProjectsModal extends React.Component {
         }
     }
 
-    determine = () => {
-        this.props.onDeleProject(this.state.deleteID, this.state.deleteName);
+    delete = () => {
+        console.log(this.state.deleteID)
+        this.props.onShowDeletedSuccessfullyAlert();
+        this.props.onDeleteProject(this.state.deleteID, this.state.deleteName);
         let popupDisplay = this.state.popupDisplay;
+        // this.reflashList();
         this.setState({ popupDisplay: !popupDisplay, deleteID: null, deleteName: null })
     }
     cancel = () => {
@@ -62,7 +82,52 @@ class UserProjectsModal extends React.Component {
         let popupDisplay = this.state.popupDisplay;
         this.setState({ popupDisplay: !popupDisplay })
     }
-    createList() {
+    // 获取文件目录列表
+	getProjectList = () => {
+		return new Promise((resolve, reject) => {
+            let url = cordova.file.externalDataDirectory;
+            if(cordova.platformId == "ios"){
+                url = cordova.file.documentsDirectory;
+            }
+		    window.resolveLocalFileSystemURL(url + "MyProject", (dirEntry) => {
+                var dirReader = dirEntry.createReader();
+                dirReader.readEntries((files) => {
+                var projectList = [];
+                for (var i = 0; i < files.length; i++) {
+                    projectList.push(files[i].name.replace(".sb3",""));
+                    
+                }
+                Promise.all(projectList.map((filename) => {
+                            return this.getLastModifiedDate(url + "MyProject/" + filename + ".sb3");
+                    })).then((modificationDates) => {
+                        for (let i = 0; i < projectList.length; i++) {
+                            projectList[i] = {name: projectList[i], time: modificationDates[i]};
+                        }
+                        resolve(projectList);
+                    }).catch((error) => {
+                        reject(error);
+                    });
+                });
+		    }, (error) => {
+			reject(error);
+		    });
+		});
+	}
+    // 获取文件最后修改时间
+    getLastModifiedDate = (filepath) => {
+        return new Promise((resolve, reject) => {
+            window.resolveLocalFileSystemURL(filepath, (fileEntry) => {
+                fileEntry.getMetadata((metadata) => {
+                    resolve(this.createDateTime(metadata.modificationTime));
+                }, (error) => {
+                    reject(error);
+                });
+            }, (error) => {
+                reject(error);
+            });
+        });
+    }
+     createList() {
         let projectList = localStorage.getItem('project-list') || "{}";
         projectList = JSON.parse(projectList);
         return Object.keys(projectList).map((id) => (
@@ -105,7 +170,6 @@ class UserProjectsModal extends React.Component {
             </div>
         ));
     }
-
     render() {
         return (
             <Modal
@@ -114,12 +178,14 @@ class UserProjectsModal extends React.Component {
                 id="userProjectsModal"
                 onRequestClose={this.props.onClose}
             >
+                {this.props.alertsVisible && !this.state.popupDisplay ? (
+                    <Alerts className={styles.alertsContainer} />
+                ) : null}
                 <div className={styles.modalContent}>
                     {this.createList()}
                 </div>
-                {this.state.popupDisplay ? <UniversalPopup determine={this.determine} cancel={this.cancel} content={content} /> : null}
+                {this.state.popupDisplay && <UniversalPopup determine={this.delete} cancel={this.cancel} content={content}  buttonShow={true}/>}
             </Modal>
-
         )
     }
 }
@@ -129,7 +195,7 @@ UserProjectsModal.propTypes = {
     onClose: PropTypes.func.isRequired,
     title: PropTypes.string,
     onOpenProject: PropTypes.func,
-    onDeleProject: PropTypes.func,
+    onDeleteProject: PropTypes.func,
 }
 
 const mapStateToProps = state => ({
@@ -138,6 +204,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     onClose: () => { dispatch(closeUserProjectsModal()); },
+    onShowDeletedSuccessfullyAlert: () => showAlertWithTimeout(dispatch, 'deletedSuccessfully'),
 });
 
 export default connect(

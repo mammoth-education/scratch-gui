@@ -119,7 +119,7 @@
 
 @media only screen and (max-width: 1024px) {
     .modal-content {
-        height: 100%;
+        /* height: 100%; */
         overflow: auto;
     }
 }

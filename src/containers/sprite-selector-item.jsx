@@ -95,12 +95,25 @@ class SpriteSelectorItem extends React.PureComponent {
         this.props.onDeleteButtonClick(this.props.id);
     }
     handleDuplicate (e) {
-        e.stopPropagation(); // To prevent from bubbling back to handleClick
-        this.props.onDuplicateButtonClick(this.props.id);
+        // 这里直接使用 preventDefault 无效，可能是因为在移动设备上，浏览器会在某些情况下忽略 preventDefault() 方法。这可能是由于浏览器的触摸事件处理机制引起的。
+        // 所以添加一个延迟，可以给浏览器一些时间来处理事件，但会带来一些警告
+        // 主要解决移动端点击后会再次弹出
+        setTimeout(() => {
+            e.preventDefault();
+            // 处理菜单项的点击事件
+            e.stopPropagation(); // To prevent from bubbling back to handleClick
+            this.props.onDuplicateButtonClick(this.props.id);
+          }, 100);
+        
     }
     handleExport (e) {
-        e.stopPropagation();
-        this.props.onExportButtonClick(this.props.id);
+        setTimeout(() => {
+            e.preventDefault();
+            // 处理菜单项的点击事件
+            e.stopPropagation();
+            this.props.onExportButtonClick(this.props.id);
+          }, 100);
+        
     }
     handleMouseLeave () {
         this.props.dispatchSetHoveredSprite(null);

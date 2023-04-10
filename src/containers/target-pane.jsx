@@ -144,6 +144,7 @@ class TargetPane extends React.Component {
         this.fileInput.click();
     }
     handleSpriteUpload (e) {
+        console.log("上传精灵图");
         const storage = this.props.vm.runtime.storage;
         this.props.onShowImporting();
         handleFileUpload(e.target, (buffer, fileType, fileName, fileIndex, fileCount) => {
@@ -250,6 +251,7 @@ class TargetPane extends React.Component {
             onReceivedBlocks,
             onShowImporting,
             workspaceMetrics,
+            isMobile,
             ...componentProps
         } = this.props;
         /* eslint-enable no-unused-vars */
@@ -274,6 +276,7 @@ class TargetPane extends React.Component {
                 onSelectSprite={this.handleSelectSprite}
                 onSpriteUpload={this.handleSpriteUpload}
                 onSurpriseSpriteClick={this.handleSurpriseSpriteClick}
+                isMobile={this.props.isMobile}
             />
         );
     }
