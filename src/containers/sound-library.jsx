@@ -100,6 +100,7 @@ class SoundLibrary extends React.PureComponent {
         const md5ext = soundItem._md5;
         const idParts = md5ext.split('.');
         const md5 = idParts[0];
+        const format = idParts[1];
         const vm = this.props.vm;
 
         // In case enter is called twice without a corresponding leave
@@ -108,36 +109,82 @@ class SoundLibrary extends React.PureComponent {
 
         // Save the promise so code to stop the sound may queue the stop
         // instruction after the play instruction.
+        let soundAsset;
+        console.log("soundItem",soundItem);
+        let readIosFileData = (fileUrl) => {
+            return new Promise(function(resolve, reject) {
+              // 获取文件
+              window.resolveLocalFileSystemURL(fileUrl, function(fileEntry) {
+                // 获取到文件的 FileEntry 对象
+                // 读取文件内容
+                fileEntry.file(function(file) {
+                  // 创建 FileReader 对象
+                  var fileReader = new FileReader();
+                  // 读取文件内容
+                  fileReader.onloadend = function() {
+                      // 文件内容已经读取完毕
+                    var fileData = this.result; // 获取到的文件数据
+                    console.log("fileData",fileData)
+                    var uint8Array = new Uint8Array(fileData)
+                    // console.log("Uint8Array",fileData)
+                    resolve(uint8Array);
+                  };
+                  // 开始读取文件
+                  fileReader.readAsArrayBuffer(file);
+                  
+                });
+              }, function(error) {
+                // 获取文件失败
+                reject(error);
+              });
+            });
+        }
         this.playingSoundPromise = vm.runtime.storage.load(vm.runtime.storage.AssetType.Sound, md5)
-            .then(soundAsset => {
-                if (soundAsset) {
-                    const sound = {
+            .then(data => {
+                if (data) {
+                    soundAsset = {
                         md5: md5ext,
                         name: soundItem.name,
                         format: soundItem.format,
-                        data: soundAsset.data
+                        data: data.data
                     };
-                    return this.audioEngine.decodeSoundPlayer(sound)
-                        .then(soundPlayer => {
-                            soundPlayer.connect(this.audioEngine);
-                            // Play the sound. Playing the sound will always come before a
-                            // paired stop if the sound must stop early.
-                            soundPlayer.play();
-                            soundPlayer.addListener('stop', this.onStop);
-                            // Set that the sound is playing. This affects the type of stop
-                            // instruction given if the sound must stop early.
-                            if (this.playingSoundPromise !== null) {
-                                this.playingSoundPromise.isPlaying = true;
-                            }
-                            return soundPlayer;
+                    return soundAsset;
+                } else{
+                        let url = cordova.file.applicationDirectory + "www" +`/static/asset/${md5}.${format}`;
+                        return readIosFileData(url).then((data) => {
+                            console.log("data",data);
+                            soundAsset = {
+                                md5: md5ext,
+                                name: soundItem.name,
+                                format: soundItem.format,
+                                data: data
+                            };
+                            console.log("soundAsset",soundAsset);
+                            return soundAsset;
                         });
-                }
-            });
+                    }
+            }).then(()=> {
+                return this.audioEngine.decodeSoundPlayer(soundAsset)
+                    .then(soundPlayer => {
+                        soundPlayer.connect(this.audioEngine);
+                        // Play the sound. Playing the sound will always come before a
+                        // paired stop if the sound must stop early.
+                        soundPlayer.play();
+                        soundPlayer.addListener('stop', this.onStop);
+                        // Set that the sound is playing. This affects the type of stop
+                        // instruction given if the sound must stop early.
+                        if (this.playingSoundPromise !== null) {
+                            this.playingSoundPromise.isPlaying = true;
+                        }
+                        return soundPlayer;
+                    });
+            })
     }
     handleItemMouseLeave () {
         this.stopPlayingSound();
     }
     handleItemSelected (soundItem) {
+        console.log("soundItem",soundItem)
         const vmSound = {
             format: soundItem.format,
             md5: soundItem._md5,
