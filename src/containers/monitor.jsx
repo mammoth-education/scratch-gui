@@ -80,8 +80,10 @@ class Monitor extends React.Component {
                 y: rect.upperStart.y
             }));
         }
-        this.element.style.top = `${rect.upperStart.y}px`;
-        this.element.style.left = `${rect.upperStart.x}px`;
+       
+        this.element.style.top = `5px`;
+        this.element.style.left = `5px`;
+        this.element.style.transform = `translate(${rect.upperStart.x}px, ${rect.upperStart.y}px)`;
     }
     shouldComponentUpdate (nextProps, nextState) {
         if (nextState !== this.state) {

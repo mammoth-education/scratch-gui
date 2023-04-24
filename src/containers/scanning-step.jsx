@@ -14,7 +14,8 @@ class ScanningStep extends React.Component {
         ]);
         this.state = {
             scanning: true,
-            peripheralList: []
+            peripheralList: [],
+            refreshClick:true,
         };
     }
     componentDidMount () {
@@ -45,11 +46,22 @@ class ScanningStep extends React.Component {
         this.setState({peripheralList: peripheralArray});
     }
     handleRefresh () {
+        console.log(this.state.refreshClick)
+        if(!this.state.refreshClick){
+            return;
+        }
+        let refreshClick = this.state.refreshClick;
+        this.setState({refreshClick: !refreshClick});
         this.props.vm.scanForPeripheral(this.props.extensionId);
         this.setState({
             scanning: true,
             peripheralList: []
         });
+        // 设置节流  防止用户连续点击刷新导致闪退
+        setTimeout(()=>{
+            let refreshClick = this.state.refreshClick;
+            this.setState({refreshClick: !refreshClick});
+        },500)
     }
     render () {
         return (

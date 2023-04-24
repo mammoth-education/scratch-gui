@@ -41,6 +41,7 @@ const MonitorList = props => (
                         x={monitorData.x}
                         y={monitorData.y}
                         onDragEnd={props.onMonitorChange}
+                        stageSize={props.stageSize}
                     />
                 ))}
         </Box>

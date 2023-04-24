@@ -194,6 +194,7 @@ class SB3Downloader extends React.Component {
 					// 桌面端导出
 					downloadBlob(this.props.projectFilename, content);
 				}
+				return "导出"
 			}
 		});
     }

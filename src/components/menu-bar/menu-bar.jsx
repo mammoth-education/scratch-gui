@@ -192,7 +192,7 @@ class MenuBar extends React.Component {
             'onClickLogo',
             'cancel'
         ]);
-        this.state={version:false};
+        this.state={versionShow:false};
     }
     
     
@@ -388,11 +388,11 @@ class MenuBar extends React.Component {
         this.props.onClickUserProjects();
     }
     onClickLogo (){
-        let version = this.state.version
-        this.setState({version:!version})
+        let versionShow = this.state.versionShow
+        this.setState({versionShow:!versionShow})
     }
     cancel(){
-        this.setState({ version: false });
+        this.setState({ versionShow: false });
     }
     render () {
         const saveNowMessage = (
@@ -423,6 +423,13 @@ class MenuBar extends React.Component {
                 id="gui.menuBar.new"
             />
         );
+        const version = (
+            <FormattedMessage
+                defaultMessage="version : 0.0.6"
+                description="Menu bar item for creating a new project"
+                id="version : 0.0.6"
+            />
+        );
         const remixButton = (
             <Button
                 className={classNames(
@@ -438,7 +445,6 @@ class MenuBar extends React.Component {
         );
         // Show the About button only if we have a handler for it (like in the desktop app)
         const aboutButton = this.buildAboutMenu(this.props.onClickAbout);
-        let exportNotation = true;
         let saveStatus = {saveProject:1,modifyProject:2,copyProject:3}
         return (
             <Box
@@ -448,7 +454,7 @@ class MenuBar extends React.Component {
                 )}
             >
                 
-                {this.state.version ? <UniversalPopup content={version} cancel={this.cancel}/> : null}
+                {this.state.versionShow ? <UniversalPopup content={version} cancel={this.cancel}/> : null}
                 <div className={styles.mainMenu}>
                     <div className={styles.fileGroup}>
                         <div className={classNames(styles.menuBarItem)}>
