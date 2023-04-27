@@ -60,8 +60,8 @@ class ConnectionModal extends React.Component {
         this.props.vm.on('PERIPHERAL_CONNECTED', this.handleConnected);
         this.props.vm.on('PERIPHERAL_REQUEST_ERROR', this.handleError);
         // Android 11 以下都需要手动打开定位
-        if(this.props.isMobile){
-            if(parseInt(device.version) <= 11 && device.platform == "Android"){
+        if(this.props.isMobile && window.cordova){
+            if(device.platform === "Android" && parseInt(device.version) <= 11){
                 cordova.plugins.diagnostic.isLocationEnabled((enabled) => {
                     if(!enabled){
                         this.setState({ settingPopup: true});
@@ -191,8 +191,10 @@ class ConnectionModal extends React.Component {
         });
     }
     handleReconnect () {
+        console.log("返回");
         this.setState({
-            phase: PHASES.scanning
+            // phase: PHASES.scanning
+            phase: PHASES.connected
         });
         analytics.event({
             category: 'extensions',

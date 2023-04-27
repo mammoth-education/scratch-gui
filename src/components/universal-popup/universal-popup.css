@@ -30,7 +30,9 @@
   background-color: hsla(163, 85%, 40%, 1);
   display: flex;
   align-items: center;
-  justify-content: end;
+  /* justify-content: end; */
+  /* 兼容 Android8 浏览器 */
+  justify-content: flex-end; 
 }
 .middle{
   padding: 1rem 0;
