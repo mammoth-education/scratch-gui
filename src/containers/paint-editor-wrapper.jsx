@@ -6,6 +6,7 @@ import PaintEditor from 'scratch-paint';
 import {inlineSvgFonts} from 'scratch-svg-renderer';
 
 import {connect} from 'react-redux';
+import {showAlertWithTimeout} from '../reducers/alerts';
 
 class PaintEditorWrapper extends React.Component {
     constructor (props) {
@@ -21,7 +22,11 @@ class PaintEditorWrapper extends React.Component {
             this.props.name !== nextProps.name;
     }
     handleUpdateName (name) {
-        this.props.vm.renameCostume(this.props.selectedCostumeIndex, name);
+        if(name.length > 15){
+            this.props.onShowDeletedSuccessfullyAlert();
+        }else{
+            this.props.vm.renameCostume(this.props.selectedCostumeIndex, name);
+        }
     }
     handleUpdateImage (isVector, image, rotationCenterX, rotationCenterY) {
         if (isVector) {
@@ -70,6 +75,9 @@ PaintEditorWrapper.propTypes = {
     vm: PropTypes.instanceOf(VM)
 };
 
+const mapDispatchToProps = dispatch => ({
+    onShowDeletedSuccessfullyAlert: () => showAlertWithTimeout(dispatch, 'nameCharacterLimit'),
+});
 const mapStateToProps = (state, {selectedCostumeIndex}) => {
     const targetId = state.scratchGui.vm.editingTarget.id;
     const sprite = state.scratchGui.vm.editingTarget.sprite;
@@ -91,5 +99,6 @@ const mapStateToProps = (state, {selectedCostumeIndex}) => {
 };
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(PaintEditorWrapper);

@@ -158,6 +158,23 @@ const alerts = [
         maxDisplaySecs: 3
     },
     {
+        alertId: 'nameCharacterLimit',
+        // alertType: AlertTypes.INLINE,
+        clearList: [],
+        content: (
+            <FormattedMessage
+                defaultMessage="Could not create the project. Please try again!"
+                description="Message indicating that project could not be created"
+                id="gui.alerts.characterLimit"
+                // 输入框过长提示
+            />
+        ),
+        iconURL: successImage,
+        level: AlertLevels.SUCCESS,
+        // level: AlertLevels.WARN,
+        maxDisplaySecs: 3
+    },
+    {
         alertId: 'savingError',
         clearList: ['createSuccess', 'creating', 'createCopySuccess', 'creatingCopy',
             'createRemixSuccess', 'creatingRemix', 'saveSuccess', 'saving'],
