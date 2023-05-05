@@ -228,11 +228,14 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                                 intl.formatMessage(sharedMessages.replaceProjectWarning)
                             );
                         }
+                        // 判断是否丢弃当前作品尚未保存的内容
                         if (uploadAllowed) {
                             // cues step 4
                             this.props.requestProjectUpload(loadingState);
+                            this.fileReader.readAsArrayBuffer(file);
+                        }else{
+                            this.removeFileObjects();
                         }
-                        this.fileReader.readAsArrayBuffer(file);
                     });
                 }, (e)=>{
                     console.log("FileSystem Error");
