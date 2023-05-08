@@ -14,9 +14,18 @@ let content = <>
     <FormattedMessage
         defaultMessage="位置信息未打开提示"
         description="位置信息未打开提示"
-        id="gui.bluetooth.alert"
+        id="gui.positioning.alert"
     />
 </>
+if(window.cordova && window.cordova.platformId === "ios"){
+    content = <>
+        <FormattedMessage
+            defaultMessage="蓝牙未开启,是否前往开启"
+            description="蓝牙未开启,是否前往开启"
+            id="gui.bluetooth.alert"
+        />
+    </>
+}
 class ConnectionModal extends React.Component {
     constructor (props) {
         super(props);
@@ -69,6 +78,11 @@ class ConnectionModal extends React.Component {
                 }, (error) => {
                     console.error("The following error occurred: "+error);
                 });
+            }
+            if(window.cordova.platformId === "ios"){
+                ble.isEnabled(()=>console.log("蓝牙以打开"),()=>{
+                    this.setState({ settingPopup: true});
+                })
             }
         }
     }
@@ -290,7 +304,18 @@ class ConnectionModal extends React.Component {
     }
     determine(){
         // Android 11 以下没有打开位置信息则跳转到设置中，需要手动打开
-        cordova.plugins.diagnostic.switchToLocationSettings();
+        if(window.cordova.platformId === "android"){
+            cordova.plugins.diagnostic.switchToLocationSettings();
+        }
+        if(window.cordova.platformId === "ios"){
+            cordova.plugins.diagnostic.switchToSettings(() => {
+                  console.log("已打开设置界面");
+                },
+                (error) => {
+                  console.error("打开设置界面失败：" + error);
+                }
+              )
+        }
         this.setState({ settingPopup: false });
     }
     cancel(){
