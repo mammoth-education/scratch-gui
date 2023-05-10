@@ -56,9 +56,10 @@
 .tag-wrapper {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     height: $library-filter-bar-height;
-    overflow: hidden;
+    /* overflow: hidden; */
+    overflow-x: auto;
 }
 
 .spinner-wrapper {
@@ -67,4 +68,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+@media (max-width: 1000px){
+    .tag-wrapper{
+        width: 700px;
+    }
+}
+@media (max-width: 900px){
+    .tag-wrapper{
+        width: 600px;
+    }
+}
+@media (min-width: 1000px){
+    .tag-wrapper{
+        flex-wrap: wrap;
+    }
 }

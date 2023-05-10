@@ -45,7 +45,7 @@ const FlashFirmwareStep = props => (
         </Box>
         <Box className={styles.bottomArea}>
             <div className={classNames(styles.bottomAreaItem, styles.cornerButtons)}>
-                <button className={styles.connectionButton} onClick={props.onReconnect}>
+                <button className={styles.connectionButton} onClick={props.onRenameCancel}>
                     <FormattedMessage
                         defaultMessage="Back"
                         description="Back"

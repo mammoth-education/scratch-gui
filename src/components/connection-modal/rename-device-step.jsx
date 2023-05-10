@@ -13,7 +13,9 @@ const RenameDeviceStep = props => (
             <Box className={styles.centeredRow}>
                 <input className={styles.deviceNameInput}
                     type="text"
+                    placeholder= "请输入英文或数字"
                     value={props.deviceName}
+                    maxlength="10"
                     onChange={props.onRenameChanged}
                 />
             </Box>

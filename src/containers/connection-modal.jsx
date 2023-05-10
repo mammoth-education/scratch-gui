@@ -14,18 +14,9 @@ let content = <>
     <FormattedMessage
         defaultMessage="位置信息未打开提示"
         description="位置信息未打开提示"
-        id="gui.positioning.alert"
+        id="gui.bluetooth.alert"
     />
 </>
-if(window.cordova && window.cordova.platformId === "ios"){
-    content = <>
-        <FormattedMessage
-            defaultMessage="蓝牙未开启,是否前往开启"
-            description="蓝牙未开启,是否前往开启"
-            id="gui.bluetooth.alert"
-        />
-    </>
-}
 class ConnectionModal extends React.Component {
     constructor (props) {
         super(props);
@@ -78,11 +69,6 @@ class ConnectionModal extends React.Component {
                 }, (error) => {
                     console.error("The following error occurred: "+error);
                 });
-            }
-            if(window.cordova.platformId === "ios"){
-                ble.isEnabled(()=>console.log("蓝牙以打开"),()=>{
-                    this.setState({ settingPopup: true});
-                })
             }
         }
     }
@@ -179,6 +165,10 @@ class ConnectionModal extends React.Component {
     }
     handleRenameChanged (e) {
         let name = e.target.value;
+        // 只能输入 ASCII 和数字
+        if (/[^a-zA-Z0-9]/.test(name)) {
+            name = value.replace(/[^a-zA-Z0-9]/g, '');
+        }
         this.setState({
             deviceName: name
         });
@@ -205,10 +195,9 @@ class ConnectionModal extends React.Component {
         });
     }
     handleReconnect () {
-        console.log("返回");
         this.setState({
-            // phase: PHASES.scanning
-            phase: PHASES.connected
+            phase: PHASES.scanning
+            // phase: PHASES.connected
         });
         analytics.event({
             category: 'extensions',
@@ -304,18 +293,7 @@ class ConnectionModal extends React.Component {
     }
     determine(){
         // Android 11 以下没有打开位置信息则跳转到设置中，需要手动打开
-        if(window.cordova.platformId === "android"){
-            cordova.plugins.diagnostic.switchToLocationSettings();
-        }
-        if(window.cordova.platformId === "ios"){
-            cordova.plugins.diagnostic.switchToSettings(() => {
-                  console.log("已打开设置界面");
-                },
-                (error) => {
-                  console.error("打开设置界面失败：" + error);
-                }
-              )
-        }
+        cordova.plugins.diagnostic.switchToLocationSettings();
         this.setState({ settingPopup: false });
     }
     cancel(){
