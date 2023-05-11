@@ -189,6 +189,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                         // or failed, reset file objects
                         this.removeFileObjects();
                     });
+                sessionStorage.removeItem("currentID");
             }
         }
         // step 7: remove the <input> element from the DOM and clear reader and
