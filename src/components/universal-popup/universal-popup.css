@@ -60,6 +60,11 @@
 .closeButton{
   width: 1.75rem;
   height: 1.75rem;
-  float: right;
-  margin-right: 2%;
+  position: absolute;
+  right: 2%;
+}
+.title{
+  margin: 0 auto;
+  color: white;
+  font-weight: normal;
 }

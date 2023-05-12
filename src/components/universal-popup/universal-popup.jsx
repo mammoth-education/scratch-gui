@@ -15,12 +15,14 @@ export default class UniversalPopup extends Component {
       <div className={styles.box}>
         <div className={styles.boos}>
           <div className={styles.header}>
+            <p className={styles.title}>{this.props.title}</p>
             <div className={styles.closeButton} onClick={this.props.cancel}>
               <CloseButton></CloseButton>
             </div>
           </div>
           <div className={styles.middle}>
-            <p>{this.props.content}</p>
+
+            <div>{this.props.content}</div>
             {this.props.buttonShow ? <button onClick={this.props.determine}>
               <FormattedMessage
                 defaultMessage="确定"

@@ -80,6 +80,7 @@ import gridIcon from './icon--grid.svg';
 import iconSave from './icon--save.svg';
 
 import scratchLogo from './mammoth-logo.png';
+import Logo from './logo.png';
 import codeIcon from '../gui/icon--code.svg';
 import costumesIcon from '../gui/icon--costumes.svg';
 import soundsIcon from '../gui/icon--sounds.svg';
@@ -271,11 +272,14 @@ class MenuBar extends React.Component {
                 // if(!exportNotation){
                 //     this.props.onClickSave();
                 // }
+                // 1 名称重复  2 导出
                 console.log("res",res)
-                if(res == "名称重复"){
+                if(res === 1){
                     this.props.onShowAlert('duplicateNames');
                 }else{
-                    this.props.onShowSaveSuccessAlert();
+                    if(res !== 2){
+                        this.props.onShowSaveSuccessAlert();
+                    }
                 }
                 if (this.props.onProjectTelemetryEvent) {
                     const metadata = collectMetadata(this.props.vm, this.props.projectTitle, this.props.locale);
@@ -424,12 +428,26 @@ class MenuBar extends React.Component {
             />
         );
         const version = (
-            <FormattedMessage
-                defaultMessage="version : 0.0.6"
-                description="Menu bar item for creating a new project"
-                id="version : 0.0.6"
-            />
+            <>
+                <div className={styles.topics}><img src={Logo} alt="" /><div className={styles.text}><span>Mammoth</span><span>Coding</span></div></div>
+                <div className={styles.version}>
+                    <FormattedMessage
+                        defaultMessage="version：0.0.6"
+                        description="Used to display the version number"
+                        id="version：0.0.6"
+                    />
+                    <span>2023-05-10</span>
+                </div>
+                <div><span className={styles.copyright}>2023@sunfounder</span></div>
+            </>
         );
+        const title =(
+            <FormattedMessage
+                defaultMessage="About Us"
+                description="About Us"
+                id="gui.about.title"
+            />
+        )
         const remixButton = (
             <Button
                 className={classNames(
@@ -454,7 +472,7 @@ class MenuBar extends React.Component {
                 )}
             >
                 
-                {this.state.versionShow ? <UniversalPopup content={version} cancel={this.cancel}/> : null}
+                {this.state.versionShow ? <UniversalPopup content={version} title={title} cancel={this.cancel}/> : null}
                 <div className={styles.mainMenu}>
                     <div className={styles.fileGroup}>
                         <div className={classNames(styles.menuBarItem)}>

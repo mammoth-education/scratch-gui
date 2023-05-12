@@ -10,21 +10,22 @@ import {closeConnectionModal} from '../reducers/modals';
 import UniversalPopup from '../components/universal-popup/universal-popup.jsx';
 import { FormattedMessage} from 'react-intl';
 
-let content = <>
+let content = <p>
     <FormattedMessage
         defaultMessage="位置信息未打开提示"
         description="位置信息未打开提示"
         id="gui.positioning.alert"
     />
-</>
+</p>
 if(window.cordova && window.cordova.platformId === "ios"){
-    content =<>
+    content =<p>
     <FormattedMessage
         defaultMessage="位置信息未打开提示"
         description="位置信息未打开提示"
         id="gui.bluetooth.alert"
     />
-    </>
+
+</p>
 }
 class ConnectionModal extends React.Component {
     constructor (props) {

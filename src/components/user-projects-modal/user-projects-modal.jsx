@@ -13,11 +13,13 @@ import {
     showAlertWithTimeout,
 } from '../../reducers/alerts';
 let content = <>
-    <FormattedMessage
-        defaultMessage="删除提示"
-        description="删除提示"
-        id="gui.project.deleteTips"
-    />
+    <p>
+        <FormattedMessage
+            defaultMessage="删除提示"
+            description="删除提示"
+            id="gui.project.deleteTips"
+        />
+    </p>
 </>
 class UserProjectsModal extends React.Component {
     constructor(props) {

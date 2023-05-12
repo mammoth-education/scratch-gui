@@ -146,7 +146,8 @@ class SB3Downloader extends React.Component {
 						}
 					}
 					if (hasName) {
-						let error = "名称重复";
+						// let error = "名称重复";
+						let error = 1;
 						console.log("名称重复");
 						return error;
 					} else {
@@ -194,7 +195,7 @@ class SB3Downloader extends React.Component {
 					// 桌面端导出
 					downloadBlob(this.props.projectFilename, content);
 				}
-				return "导出"
+				return 2
 			}
 		});
     }
