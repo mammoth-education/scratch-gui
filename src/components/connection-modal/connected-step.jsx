@@ -11,28 +11,26 @@ import classNames from 'classnames';
 const ConnectedStep = props => (
     <Box className={styles.body}>
         <Box className={styles.activityArea}>
-            <Box className={styles.centeredRow}>
-                <div className={styles.peripheralActivity}>
-                    <img
-                        className={styles.peripheralActivityIcon}
-                        src={props.connectionIconURL}
+            <Box className={styles.centeredCol}>
+                <Box>
+                    <span>{props.deviceName + " "}</span>
+                    <FormattedMessage
+                        defaultMessage="Connected"
+                        description="Message indicating that a device was connected"
+                        id="gui.connection.connected"
                     />
-                    <img
-                        className={styles.bluetoothConnectedIcon}
-                        src={bluetoothIcon}
+                </Box>
+                <Box>
+                    <FormattedMessage
+                        defaultMessage="Current version: "
+                        description="Current version"
+                        id="gui.connection.curren-version"
                     />
-                </div>
+                    <span>{props.currentFirmwareVersion}</span>
+                </Box>
             </Box>
         </Box>
         <Box className={styles.bottomArea}>
-            <Box className={classNames(styles.bottomAreaItem, styles.instructions)}>
-                <span>{props.deviceName + " "}</span>
-                <FormattedMessage
-                    defaultMessage="Connected"
-                    description="Message indicating that a device was connected"
-                    id="gui.connection.connected"
-                />
-            </Box>
             <Dots
                 success
                 className={styles.bottomAreaItem}
@@ -59,7 +57,7 @@ const ConnectedStep = props => (
                         id="gui.connection.rename-device"
                     />
                 </button> : null}
-                { props.firmwareFlashable &&
+                { props.firmwareFlashable && !props.isMobile &&
                     <button
                         className={styles.connectionButton}
                         onClick={props.onFlashFirmware}
@@ -78,6 +76,7 @@ const ConnectedStep = props => (
 
 ConnectedStep.propTypes = {
     connectionIconURL: PropTypes.string.isRequired,
+    currentFirmwareVersion: PropTypes.string,
     onCancel: PropTypes.func,
     onDisconnect: PropTypes.func,
     onRenameDevice: PropTypes.func.isRequired,

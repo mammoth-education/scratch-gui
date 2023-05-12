@@ -68,6 +68,11 @@ class ConnectionModal extends React.Component {
     componentDidMount () {
         this.props.vm.on('PERIPHERAL_CONNECTED', this.handleConnected);
         this.props.vm.on('PERIPHERAL_REQUEST_ERROR', this.handleError);
+        this.props.vm.getPeripheralFirmwareVersion(this.props.extensionId).then(version => {
+            this.setState({
+                currentFirmwareVersion: version
+            });
+        }, () => {});
         // Android 11 以下都需要手动打开定位
         if(this.props.isMobile && window.cordova){
             if(device.platform === "Android" && parseInt(device.version) <= 11){
@@ -328,6 +333,7 @@ class ConnectionModal extends React.Component {
         this.setState({ settingPopup: false });
     }
     render () {
+        console.log("current firmware version: ", this.state.currentFirmwareVersion);
         localStorage.setItem("deviceName",this.state.deviceName)
         return (
             <>
