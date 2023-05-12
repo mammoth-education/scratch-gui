@@ -25,6 +25,13 @@
     align-items: center;
 }
 
+.centered-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .space-evenly-column {
     height:100%;
     display: flex;
