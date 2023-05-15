@@ -35,6 +35,8 @@
   /* box-shadow: 2px 2px 5px 0px grey; */
   box-shadow: 0px 0px 5px  grey;
   outline: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
 }
 .key.pressed {
   box-shadow: 1px 1px 5px  grey;

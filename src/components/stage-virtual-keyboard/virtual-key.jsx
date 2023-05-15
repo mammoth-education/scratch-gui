@@ -34,6 +34,8 @@ class VirtualKey extends React.Component {
   onPressed(e) {
     e.preventDefault();
     this.pressKey(this.props.keyName);
+    clearTimeout(this.state.timeout);
+    clearInterval(this.state.interval);
     let timeout = setTimeout(() => {
       let interval = setInterval(() => {
         this.pressKey(this.props.keyName, true);

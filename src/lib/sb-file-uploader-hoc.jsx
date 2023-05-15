@@ -237,6 +237,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                         }else{
                             this.removeFileObjects();
                         }
+                        this.props.closeFileMenu();
                     });
                 }, (e)=>{
                     console.log("FileSystem Error");
