@@ -272,6 +272,7 @@
     justify-content: center;
     background-color: $ui-white-transparent;
     background-clip: padding-box;
+    box-sizing: content-box;
 }
 .save-button img {
     width: 80%;
