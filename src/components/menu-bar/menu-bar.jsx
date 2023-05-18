@@ -191,9 +191,10 @@ class MenuBar extends React.Component {
             'handleClickStageTab',
             'handleClickUserProjects',
             'onClickLogo',
-            'cancel'
+            'cancel',
+            'getVersion'
         ]);
-        this.state={versionShow:false};
+        this.state={versionShow:false,version:""};
     }
     
     
@@ -398,6 +399,21 @@ class MenuBar extends React.Component {
     cancel(){
         this.setState({ versionShow: false });
     }
+    getVersion(){
+        // 获取应用程序的版本号
+        if(window.cordova){
+            cordova.getAppVersion.getVersionNumber().then(function (appVersion) {
+                let version = appVersion
+                this.setState({version:version})
+                return appVersion
+            }).catch(function (error) {
+                console.log('获取应用程序的版本号失败：' + error);
+            });
+        }else{
+            this.setState({version:"0.0.6"})
+            return "0.0.6"
+        }
+    }
     render () {
         const saveNowMessage = (
             <FormattedMessage
@@ -429,16 +445,25 @@ class MenuBar extends React.Component {
         );
         const version = (
             <>
-                <div className={styles.topics}><img src={Logo} alt="" /><div className={styles.text}><span>Mammoth</span><span>Coding</span></div></div>
+                <div className={styles.topics}>
+                    <img src={Logo} alt="" />
+                    <div className={styles.text}>
+                        <FormattedMessage
+                        defaultMessage="Mammoth Coding"
+                        description="Used to display the app name"
+                        id="gui.about.app"
+                    />
+                    </div>
+                </div>
                 <div className={styles.version}>
                     <FormattedMessage
-                        defaultMessage="version：0.0.6"
+                        defaultMessage="version"
                         description="Used to display the version number"
-                        id="version：0.0.6"
-                    />
-                    <span>2023-05-10</span>
+                        id="gui.about.version"
+                    />1.0.0
+                    <span>2023-05-16</span>
                 </div>
-                <div><span className={styles.copyright}>2023@sunfounder</span></div>
+                <div><span className={styles.copyright}>2023@SunFounder</span></div>
             </>
         );
         const title =(
