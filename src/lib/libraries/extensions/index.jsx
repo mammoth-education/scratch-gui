@@ -94,7 +94,7 @@ export default [
             />
         ),
         // 帮助链接
-        helpLink: 'https://kaka-kit.readthedocs.io/en/latest/' // TODO  
+        helpLink: 'https://kaka-kit.readthedocs.io/quickstart.html' // TODO  
     },
     {
         name: (
