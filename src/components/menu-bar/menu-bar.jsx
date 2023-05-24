@@ -461,7 +461,7 @@ class MenuBar extends React.Component {
                         description="Used to display the version number"
                         id="gui.about.version"
                     />1.0.0
-                    <span>2023-05-16</span>
+                    <span>2023-05-24</span>
                 </div>
                 <div><span className={styles.copyright}>2023@SunFounder</span></div>
             </>
