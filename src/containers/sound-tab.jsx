@@ -380,9 +380,8 @@ const mapDispatchToProps = dispatch => ({
                 // 其他平台不支持录音
                 console.log("当前平台不支持录音");
             }
-        }else{
-            dispatch(openSoundRecorder());
         }
+        dispatch(openSoundRecorder());
     },
     onRequestCloseSoundLibrary: () => {
         dispatch(closeSoundLibrary());
