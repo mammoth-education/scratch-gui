@@ -200,7 +200,10 @@ class MenuBar extends React.Component {
     
     
     componentDidMount () {
-        this.check();
+        // ios 端需要时间加载 cordova-plugin-advanced-http 插件
+        setTimeout(() => {
+            this.check();
+          }, 1000);
         document.addEventListener('keydown', this.handleKeyPress);
     }
     componentWillUnmount () {
