@@ -192,13 +192,15 @@ class MenuBar extends React.Component {
             'handleClickUserProjects',
             'onClickLogo',
             'cancel',
-            'getVersion'
+            'getVersion',
+            'check'
         ]);
-        this.state={versionShow:false,version:""};
+        this.state={versionShow:false,checkingContent:"",updateTips:false,loading:false};
     }
     
     
     componentDidMount () {
+        this.check();
         document.addEventListener('keydown', this.handleKeyPress);
     }
     componentWillUnmount () {
@@ -397,21 +399,49 @@ class MenuBar extends React.Component {
         this.setState({versionShow:!versionShow})
     }
     cancel(){
-        this.setState({ versionShow: false });
+        this.setState({ versionShow: false ,loading: false,updateTips:false});
     }
     getVersion(){
         // 获取应用程序的版本号
         if(window.cordova){
             cordova.getAppVersion.getVersionNumber().then(function (appVersion) {
                 let version = appVersion
-                this.setState({version:version})
-                return appVersion
+                console.log("Current version",version)
             }).catch(function (error) {
                 console.log('获取应用程序的版本号失败：' + error);
             });
+        }
+    }
+    check(){
+        this.setState({loading:true})
+        if(window.cordova){
+            cordova.plugin.http.get("https://ezblock.cc/app_v2/mammoth-coding/version.txt", {}, {}, (response) => {
+                var latestVersion = response.data;
+                console.log("latestVersion1",latestVersion)
+                this.setState({checkingContent: latestVersion,loading:false,updateTips:true})
+                latestVersion = latestVersion.split('.').pop();
+                cordova.getAppVersion.getVersionNumber().then( (appVersion) => {
+                    var currentVersion = appVersion;
+                    console.log("Current version1",currentVersion)
+                    currentVersion = currentVersion.split('.').pop();
+                    if(parseInt(latestVersion) > parseInt(currentVersion)){
+                        if(!this.state.versionShow){
+                            this.setState({versionShow:true})
+                        }
+                    }
+                }).catch(function (error) {
+                    console.log('获取应用程序的版本号失败：' + error);
+                });
+            }, function(error) {
+                console.error(error);
+            });
+        }
+    }
+    download(){
+        if(navigator.language == 'en-US'){
+            window.open("https://ezblock.com.cn/app_v2/mammoth-coding/index.html?lang=en");
         }else{
-            this.setState({version:"0.0.6"})
-            return "0.0.6"
+            window.open("https://ezblock.com.cn/app_v2/mammoth-coding/index.html");
         }
     }
     render () {
@@ -443,6 +473,45 @@ class MenuBar extends React.Component {
                 id="gui.menuBar.new"
             />
         );
+        const updateTips = (
+                <span  className={styles.check} onClick={this.check}>
+                    <FormattedMessage
+                        defaultMessage="Check updates"
+                        description="Used to display the app name"
+                        id="gui.connection.check-for-updates"
+                    />
+                </span>
+        )
+        const downloadLink = (
+            <>
+                <span className={styles.download} onClick={this.download}>
+                    <FormattedMessage
+                        defaultMessage="Download"
+                        description="Used to display the app name"
+                        id="gui.downloadApp"
+                    />
+                </span>
+            </>
+        )
+        const latestVersion = (
+            <>
+                <FormattedMessage
+                    defaultMessage="Latest Version"
+                    description="Used to display the app name"
+                    id="gui.connection.latest-version"
+                /> {this.state.checkingContent} {downloadLink}
+            </>
+        )
+        const loading = (
+            <div className={styles.loadingBox}>
+                <FormattedMessage
+                    defaultMessage="Checking"
+                    description="Used to display the app name"
+                    id="gui.checking"
+                /> 
+                <div className={styles.loading}><div></div><div></div><div></div><div></div></div>
+            </div>
+        )
         const version = (
             <>
                 <div className={styles.topics}>
@@ -463,6 +532,7 @@ class MenuBar extends React.Component {
                     />1.0.1
                     <span>2023-05-25</span>
                 </div>
+                <div className={styles.checkBox} >{this.state.loading ? loading : (this.state.updateTips ? latestVersion : updateTips)}</div>
                 <div><span className={styles.copyright}>2023@SunFounder</span></div>
             </>
         );
