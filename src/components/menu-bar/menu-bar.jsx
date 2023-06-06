@@ -419,12 +419,19 @@ class MenuBar extends React.Component {
                 var latestVersion = response.data;
                 console.log("latestVersion1",latestVersion)
                 this.setState({checkingContent: latestVersion,loading:false,updateTips:true})
-                latestVersion = latestVersion.split('.').pop();
+
+                var newFirstNumber = parseInt(latestVersion.substring(0, latestVersion.indexOf(".")));
+                var newSecondNumber = parseInt(latestVersion.substring(latestVersion.indexOf(".") + 1, latestVersion.lastIndexOf(".")));
+                var newThirdNumber = parseInt(latestVersion.substring(latestVersion.lastIndexOf(".") + 1));
+
                 cordova.getAppVersion.getVersionNumber().then( (appVersion) => {
                     var currentVersion = appVersion;
                     console.log("Current version1",currentVersion)
-                    currentVersion = currentVersion.split('.').pop();
-                    if(parseInt(latestVersion) > parseInt(currentVersion)){
+
+                    var oldFirstNumber = parseInt(currentVersion.substring(0, currentVersion.indexOf(".")));
+                    var oldSecondNumber = parseInt(currentVersion.substring(currentVersion.indexOf(".") + 1, currentVersion.lastIndexOf(".")));
+                    var oldThirdNumber = parseInt(currentVersion.substring(currentVersion.lastIndexOf(".") + 1));
+                    if (newFirstNumber > oldFirstNumber || newSecondNumber > oldSecondNumber || newThirdNumber > oldThirdNumber) {
                         if(!this.state.versionShow){
                             this.setState({versionShow:true})
                         }
