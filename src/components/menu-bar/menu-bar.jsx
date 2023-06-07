@@ -448,10 +448,14 @@ class MenuBar extends React.Component {
         }
     }
     download(){
-        if(navigator.language == 'en-US'){
-            window.open("https://ezblock.com.cn/app_v2/mammoth-coding/index.html?lang=en");
+        if(cordova.platformId == "ios"){
+            window.open("https://apps.apple.com/cn/app/%E9%95%BF%E6%AF%9B%E8%B1%A1%E7%BC%96%E7%A8%8B/id6448233669");
         }else{
-            window.open("https://ezblock.com.cn/app_v2/mammoth-coding/index.html");
+            if(navigator.language == 'en-US'){
+                window.open("https://ezblock.com.cn/app_v2/mammoth-coding/index.html?lang=en");
+            }else{
+                window.open("https://ezblock.com.cn/app_v2/mammoth-coding/index.html");
+            }
         }
     }
     render () {
