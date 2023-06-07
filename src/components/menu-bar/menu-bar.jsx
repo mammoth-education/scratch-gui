@@ -195,7 +195,7 @@ class MenuBar extends React.Component {
             'getVersion',
             'check'
         ]);
-        this.state={versionShow:false,checkingContent:"",updateTips:false,loading:false};
+        this.state={versionShow:false,checkingContent:"",updateTips:false,loading:false,downloadShow:false};
     }
     
     
@@ -436,7 +436,7 @@ class MenuBar extends React.Component {
                     var oldThirdNumber = parseInt(currentVersion.substring(currentVersion.lastIndexOf(".") + 1));
                     if (newFirstNumber > oldFirstNumber || newSecondNumber > oldSecondNumber || newThirdNumber > oldThirdNumber) {
                         if(!this.state.versionShow){
-                            this.setState({versionShow:true})
+                            this.setState({versionShow:true,downloadShow:true})
                         }
                     }
                 }).catch(function (error) {
@@ -500,6 +500,7 @@ class MenuBar extends React.Component {
                         description="Used to display the app name"
                         id="gui.downloadApp"
                     />
+                    <div className={styles.red}></div>
                 </span>
             </>
         )
@@ -509,7 +510,7 @@ class MenuBar extends React.Component {
                     defaultMessage="Latest Version"
                     description="Used to display the app name"
                     id="gui.connection.latest-version"
-                /> {this.state.checkingContent} {downloadLink}
+                /> {this.state.checkingContent} {this.state.downloadShow ?  downloadLink : null}
             </>
         )
         const loading = (
@@ -539,8 +540,8 @@ class MenuBar extends React.Component {
                         defaultMessage="version"
                         description="Used to display the version number"
                         id="gui.about.version"
-                    />1.0.1
-                    <span>2023-05-25</span>
+                    />1.0.2
+                    <span>2023-06-06</span>
                 </div>
                 <div className={styles.checkBox} >{this.state.loading ? loading : (this.state.updateTips ? latestVersion : updateTips)}</div>
                 <div><span className={styles.copyright}>2023@SunFounder</span></div>

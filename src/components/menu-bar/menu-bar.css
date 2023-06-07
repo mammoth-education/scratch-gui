@@ -380,4 +380,12 @@
     margin-left: 10px;
     font-weight: bold;
   }
- 
+ .red{
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: red;
+    display: inline-block;
+    border-radius: 50%;
+    margin-left: 4px;
+    margin-bottom: 8px;
+ }
