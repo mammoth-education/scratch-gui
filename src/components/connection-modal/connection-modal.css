@@ -516,3 +516,11 @@
 	border-radius: 0.25rem;
 	background-color: $motion-tertiary;
 }
+.help-img{
+    width: 100px;
+    height: 100px;
+}
+.help-link{
+    position: absolute;
+    top: 55%;
+}

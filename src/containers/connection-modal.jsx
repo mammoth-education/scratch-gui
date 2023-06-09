@@ -168,7 +168,10 @@ class ConnectionModal extends React.Component {
         });
     }
     handleHelp () {
-        window.open(this.state.extension.helpLink, '_blank');
+        // window.open(this.state.extension.helpLink, '_blank');
+        this.setState({
+            phase: PHASES.helpPage,
+        });
         analytics.event({
             category: 'extensions',
             action: 'help',
