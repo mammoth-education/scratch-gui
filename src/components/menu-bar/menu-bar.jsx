@@ -195,15 +195,18 @@ class MenuBar extends React.Component {
             'getVersion',
             'check'
         ]);
-        this.state={versionShow:false,checkingContent:"",updateTips:false,loading:false,downloadShow:false};
+        this.state={versionShow:false,checkingContent:"",updateTips:false,loading:false,downloadShow:false,updateShow:false};
     }
     
     
     componentDidMount () {
-        // ios 端需要时间加载 cordova-plugin-advanced-http 插件
-        setTimeout(() => {
-            this.check();
-          }, 1000);
+        if(window.cordova && window.cordova.platformId == "android"){
+            this.setState({updateShow:true});
+            // ios 端需要时间加载 cordova-plugin-advanced-http 插件
+            setTimeout(() => {
+                this.check();
+              }, 1000);
+        }
         document.addEventListener('keydown', this.handleKeyPress);
     }
     componentWillUnmount () {
@@ -448,15 +451,15 @@ class MenuBar extends React.Component {
         }
     }
     download(){
-        if(cordova.platformId == "ios"){
-            window.open("https://apps.apple.com/cn/app/%E9%95%BF%E6%AF%9B%E8%B1%A1%E7%BC%96%E7%A8%8B/id6448233669");
-        }else{
+        // if(cordova.platformId == "ios"){
+        //     window.open("https://apps.apple.com/cn/app/%E9%95%BF%E6%AF%9B%E8%B1%A1%E7%BC%96%E7%A8%8B/id6448233669");
+        // }else{
             if(navigator.language == 'en-US'){
                 window.open("https://ezblock.com.cn/app_v2/mammoth-coding/index.html?lang=en");
             }else{
                 window.open("https://ezblock.com.cn/app_v2/mammoth-coding/index.html");
             }
-        }
+        // }
     }
     render () {
         const saveNowMessage = (
@@ -544,10 +547,10 @@ class MenuBar extends React.Component {
                         defaultMessage="version"
                         description="Used to display the version number"
                         id="gui.about.version"
-                    />1.0.2
+                    />1.0.4
                     <span>2023-06-06</span>
                 </div>
-                <div className={styles.checkBox} >{this.state.loading ? loading : (this.state.updateTips ? latestVersion : updateTips)}</div>
+                {this.state.updateShow ? <div className={styles.checkBox} >{this.state.loading ? loading : (this.state.updateTips ? latestVersion : updateTips)}</div> : null}
                 <div><span className={styles.copyright}>2023@SunFounder</span></div>
             </>
         );
