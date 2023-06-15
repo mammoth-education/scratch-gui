@@ -13,3 +13,21 @@ body,
 
 /* @todo: move globally? Safe / side FX, for blocks particularly? */
 * { box-sizing: border-box; }
+
+/* body {
+    margin: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    height: calc(100% + env(safe-area-inset-bottom));
+    background-color: black;
+} */
+:root {
+    --notch-inset-top: 0px;
+    --notch-inset-right: 0px;
+    --notch-inset-bottom: 0px;
+    --notch-inset-left: 0px;
+}
+
+body {
+    padding: var(--notch-inset-top) var(--notch-inset-right) var(--notch-inset-bottom) var(--notch-inset-left);
+    /* background-color: $motion-primary; */
+    background-color: black;
+}
