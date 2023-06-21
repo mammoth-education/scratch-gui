@@ -49,13 +49,13 @@ export default appTarget => {
         window.onbeforeunload = () => true;
     }
     window.addEventListener("load",()=>{
-        if(window.cordova && window.cordova.platformId == "ios"){
+        if(window.cordova){
             // setTimeout(()=>{
                 
-                document.body.style.margin = 'env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)';
+                // document.body.style.margin = 'env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)';
                 // document.body.style.width = 'calc(100% - env(safe-area-inset-left) )';
-                document.body.style.width = 'calc(100% + env(safe-area-inset-left) )';
-                document.body.style.height = 'calc(100% + env(safe-area-inset-bottom))';
+                // document.body.style.width = 'calc(100% + env(safe-area-inset-left) )';
+                // document.body.style.height = 'calc(100% + env(safe-area-inset-bottom))';
                 // document.getElementsByTagName('html')[0].style.backgroundColor = 'hsla(177,100%,32%,1)';
                 // 固定全屏方向
                 // screen.orientation.lock('portrait');
@@ -63,9 +63,9 @@ export default appTarget => {
             // },100)
         }
     })
-    if(window.cordova && window.cordova.platformId == "android"){
-        screen.orientation.lock('landscape-primary');
-    }
+    // if(window.cordova && window.cordova.platformId == "android"){
+    //     screen.orientation.lock('landscape-primary');
+    // }
     document.addEventListener("visibilitychange", ()=>{
         if (document.visibilityState === "hidden") {
             if(window.cordova && window.cordova.platformId == "ios"){

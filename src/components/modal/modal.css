@@ -12,6 +12,18 @@
     background-color: $ui-modal-overlay;
     margin: var(--notch-inset-top) var(--notch-inset-right) var(--notch-inset-bottom) var(--notch-inset-left);
 }
+.modal-overlay-ios {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: $z-index-modal;
+    background-color: $ui-modal-overlay;
+    margin: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    width: calc(100% - env(safe-area-inset-left) );
+    height: 100% ;
+}
 
 .modal-content * {
     box-sizing: border-box;

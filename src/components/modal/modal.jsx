@@ -13,14 +13,19 @@ import helpIcon from '../../lib/assets/icon--help.svg';
 
 import styles from './modal.css';
 
-const ModalComponent = props => (
+const ModalComponent = props => {
+    let isMobile = false;
+    if(window.cordova && window.cordova.platformId == "ios"){
+        isMobile = true;
+    }
+    return(
     <ReactModal
         isOpen
         className={classNames(styles.modalContent, props.className, {
             [styles.fullScreen]: props.fullScreen
         })}
         contentLabel={props.contentLabel}
-        overlayClassName={styles.modalOverlay}
+        overlayClassName={isMobile ? styles.modalOverlayIos : styles.modalOverlay}
         onRequestClose={props.onRequestClose}
     >
         <Box
@@ -92,7 +97,7 @@ const ModalComponent = props => (
             {props.children}
         </Box>
     </ReactModal>
-);
+)};
 
 ModalComponent.propTypes = {
     children: PropTypes.node,

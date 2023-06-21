@@ -208,6 +208,8 @@ class MenuBar extends React.Component {
               }, 1000);
         }
         document.addEventListener('keydown', this.handleKeyPress);
+        // 为了解决iOS端全屏时block页面未填满屏幕
+        this.handleClickCostumesTab()
     }
     componentWillUnmount () {
         document.removeEventListener('keydown', this.handleKeyPress);
