@@ -33,6 +33,11 @@ const fixAndroidNotch = () => {
             style.setProperty("--notch-inset-left", px + "px");
         }, (err) => console.error("Failed to get insets left:", err));
     }
+    // HUAWEI 设备能用 env ，所有防止重复设置 body 的 width 和 padding 
+    if(window.cordova && device.manufacturer == "HUAWEI"){
+        document.body.style.width = 'calc(100% - env(safe-area-inset-left) )';
+        document.body.style.padding  = '0';
+    }
 };
 
 export default appTarget => {
