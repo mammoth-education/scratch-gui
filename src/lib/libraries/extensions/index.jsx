@@ -1,5 +1,5 @@
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import musicIconURL from './music/music.png';
 import musicInsetIconURL from './music/music-small.svg';
@@ -51,14 +51,60 @@ import kakaInsetIconURL from './kaka/kaka-small.svg';
 import kakaConnectionIconURL from './kaka/kaka-illustration.svg';
 import kakaConnectionSmallIconURL from './kaka/kaka-small.svg';
 
-let platform = "browser";
+import galaxyRVRIconURL from './galaxyRVR/galaxyRVR.jpg';
+import galaxyRVRInsetIconURL from './galaxyRVR/galaxyRVR-small.svg';
+import galaxyRVRConnectionIconURL from './galaxyRVR/galaxyRVR-illustration.svg';
+import galaxyRVRConnectionSmallIconURL from './galaxyRVR/galaxyRVR-small.svg';
+
+let platform = "browsers";
 if (window.cordova && window.cordova.platformId !== "browser") {
     platform = window.cordova.platformId;
 } else if (navigator.userAgent.indexOf("Electron/") > 0) {
     platform = "electron";
 }
 
+// 添加拓展
 export default [
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="火星车"
+                description="长毛象 火星车 extension"
+                id="gui.extension.galaxyRVR.name"
+            />
+        ),
+        extensionId: 'galaxyRVR',
+        iconURL: galaxyRVRIconURL,
+        insetIconURL: galaxyRVRInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="galaxyRVR"
+                description="Description for the 'GalaxyRVR' extension"
+                id="gui.extension.galaxyRVR.description"
+            />
+        ),
+        internetConnectionRequired: true,  //wifi图标
+        featured: true,
+        disabled: false,
+        // bluetoothRequired: true,  // 蓝牙图标
+        launchPeripheralConnectionFlow: true,
+        deviceNameEditable: true,
+        wireless: true, //WIFI连方式
+        firmwareFlashable: false,
+        deviceWifiEditable: true,
+        useAutoScan: platform === "browser" ? true : false,
+        connectionIconURL: galaxyRVRConnectionIconURL,
+        connectionSmallIconURL: galaxyRVRConnectionSmallIconURL,
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their galaxyRVR."
+                id="gui.extension.galaxyRVR.connectingMessage"
+            />
+        ),
+        // 帮助链接
+        helpLink: 'https://kaka-kit.readthedocs.io/en/latest/quickstart.html#' // TODO  
+    },
     {
         name: (
             <FormattedMessage
@@ -81,6 +127,7 @@ export default [
         disabled: false,
         bluetoothRequired: true,
         launchPeripheralConnectionFlow: true,
+        // setWifiButton: true,
         deviceNameEditable: true,
         firmwareFlashable: true,
         useAutoScan: platform === "browser" ? true : false,
