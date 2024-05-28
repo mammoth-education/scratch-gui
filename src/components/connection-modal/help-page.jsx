@@ -18,7 +18,18 @@ const HelpPage = props => (
                         src={help}
                     />
                 </React.Fragment>
+                {/* 由于APP上架不通过，原因好像是上架时设置为适用于儿童，无法使用跳转链接 */}
                 <p className={styles.helpLink}>kaka-kit.rtfd.io</p>
+                <button
+                    className={styles.copyButton}
+                    onClick={props.onCopy}
+                >
+                    <FormattedMessage
+                        defaultMessage="Copy"
+                        description="copyUrl"
+                        id="gui.connection.copyUrl"
+                    />
+                </button>
             </Box>
         </Box>
         <Box className={styles.bottomArea}>
@@ -29,7 +40,7 @@ const HelpPage = props => (
             />
             <button
                 className={classNames(styles.bottomAreaItem, styles.connectionButton)}
-                onClick={props.onReconnect}
+                onClick={props.onRenameCancel}
             >
                 <FormattedMessage
                     defaultMessage="back"
@@ -39,7 +50,7 @@ const HelpPage = props => (
             </button>
         </Box>
     </Box>
-    
+
 
 
 );
