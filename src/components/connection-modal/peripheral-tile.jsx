@@ -1,4 +1,4 @@
-import {FormattedMessage} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import React from 'react';
@@ -8,16 +8,16 @@ import Box from '../box/box.jsx';
 import styles from './connection-modal.css';
 
 class PeripheralTile extends React.Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         bindAll(this, [
             'handleConnecting'
         ]);
     }
-    handleConnecting () {
+    handleConnecting() {
         this.props.onConnecting(this.props.peripheralId);
     }
-    render () {
+    render() {
         return (
             <Box className={styles.peripheralTile}>
                 <Box className={styles.peripheralTileName}>
@@ -34,7 +34,7 @@ class PeripheralTile extends React.Component {
                             />
                         </Box>
                         <Box className={styles.peripheralTileNameText}>
-                            {this.props.name}
+                            {this.props.name} ({this.props.ip})
                         </Box>
                     </Box>
                 </Box>

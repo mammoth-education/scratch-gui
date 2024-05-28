@@ -5,7 +5,7 @@ import ScanningStepComponent from '../components/connection-modal/scanning-step.
 import VM from 'scratch-vm';
 
 class ScanningStep extends React.Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         bindAll(this, [
             'handlePeripheralListUpdate',
@@ -15,55 +15,55 @@ class ScanningStep extends React.Component {
         this.state = {
             scanning: true,
             peripheralList: [],
-            refreshClick:true,
+            refreshClick: true,
         };
     }
-    componentDidMount () {
+    componentDidMount() {
         this.props.vm.scanForPeripheral(this.props.extensionId);
         this.props.vm.on(
             'PERIPHERAL_LIST_UPDATE', this.handlePeripheralListUpdate);
         this.props.vm.on(
             'PERIPHERAL_SCAN_TIMEOUT', this.handlePeripheralScanTimeout);
     }
-    componentWillUnmount () {
+    componentWillUnmount() {
         // @todo: stop the peripheral scan here
         this.props.vm.removeListener(
             'PERIPHERAL_LIST_UPDATE', this.handlePeripheralListUpdate);
         this.props.vm.removeListener(
             'PERIPHERAL_SCAN_TIMEOUT', this.handlePeripheralScanTimeout);
     }
-    handlePeripheralScanTimeout () {
+    handlePeripheralScanTimeout() {
         this.setState({
             scanning: false,
             peripheralList: []
         });
     }
-    handlePeripheralListUpdate (newList) {
+    handlePeripheralListUpdate(newList) {
         // TODO: sort peripherals by signal strength? so they don't jump around
         const peripheralArray = Object.keys(newList).map(id =>
             newList[id]
         );
-        this.setState({peripheralList: peripheralArray});
+        this.setState({ peripheralList: peripheralArray });
     }
-    handleRefresh () {
+    handleRefresh() {
         console.log(this.state.refreshClick)
-        if(!this.state.refreshClick){
+        if (!this.state.refreshClick) {
             return;
         }
         let refreshClick = this.state.refreshClick;
-        this.setState({refreshClick: !refreshClick});
+        this.setState({ refreshClick: !refreshClick });
         this.props.vm.scanForPeripheral(this.props.extensionId);
         this.setState({
             scanning: true,
             peripheralList: []
         });
         // 设置节流  防止用户连续点击刷新导致闪退
-        setTimeout(()=>{
+        setTimeout(() => {
             let refreshClick = this.state.refreshClick;
-            this.setState({refreshClick: !refreshClick});
-        },500)
+            this.setState({ refreshClick: !refreshClick });
+        }, 500)
     }
-    render () {
+    render() {
         return (
             <ScanningStepComponent
                 connectionSmallIconURL={this.props.connectionSmallIconURL}
@@ -77,6 +77,7 @@ class ScanningStep extends React.Component {
                 onFlashFirmware={this.props.onFlashFirmware}
                 onRefresh={this.handleRefresh}
                 isMobile={this.props.isMobile}
+                currentWifiName={this.props.currentWifiName}
             />
         );
     }

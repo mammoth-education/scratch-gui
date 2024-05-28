@@ -1,4 +1,4 @@
-import {FormattedMessage} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
@@ -34,14 +34,15 @@ const ScanningStep = props => (
                 ) : (
                     <div className={styles.peripheralTilePane}>
                         {props.peripheralList.map(peripheral =>
-                            (<PeripheralTile
-                                connectionSmallIconURL={props.connectionSmallIconURL}
-                                key={peripheral.peripheralId}
-                                name={peripheral.name}
-                                peripheralId={peripheral.peripheralId}
-                                rssi={peripheral.rssi}
-                                onConnecting={props.onConnecting}
-                            />)
+                        (<PeripheralTile
+                            connectionSmallIconURL={props.connectionSmallIconURL}
+                            key={peripheral.peripheralId}
+                            name={peripheral.name}
+                            ip={peripheral.ip}
+                            peripheralId={peripheral.peripheralId}
+                            rssi={peripheral.rssi}
+                            onConnecting={props.onConnecting}
+                        />)
                         )}
                     </div>
                 )
@@ -56,6 +57,14 @@ const ScanningStep = props => (
             )}
         </Box>
         <Box className={styles.bottomArea}>
+            <Box className={classNames(styles.bottomAreaItem, styles.instructions)}>
+                <FormattedMessage
+                    defaultMessage="Select your device in the list above."
+                    description="Prompt for choosing a device to connect to"
+                    id="gui.connection.curren-WIFI"
+                />
+                <span>{props.currentWifiName}</span>
+            </Box>
             <Box className={classNames(styles.bottomAreaItem, styles.instructions)}>
                 <FormattedMessage
                     defaultMessage="Select your device in the list above."
