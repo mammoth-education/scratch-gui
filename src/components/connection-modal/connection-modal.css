@@ -23,6 +23,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .centered-col {
@@ -33,7 +34,7 @@
 }
 
 .space-evenly-column {
-    height:100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -123,10 +124,21 @@
     background-color: #DBDBDB;
 }
 
-.signal-bar:nth-of-type(1) { height: 25%; }
-.signal-bar:nth-of-type(2) { height: 50%; }
-.signal-bar:nth-of-type(3) { height: 75%; }
-.signal-bar:nth-of-type(4) { height: 100%; }
+.signal-bar:nth-of-type(1) {
+    height: 25%;
+}
+
+.signal-bar:nth-of-type(2) {
+    height: 50%;
+}
+
+.signal-bar:nth-of-type(3) {
+    height: 75%;
+}
+
+.signal-bar:nth-of-type(4) {
+    height: 100%;
+}
 
 .green-bar {
     background-color: $pen-primary;
@@ -213,11 +225,25 @@
 }
 
 @keyframes wiggle {
-    0% {transform: rotate(3deg) scale(1.05);}
-    25% {transform: rotate(-3deg) scale(1.05);}
-    50% {transform: rotate(5deg) scale(1.05);}
-    75% {transform: rotate(-2deg) scale(1.05);}
-    100% {transform: rotate(0deg) scale(1.05);}
+    0% {
+        transform: rotate(3deg) scale(1.05);
+    }
+
+    25% {
+        transform: rotate(-3deg) scale(1.05);
+    }
+
+    50% {
+        transform: rotate(5deg) scale(1.05);
+    }
+
+    75% {
+        transform: rotate(-2deg) scale(1.05);
+    }
+
+    100% {
+        transform: rotate(0deg) scale(1.05);
+    }
 }
 
 .bluetooth-centered-icon {
@@ -234,12 +260,27 @@
 }
 
 .activityArea {
+    /* min-height: 165px; */
     height: 165px;
     background-color: $motion-light-transparent;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: .5rem;
+}
+
+.setActivityArea {
+    background-color: $motion-light-transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .5rem;
+}
+
+.inputBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .scratch-link-help {
@@ -347,6 +388,7 @@
 [dir="ltr"] .button-icon-right {
     margin-left: 0.5rem;
 }
+
 [dir="rtl"] .button-icon-right {
     margin-right: 0.5rem;
 }
@@ -505,22 +547,42 @@
 }
 
 .error-message::-webkit-scrollbar-track {
-	border-radius: 10px;
-	background-color: $ui-white-transparent;
+    border-radius: 10px;
+    background-color: $ui-white-transparent;
 }
+
 .error-message::-webkit-scrollbar {
     width: 0.5rem;
     height: 0.5rem;
 }
+
 .error-message::-webkit-scrollbar-thumb {
-	border-radius: 0.25rem;
-	background-color: $motion-tertiary;
+    border-radius: 0.25rem;
+    background-color: $motion-tertiary;
 }
-.help-img{
+
+.help-img {
     width: 100px;
     height: 100px;
 }
-.help-link{
+
+.help-link {
     position: absolute;
     top: 55%;
+}
+
+.set-title {
+    width: 100%;
+    padding: 5px 0;
+}
+
+.set-tips {
+    padding-left: 10px;
+    width: 4rem;
+}
+
+.copyButton {
+    position: absolute;
+    top: 60%;
+    left: 64%;
 }

@@ -16,6 +16,7 @@ import RenameDeviceSuccessStep from './rename-device-success-step.jsx';
 import FlashFirmwareStep from './flash-firmware-step.jsx';
 import FlashFirmwareSuccessStep from './flash-firmware-success-step.jsx';
 import FlashFirmwareErrorStep from './flash-firmware-error-step.jsx';
+import SettingWiFiSteps from './setting-wiFi-steps.jsx';
 import HelpPage from './help-page.jsx';
 
 import styles from './connection-modal.css';
@@ -31,7 +32,8 @@ const PHASES = keyMirror({
     flashFirmware: null,
     flasheFirmwareSuccess: null,
     flashFirmwareError: null,
-    helpPage:null,
+    settingWiFi: null,
+    helpPage: null,
 });
 
 const ConnectionModalComponent = props => (
@@ -56,6 +58,7 @@ const ConnectionModalComponent = props => (
             {props.phase === PHASES.flashFirmware && <FlashFirmwareStep {...props} />}
             {props.phase === PHASES.flasheFirmwareSuccess && <FlashFirmwareSuccessStep {...props} />}
             {props.phase === PHASES.flasheFirmwareError && <FlashFirmwareErrorStep {...props} />}
+            {props.phase === PHASES.settingWiFi && <SettingWiFiSteps {...props} />}
             {props.phase === PHASES.helpPage && <HelpPage {...props} />}
         </Box>
     </Modal>
