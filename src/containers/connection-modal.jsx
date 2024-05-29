@@ -525,6 +525,7 @@ class ConnectionModal extends React.Component {
                         bluetooth={this.state.extension && this.state.extension.bluetooth}
                         firmwareFlashable={this.state.extension && this.state.extension.firmwareFlashable}
                         deviceWifiEditable={this.state.extension && this.state.extension.deviceWifiEditable}
+                        calibrationRequired={this.state.extension && this.state.extension.calibrationRequired}
                         deviceName={this.state.deviceName}
                         currentWifiName={this.state.currentWifiName}
                         currentWifiIP={this.state.currentWifiIP}
