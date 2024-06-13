@@ -146,17 +146,17 @@ const GUIComponent = props => {
 
     let isMobile = false;
     let localProjectsVisible = false;
-    if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android') ||
+    if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android') || navigator.platform.indexOf('iPad') === -1 ||
         navigator.userAgent.indexOf('Mobile') > -1) {
         isMobile = true;
         localProjectsVisible = true;
     }
-    
+
     let isSmallDevice = false;
     if (window.screen.width < layout.fullSizeMinWidth || window.innerWidth < layout.fullSizeMinWidth) {
         isSmallDevice = true;
     }
-    
+
     const tabClassNames = {
         tabs: styles.tabs,
         tab: classNames(tabStyles.reactTabsTab, styles.tab),
@@ -172,7 +172,7 @@ const GUIComponent = props => {
 
     return (<MediaQuery minWidth={layout.fullSizeMinWidth}>{isFullSize => {
         const stageSize = resolveStageSize(stageSizeMode, isFullSize);
-      
+
         return isPlayerOnly ? (
             <StageWrapper
                 isFullScreen={isFullScreen}
@@ -245,7 +245,7 @@ const GUIComponent = props => {
                         title={intl.formatMessage(messages.myProjects)}
                         onOpenProject={onOpenProject}
                         onDeleteProject={onDeleteProject}
-                        alertsVisible = {alertsVisible}
+                        alertsVisible={alertsVisible}
                     />
                 ) : null}
                 <MenuBar
@@ -288,7 +288,7 @@ const GUIComponent = props => {
                     localProjectsVisible={localProjectsVisible}
                     editMenuVisible={false}
                     isMobile={isMobile}
-                    alertsVisible = {alertsVisible}
+                    alertsVisible={alertsVisible}
                 />
                 <Box className={styles.bodyWrapper}>
                     <Box className={styles.flexWrapper}>
@@ -349,7 +349,7 @@ const GUIComponent = props => {
                                             id="gui.gui.soundsTab"
                                         />
                                     </Tab>
-                                    { isSmallDevice && 
+                                    {isSmallDevice &&
                                         <Tab
                                             className={tabClassNames.tab}
                                             onClick={onActivateStageTab}
@@ -381,7 +381,7 @@ const GUIComponent = props => {
                                         />
                                     </Box>
                                     {/* 添加拓展 */}
-                                    <Box className={ styles.extensionButtonContainer}>
+                                    <Box className={styles.extensionButtonContainer}>
                                         <button
                                             className={styles.extensionButton}
                                             title={intl.formatMessage(messages.addExtension)}
@@ -397,11 +397,11 @@ const GUIComponent = props => {
                                     <Box className={styles.watermark}>
                                         <Watermark />
                                     </Box>
-                                    { !isFullScreen && <Box className={classNames(
+                                    {!isFullScreen && <Box className={classNames(
                                         styles.smallDeviceStagePanel,
                                         { [styles.fullScreen]: isFullScreen })
                                     }>
-                                        <Controls vm={vm} className={styles.flexVertical}/>
+                                        <Controls vm={vm} className={styles.flexVertical} />
                                         {/* 全屏切换按钮 */}
                                         <FullscreenButton />
                                         {/* 显示隐藏舞台预览窗按钮*/}
@@ -410,16 +410,16 @@ const GUIComponent = props => {
                                                 src={stagePreviewVisible ? eyeSlashFillIcon : eyeFillIcon}
                                             />
                                         </button>
-                                    </Box> }
+                                    </Box>}
                                 </TabPanel>
                                 <TabPanel className={tabClassNames.tabPanel}>
-                                    {costumesTabVisible && <CostumeTab vm={vm} isMobile={isMobile}/>}
+                                    {costumesTabVisible && <CostumeTab vm={vm} isMobile={isMobile} />}
                                 </TabPanel>
                                 <TabPanel className={tabClassNames.tabPanel}>
-                                    {soundsTabVisible && <SoundTab vm={vm}  isMobile={isMobile}/>}
+                                    {soundsTabVisible && <SoundTab vm={vm} isMobile={isMobile} />}
                                 </TabPanel>
-                                { isSmallDevice && <TabPanel className={tabClassNames.tabPanel}>
-                                    {stageTabVisible && <StageAndTargetWrapper 
+                                {isSmallDevice && <TabPanel className={tabClassNames.tabPanel}>
+                                    {stageTabVisible && <StageAndTargetWrapper
                                         isFullScreen={isFullScreen}
                                         isRendererSupported={isRendererSupported}
                                         isRtl={isRtl}
@@ -428,10 +428,10 @@ const GUIComponent = props => {
                                         stageSize={stageSize}
                                         vm={vm}
                                     />}
-                                </TabPanel> }
+                                </TabPanel>}
                             </Tabs>
-                            { blocksTabVisible && <div className={styles.stageAndTarget}>
-                                <StageAndTargetWrapper 
+                            {blocksTabVisible && <div className={styles.stageAndTarget}>
+                                <StageAndTargetWrapper
                                     isFullScreen={isFullScreen}
                                     isRendererSupported={isRendererSupported}
                                     isRtl={isRtl}
@@ -442,8 +442,8 @@ const GUIComponent = props => {
                                     isSmallDevice={isSmallDevice}
                                     vm={vm}
                                 />
-                            </div> }
-                            { backpackVisible && <Backpack host={backpackHost} /> }
+                            </div>}
+                            {backpackVisible && <Backpack host={backpackHost} />}
                         </Box>
                     </Box>
                 </Box>
@@ -451,7 +451,7 @@ const GUIComponent = props => {
             </Box>
         );
     }}</MediaQuery>);
-  };
+};
 
 GUIComponent.propTypes = {
     accountNavOpen: PropTypes.bool,
