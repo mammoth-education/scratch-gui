@@ -338,6 +338,12 @@ class ConnectionModal extends React.Component {
         } else {
             this.setState({ phase: PHASES.connected });
         }
+        this.setState({
+            renameState: false,
+            apPasswordState: false,
+            staSsidState: false,
+            staPasswordState: false,
+        })
         analytics.event({
             category: 'extensions',
             action: 'cancelRenameDevice',
