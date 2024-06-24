@@ -85,10 +85,36 @@ const SettingWiFiSteps = props => {
             <input className={styles.deviceNameInput}
               type="text"
               placeholder="请输入SSID"
-              // value={props.deviceName}
+              value={props.staSsid}
               // maxlength="10"
               onChange={props.onWifiSSIDChanged}
+              onClick={props.onSSIDInputClick}
+              onFocus={props.onScanWifi}
+              onBlur={props.onSSIDInputBlur}
             />
+            {props.showDropdown && (
+              <div className={styles.dropdownMenu}>
+                {props.networksList.length > 0 ? (
+                  props.networksList.map((network, index) => (
+                    <div
+                      className={styles.dropdownItem}
+                      key={index}
+                      onClick={() => props.onOptionClick(network.ssid)}
+                    >
+                      {network.ssid}
+                    </div>
+                  ))
+                ) : (
+                  <div>
+                    <FormattedMessage
+                      defaultMessage="Searching..."
+                      description="Searching..."
+                      id="gui.connection.scan-wifi"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
             {
               <Box className={styles.setTips}>
                 {

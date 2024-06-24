@@ -281,6 +281,29 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+}
+
+.dropdown-item {
+    margin: 10px;
+}
+
+.dropdown-menu {
+    position: absolute;
+    background-color: antiquewhite;
+    width: calc(100% - 4rem);
+    max-height: 7rem;
+    overflow: scroll;
+    top: 2rem;
+    z-index: 1;
+    scrollbar-width: none;
+    left: 0;
+    /* background-color: $motion-light-transparent; */
+}
+
+.dropdown-menu::-webkit-scrollbar {
+    width: 2px;
+    /* height: 12px; */
 }
 
 .scratch-link-help {

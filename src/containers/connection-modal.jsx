@@ -55,6 +55,10 @@ class ConnectionModal extends React.Component {
             'handleSetButton',
             'handleReconnect',
             'handleCalibration',
+            'handleScanWifi',
+            'handleOptionClick',
+            'handleSSIDInputBlur',
+            'handleSSIDInputClick',
             "determine",
             "cancel",
         ]);
@@ -79,6 +83,8 @@ class ConnectionModal extends React.Component {
             apPasswordState: false,
             staPasswordState: false,
             staSsidState: false,
+            networksList: [],
+            showDropdown: false,
         };
     }
     componentDidMount() {
@@ -139,6 +145,7 @@ class ConnectionModal extends React.Component {
     componentWillUnmount() {
         this.props.vm.removeListener('PERIPHERAL_CONNECTED', this.handleConnected);
         this.props.vm.removeListener('PERIPHERAL_REQUEST_ERROR', this.handleError);
+        clearInterval(this.intervalId);
     }
     // 刷新
     handleScanning() {
@@ -504,6 +511,40 @@ class ConnectionModal extends React.Component {
         this.props.vm.calibration(this.props.extensionId, true);
     }
 
+    handleOptionClick = (option) => {
+        this.setState({
+            ssid: option,
+            showDropdown: false
+        });
+    };
+
+    handleSSIDInputBlur = () => {
+        setTimeout(() => {
+            this.setState({ showDropdown: false });
+        }, 200);
+    }
+
+    handleSSIDInputClick = () => {
+        this.setState({
+            showDropdown: true
+        })
+    }
+
+    handleScanWifi() {
+        let restart = { "command": "scan-wifi" };
+        this.props.vm.settingDeviceWiFi(this.props.extensionId, restart);
+        let networks;
+        let intervalId = setInterval(() => {
+            networks = this.props.vm.getWebSocketData(this.props.extensionId);
+            console.log("webSocketData", networks);
+            if (networks) {
+                this.setState({ networksList: networks._networks, });
+                //清除定时器
+                clearInterval(intervalId);
+            }
+        }, 2000);
+    }
+
     render() {
         localStorage.setItem("deviceName", this.state.deviceName)
         return (
@@ -539,6 +580,13 @@ class ConnectionModal extends React.Component {
                         apPasswordState={this.state.apPasswordState}
                         staSsidState={this.state.staSsidState}
                         staPasswordState={this.state.staPasswordState}
+                        networksList={this.state.networksList}
+                        showDropdown={this.state.showDropdown}
+                        staSsid={this.state.ssid}
+                        onScanWifi={this.handleScanWifi}
+                        onOptionClick={this.handleOptionClick}
+                        onSSIDInputBlur={this.handleSSIDInputBlur}
+                        onSSIDInputClick={this.handleSSIDInputClick}
                         onRenameDevice={this.handleRename}
                         onSetButton={this.handleSetButton}
                         vm={this.props.vm}
