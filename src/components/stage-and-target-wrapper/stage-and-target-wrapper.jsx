@@ -20,6 +20,7 @@ const StageAndTargetWrapper = props => {
         isSmallDevice,
         stageSize,
         stagePreviewVisible,
+        selectedTabIndex,
         vm,
         ...componentProps
     } = omit(props, 'dispatch');
@@ -35,16 +36,19 @@ const StageAndTargetWrapper = props => {
                 stagePreviewVisible={stagePreviewVisible}
                 vm={vm}
                 isPreview={isPreview}
+                selectedTabIndex={selectedTabIndex}
                 {...props}
             />
-            { <Box className={classNames(styles.targetWrapper, isPreview ? styles.preview : null)}>
+            {<Box className={classNames(styles.targetWrapper, isPreview ? styles.preview : null)}>
                 <TargetPane
                     stageSize={stageSize}
                     vm={vm}
                     isMobile={isMobile}
+                    selectedTabIndex={selectedTabIndex}
+                    isSmallDevice={isSmallDevice}
                     {...componentProps}
                 />
-            </Box> }
+            </Box>}
         </Box>
     )
 }

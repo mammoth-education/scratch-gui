@@ -1,31 +1,31 @@
 import bindAll from 'lodash.bindall';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {intlShape, injectIntl} from 'react-intl';
+import { connect } from 'react-redux';
+import { intlShape, injectIntl } from 'react-intl';
 
 import {
     openSpriteLibrary,
     closeSpriteLibrary
 } from '../reducers/modals';
-import {activateTab, COSTUMES_TAB_INDEX, BLOCKS_TAB_INDEX,STAGE_TAB_INDEX} from '../reducers/editor-tab';
-import {setReceivedBlocks} from '../reducers/hovered-target';
-import {showStandardAlert, closeAlertWithId} from '../reducers/alerts';
-import {setRestore} from '../reducers/restore-deletion';
+import { activateTab, COSTUMES_TAB_INDEX, BLOCKS_TAB_INDEX, STAGE_TAB_INDEX } from '../reducers/editor-tab';
+import { setReceivedBlocks } from '../reducers/hovered-target';
+import { showStandardAlert, closeAlertWithId } from '../reducers/alerts';
+import { setRestore } from '../reducers/restore-deletion';
 import DragConstants from '../lib/drag-constants';
 import TargetPaneComponent from '../components/target-pane/target-pane.jsx';
-import {BLOCKS_DEFAULT_SCALE} from '../lib/layout-constants';
+import { BLOCKS_DEFAULT_SCALE } from '../lib/layout-constants';
 import spriteLibraryContent from '../lib/libraries/sprites.json';
-import {handleFileUpload, spriteUpload} from '../lib/file-uploader.js';
+import { handleFileUpload, spriteUpload } from '../lib/file-uploader.js';
 import sharedMessages from '../lib/shared-messages';
-import {emptySprite} from '../lib/empty-assets';
-import {highlightTarget} from '../reducers/targets';
-import {fetchSprite, fetchCode} from '../lib/backpack-api';
+import { emptySprite } from '../lib/empty-assets';
+import { highlightTarget } from '../reducers/targets';
+import { fetchSprite, fetchCode } from '../lib/backpack-api';
 import randomizeSpritePosition from '../lib/randomize-sprite-position';
 import downloadBlob from '../lib/download-blob';
 
 class TargetPane extends React.Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         bindAll(this, [
             'handleActivateBlocksTab',
@@ -50,34 +50,34 @@ class TargetPane extends React.Component {
             'setFileInput'
         ]);
     }
-    componentDidMount () {
+    componentDidMount() {
         this.props.vm.addListener('BLOCK_DRAG_END', this.handleBlockDragEnd);
     }
-    componentWillUnmount () {
+    componentWillUnmount() {
         this.props.vm.removeListener('BLOCK_DRAG_END', this.handleBlockDragEnd);
     }
-    handleChangeSpriteDirection (direction) {
-        this.props.vm.postSpriteInfo({direction});
+    handleChangeSpriteDirection(direction) {
+        this.props.vm.postSpriteInfo({ direction });
     }
-    handleChangeSpriteRotationStyle (rotationStyle) {
-        this.props.vm.postSpriteInfo({rotationStyle});
+    handleChangeSpriteRotationStyle(rotationStyle) {
+        this.props.vm.postSpriteInfo({ rotationStyle });
     }
-    handleChangeSpriteName (name) {
+    handleChangeSpriteName(name) {
         this.props.vm.renameSprite(this.props.editingTarget, name);
     }
-    handleChangeSpriteSize (size) {
-        this.props.vm.postSpriteInfo({size});
+    handleChangeSpriteSize(size) {
+        this.props.vm.postSpriteInfo({ size });
     }
-    handleChangeSpriteVisibility (visible) {
-        this.props.vm.postSpriteInfo({visible});
+    handleChangeSpriteVisibility(visible) {
+        this.props.vm.postSpriteInfo({ visible });
     }
-    handleChangeSpriteX (x) {
-        this.props.vm.postSpriteInfo({x});
+    handleChangeSpriteX(x) {
+        this.props.vm.postSpriteInfo({ x });
     }
-    handleChangeSpriteY (y) {
-        this.props.vm.postSpriteInfo({y});
+    handleChangeSpriteY(y) {
+        this.props.vm.postSpriteInfo({ y });
     }
-    handleDeleteSprite (id) {
+    handleDeleteSprite(id) {
         const restoreSprite = this.props.vm.deleteSprite(id);
         const restoreFun = () => restoreSprite().then(this.handleActivateBlocksTab);
 
@@ -87,10 +87,10 @@ class TargetPane extends React.Component {
         });
 
     }
-    handleDuplicateSprite (id) {
+    handleDuplicateSprite(id) {
         this.props.vm.duplicateSprite(id);
     }
-    handleExportSprite (id) {
+    handleExportSprite(id) {
         const spriteName = this.props.vm.runtime.getTargetById(id).getName();
         const saveLink = document.createElement('a');
         document.body.appendChild(saveLink);
@@ -99,13 +99,13 @@ class TargetPane extends React.Component {
             downloadBlob(`${spriteName}.sprite3`, content);
         });
     }
-    handleSelectSprite (id) {
+    handleSelectSprite(id) {
         this.props.vm.setEditingTarget(id);
         if (this.props.stage && id !== this.props.stage.id) {
             this.props.onHighlightTarget(id);
         }
     }
-    handleSurpriseSpriteClick () {
+    handleSurpriseSpriteClick() {
         const surpriseSprites = spriteLibraryContent.filter(sprite =>
             (sprite.tags.indexOf('letters') === -1) && (sprite.tags.indexOf('numbers') === -1)
         );
@@ -114,12 +114,12 @@ class TargetPane extends React.Component {
         this.props.vm.addSprite(JSON.stringify(item))
             .then(this.handleActivateBlocksTab);
     }
-    handlePaintSpriteClick () {
+    handlePaintSpriteClick() {
         const formatMessage = this.props.intl.formatMessage;
         const emptyItem = emptySprite(
-            formatMessage(sharedMessages.sprite, {index: 1}),
+            formatMessage(sharedMessages.sprite, { index: 1 }),
             formatMessage(sharedMessages.pop),
-            formatMessage(sharedMessages.costume, {index: 1})
+            formatMessage(sharedMessages.costume, { index: 1 })
         );
         this.props.vm.addSprite(JSON.stringify(emptyItem)).then(() => {
             setTimeout(() => { // Wait for targets update to propagate before tab switching
@@ -127,23 +127,23 @@ class TargetPane extends React.Component {
             });
         });
     }
-    handleActivateBlocksTab () {
+    handleActivateBlocksTab() {
         // this.props.onActivateTab(BLOCKS_TAB_INDEX);
         if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android') ||
             navigator.userAgent.indexOf('Mobile') > -1) {
             this.props.onActivateTab(STAGE_TAB_INDEX);
-        }else{
+        } else {
             this.props.onActivateTab(BLOCKS_TAB_INDEX);
         }
     }
-    handleNewSprite (spriteJSONString) {
+    handleNewSprite(spriteJSONString) {
         return this.props.vm.addSprite(spriteJSONString)
             .then(this.handleActivateBlocksTab);
     }
-    handleFileUploadClick () {
+    handleFileUploadClick() {
         this.fileInput.click();
     }
-    handleSpriteUpload (e) {
+    handleSpriteUpload(e) {
         console.log("上传精灵图");
         const storage = this.props.vm.runtime.storage;
         this.props.onShowImporting();
@@ -159,16 +159,16 @@ class TargetPane extends React.Component {
             }, this.props.onCloseImporting);
         }, this.props.onCloseImporting);
     }
-    setFileInput (input) {
+    setFileInput(input) {
         this.fileInput = input;
     }
-    handleBlockDragEnd (blocks) {
+    handleBlockDragEnd(blocks) {
         if (this.props.hoveredTarget.sprite && this.props.hoveredTarget.sprite !== this.props.editingTarget) {
             this.shareBlocks(blocks, this.props.hoveredTarget.sprite, this.props.editingTarget);
             this.props.onReceivedBlocks(true);
         }
     }
-    shareBlocks (blocks, targetId, optFromTargetId) {
+    shareBlocks(blocks, targetId, optFromTargetId) {
         // Position the top-level block based on the scroll position.
         const topBlock = blocks.find(block => block.topLevel);
         if (topBlock) {
@@ -184,7 +184,7 @@ class TargetPane extends React.Component {
             }
 
             // Determine position of the top-level block based on the target's workspace metrics.
-            const {scrollX, scrollY, scale} = metrics;
+            const { scrollX, scrollY, scale } = metrics;
             const posY = -scrollY + 30;
             let posX;
             if (this.props.isRtl) {
@@ -200,8 +200,8 @@ class TargetPane extends React.Component {
 
         return this.props.vm.shareBlocksToTarget(blocks, targetId, optFromTargetId);
     }
-    handleDrop (dragInfo) {
-        const {sprite: targetId} = this.props.hoveredTarget;
+    handleDrop(dragInfo) {
+        const { sprite: targetId } = this.props.hoveredTarget;
         if (dragInfo.dragType === DragConstants.SPRITE) {
             // Add one to both new and target index because we are not counting/moving the stage
             this.props.vm.reorderTarget(dragInfo.index + 1, dragInfo.newIndex + 1);
@@ -240,7 +240,7 @@ class TargetPane extends React.Component {
             }
         }
     }
-    render () {
+    render() {
         /* eslint-disable no-unused-vars */
         const {
             dispatchUpdateRestore,
@@ -252,6 +252,8 @@ class TargetPane extends React.Component {
             onShowImporting,
             workspaceMetrics,
             isMobile,
+            selectedTabIndex,
+            isSmallDevice,
             ...componentProps
         } = this.props;
         /* eslint-enable no-unused-vars */
@@ -277,6 +279,8 @@ class TargetPane extends React.Component {
                 onSpriteUpload={this.handleSpriteUpload}
                 onSurpriseSpriteClick={this.handleSurpriseSpriteClick}
                 isMobile={this.props.isMobile}
+                selectedTabIndex={selectedTabIndex}
+                isSmallDevice={isSmallDevice}
             />
         );
     }

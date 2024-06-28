@@ -6,7 +6,7 @@ import VM from 'scratch-vm';
 import SpriteLibrary from '../../containers/sprite-library.jsx';
 import SpriteSelectorComponent from '../sprite-selector/sprite-selector.jsx';
 import StageSelector from '../../containers/stage-selector.jsx';
-import {STAGE_DISPLAY_SIZES} from '../../lib/layout-constants';
+import { STAGE_DISPLAY_SIZES } from '../../lib/layout-constants';
 
 import styles from './target-pane.css';
 
@@ -46,6 +46,8 @@ const TargetPane = ({
     sprites,
     vm,
     isMobile,
+    selectedTabIndex,
+    isSmallDevice,
     ...componentProps
 }) => (
     <div
@@ -79,8 +81,10 @@ const TargetPane = ({
             onSpriteUpload={onSpriteUpload}
             onSurpriseSpriteClick={onSurpriseSpriteClick}
             isMobile={isMobile}
-
+            selectedTabIndex={selectedTabIndex}
+            isSmallDevice={isSmallDevice}
         />
+        {/* 舞台 */}
         <div className={styles.stageSelectorWrapper}>
             {stage.id && <StageSelector
                 asset={
