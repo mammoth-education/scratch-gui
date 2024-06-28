@@ -130,12 +130,12 @@ class SB3Downloader extends React.Component {
 				if (currentID) {
 					// 修改项目
 					console.log("修改项目", projectList);
-					const hasMatchingName = Object.values(projectList).some(project => project.name === projectName);
-					if (hasMatchingName) {
-						// 名称重复
-						let error = 1;
-						console.log("名称重复");
-						return error;
+					for (let key in projectList) {
+						if (projectList[key].name === projectName) {
+							if (projectList[key].id !== currentID.id) {
+								return 1;
+							}
+						}
 					}
 					projectList[currentID.id].name = projectName;
 					projectList[currentID.id].updateDate = Date.now();
