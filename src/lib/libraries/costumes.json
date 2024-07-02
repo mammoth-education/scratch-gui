@@ -4529,6 +4529,30 @@
         "rotationCenterY": 22
     },
     {
+        "name": "GalaxyRVR-a",
+        "tags": [
+            "car"
+        ],
+        "assetId": "3f435e548f371a0a6d3e67d53cd313a9",
+        "bitmapResolution": 1,
+        "dataFormat": "svg",
+        "md5ext": "3f435e548f371a0a6d3e67d53cd313a9.svg",
+        "rotationCenterX": 12,
+        "rotationCenterY": 24
+    },
+    {
+        "name": "GalaxyRVR-b",
+        "tags": [
+            "car"
+        ],
+        "assetId": "ac92edebd52590953c69c2fb7f0627e7",
+        "bitmapResolution": 1,
+        "dataFormat": "svg",
+        "md5ext": "ac92edebd52590953c69c2fb7f0627e7.svg",
+        "rotationCenterX": 12,
+        "rotationCenterY": 24
+    },
+    {
         "name": "Ghost-a",
         "tags": [
             "fantasy",

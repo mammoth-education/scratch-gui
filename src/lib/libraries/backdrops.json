@@ -521,6 +521,21 @@
         "rotationCenterY": 180
     },
     {
+        "name": "Mars",
+        "tags": [
+            "mars",
+            "cnsa",
+            "zhurong",
+            "space"
+        ],
+        "assetId": "45b7b545afbeecc324dc8d8e88b6a9d7",
+        "bitmapResolution": 2,
+        "dataFormat": "png",
+        "md5ext": "45b7b545afbeecc324dc8d8e88b6a9d7.png",
+        "rotationCenterX": 480,
+        "rotationCenterY": 360
+    },
+    {
         "name": "Metro",
         "tags": [
             "outdoors",
