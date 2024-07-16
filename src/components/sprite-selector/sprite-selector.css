@@ -33,7 +33,8 @@
     width: calc((100% / $sprites-per-row ) - $space);
     max-width: 6rem;
     min-width: 4rem;
-    min-height: 4rem; /* @todo: calc height same as width */
+    min-height: 4rem;
+    /* @todo: calc height same as width */
     margin: calc($space / 2);
 }
 
@@ -104,11 +105,25 @@
 }
 
 @keyframes wiggle {
-    0% {transform: rotate(3deg) scale(1.05);}
-    25% {transform: rotate(-3deg) scale(1.05);}
-    50% {transform: rotate(5deg) scale(1.05);}
-    75% {transform: rotate(-2deg) scale(1.05);}
-    100% {transform: rotate(0deg) scale(1.05);}
+    0% {
+        transform: rotate(3deg) scale(1.05);
+    }
+
+    25% {
+        transform: rotate(-3deg) scale(1.05);
+    }
+
+    50% {
+        transform: rotate(5deg) scale(1.05);
+    }
+
+    75% {
+        transform: rotate(-2deg) scale(1.05);
+    }
+
+    100% {
+        transform: rotate(0deg) scale(1.05);
+    }
 }
 
 .receivedBlocks {
@@ -116,12 +131,20 @@
 }
 
 @keyframes glowing {
-    10% { box-shadow: 0 0 10px #7fff1e; }
-    90% { box-shadow: 0 0 10px #7fff1e; }
-    100% { box-shadow: none; }
+    10% {
+        box-shadow: 0 0 10px #7fff1e;
+    }
+
+    90% {
+        box-shadow: 0 0 10px #7fff1e;
+    }
+
+    100% {
+        box-shadow: none;
+    }
 }
 
-.placeholder > .sprite {
+.placeholder>.sprite {
     background: black;
     filter: opacity(15%) brightness(0%);
 }
@@ -131,5 +154,10 @@
     .sprite-selector {
         border-radius: $space;
         border: 1px solid $ui-black-transparent;
+        /* max-width: 10rem; */
+    }
+
+    .scroll-wrapper {
+        height: calc(100% - 4rem);
     }
 }

@@ -5567,6 +5567,36 @@
         "blocks": {}
     },
     {
+        "name": "GalaxyRVR",
+        "tags": [
+            "car"
+        ],
+        "isStage": false,
+        "variables": {},
+        "costumes": [
+            {
+                "assetId": "3f435e548f371a0a6d3e67d53cd313a9",
+                "name": "GalaxyRVR-a",
+                "bitmapResolution": 1,
+                "md5ext": "3f435e548f371a0a6d3e67d53cd313a9.svg",
+                "dataFormat": "svg",
+                "rotationCenterX": 38,
+                "rotationCenterY": 32
+            },
+            {
+                "assetId": "ac92edebd52590953c69c2fb7f0627e7",
+                "name": "GalaxyRVR-b",
+                "bitmapResolution": 1,
+                "md5ext": "ac92edebd52590953c69c2fb7f0627e7.svg",
+                "dataFormat": "svg",
+                "rotationCenterX": 37,
+                "rotationCenterY": 34
+            }
+        ],
+        "sounds": [],
+        "blocks": {}
+    },
+    {
         "name": "Fruit Salad",
         "tags": [
             "food",

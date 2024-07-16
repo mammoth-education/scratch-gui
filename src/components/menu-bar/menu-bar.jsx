@@ -2,6 +2,9 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { defineMessages, FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { defineMessages, FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
 import bowser, { version } from 'bowser';
@@ -553,7 +556,7 @@ class MenuBar extends React.Component {
                     <span>2023-06-25</span>
                 </div>
                 {this.state.updateShow ? <div className={styles.checkBox} >{this.state.loading ? loading : (this.state.updateTips ? latestVersion : updateTips)}</div> : null}
-                <div><span className={styles.copyright}>2023@SunFounder</span></div>
+                <div><span className={styles.copyright}>2024@SunFounder</span></div>
             </>
         );
         const title = (
@@ -652,7 +655,7 @@ class MenuBar extends React.Component {
                                             {/* copy项目 */}
                                             {
                                                 this.props.canCreateCopy &&
-                                                <SB3Downloader saveStatus={saveStatus.copyProject} >
+                                                <SB3Downloader saveStatus={saveStatus.copyProject} onOpenProject={this.props.onOpenProject}>
                                                     {(_, downloadProjectCallback) => (
                                                         <MenuItem onClick={this.getSaveToComputerHandler(downloadProjectCallback)}>
                                                             {createCopyMessage}

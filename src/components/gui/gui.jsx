@@ -146,7 +146,7 @@ const GUIComponent = props => {
 
     let isMobile = false;
     let localProjectsVisible = false;
-    if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android') || navigator.platform.indexOf('iPad') === -1 ||
+    if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android') ||
         navigator.userAgent.indexOf('Mobile') > -1) {
         isMobile = true;
         localProjectsVisible = true;
@@ -284,6 +284,7 @@ const GUIComponent = props => {
                     onClickSoundsTab={onActivateSoundsTab}
                     onClickStageTab={onActivateStageTab}
                     onTabSelect={onActivateTab}
+                    onOpenProject={onOpenProject}
                     selectedTabIndex={activeTabIndex}
                     localProjectsVisible={localProjectsVisible}
                     editMenuVisible={false}
@@ -426,6 +427,7 @@ const GUIComponent = props => {
                                         isMobile={isMobile}
                                         isSmallDevice={isSmallDevice}
                                         stageSize={stageSize}
+                                        selectedTabIndex={activeTabIndex}
                                         vm={vm}
                                     />}
                                 </TabPanel>}
@@ -440,6 +442,7 @@ const GUIComponent = props => {
                                     isPreview={isSmallDevice ? true : false}
                                     stagePreviewVisible={stagePreviewVisible}
                                     isSmallDevice={isSmallDevice}
+                                    selectedTabIndex={activeTabIndex}
                                     vm={vm}
                                 />
                             </div>}

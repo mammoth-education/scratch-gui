@@ -99,8 +99,8 @@ export default function (vm) {
         if (vm.runtime.targets[0] && vm.runtime.targets[0].getCostumes().length > 0) {
             return vm.runtime.targets[0].getCostumes().map(costume => [costume.name, costume.name])
                 .concat([[next, 'next backdrop'],
-                    [previous, 'previous backdrop'],
-                    [random, 'random backdrop']]);
+                [previous, 'previous backdrop'],
+                [random, 'random backdrop']]);
         }
         return [['', '']];
     };
@@ -176,10 +176,10 @@ export default function (vm) {
     };
 
     ScratchBlocks.Blocks.motion_pointtowards_menu.init = function () {
-        
+
         let mouse = ScratchBlocks.ScratchMsgs.translate('MOTION_POINTTOWARDS_POINTER', 'mouse-pointer');
-        if(isMobile){
-            mouse = ScratchBlocks.ScratchMsgs.translate('MOTION_POINTTOWARDS_POINTER_MOBILE', 'mouse-pointer');
+        if (isMobile) {
+            mouse = ScratchBlocks.ScratchMsgs.translate('MOTION_POINTTOWARDS_POINTER_MOBILE', 'touch-point');
         }
         const json = jsonForMenuBlock('TOWARDS', spriteMenu, motionColors, [
             [mouse, '_mouse_']
@@ -190,8 +190,8 @@ export default function (vm) {
     ScratchBlocks.Blocks.motion_goto_menu.init = function () {
         const random = ScratchBlocks.ScratchMsgs.translate('MOTION_GOTO_RANDOM', 'random position');
         let mouse = ScratchBlocks.ScratchMsgs.translate('MOTION_GOTO_POINTER', 'mouse-pointer');
-        if(isMobile){
-            mouse = ScratchBlocks.ScratchMsgs.translate('MOTION_GOTO_POINTER_MOBILE', 'mouse-pointer');
+        if (isMobile) {
+            mouse = ScratchBlocks.ScratchMsgs.translate('MOTION_GOTO_POINTER_MOBILE', 'touch-point');
         }
         const json = jsonForMenuBlock('TO', spriteMenu, motionColors, [
             [random, '_random_'],
@@ -203,8 +203,8 @@ export default function (vm) {
     ScratchBlocks.Blocks.motion_glideto_menu.init = function () {
         const random = ScratchBlocks.ScratchMsgs.translate('MOTION_GLIDETO_RANDOM', 'random position');
         let mouse = ScratchBlocks.ScratchMsgs.translate('MOTION_GLIDETO_POINTER', 'mouse-pointer');
-        if(isMobile){
-            mouse = ScratchBlocks.ScratchMsgs.translate('MOTION_GLIDETO_POINTER_MOBILE', 'mouse-pointer');
+        if (isMobile) {
+            mouse = ScratchBlocks.ScratchMsgs.translate('MOTION_GLIDETO_POINTER_MOBILE', 'touch-point');
         }
         const json = jsonForMenuBlock('TO', spriteMenu, motionColors, [
             [random, '_random_'],
@@ -305,8 +305,8 @@ export default function (vm) {
 
     ScratchBlocks.Blocks.sensing_distancetomenu.init = function () {
         let mouse = ScratchBlocks.ScratchMsgs.translate('SENSING_DISTANCETO_POINTER', 'mouse-pointer');
-        if(isMobile){
-            mouse = ScratchBlocks.ScratchMsgs.translate('SENSING_DISTANCETO_POINTER_MOBILE', 'mouse-pointer');
+        if (isMobile) {
+            mouse = ScratchBlocks.ScratchMsgs.translate('SENSING_DISTANCETO_POINTER_MOBILE', 'touch-point');
         }
         const json = jsonForMenuBlock('DISTANCETOMENU', spriteMenu, sensingColors, [
             [mouse, '_mouse_']
@@ -315,13 +315,13 @@ export default function (vm) {
     };
     var isMobile = false;
     if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android') ||
-      navigator.userAgent.indexOf('Mobile') > -1) {
-      isMobile = true;
+        navigator.userAgent.indexOf('Mobile') > -1) {
+        isMobile = false;
     }
     ScratchBlocks.Blocks.sensing_touchingobjectmenu.init = function () {
         let mouse = ScratchBlocks.ScratchMsgs.translate('SENSING_TOUCHINGOBJECT_POINTER', 'mouse-pointer');
-        if(isMobile){
-            mouse = ScratchBlocks.ScratchMsgs.translate('SENSING_TOUCHINGOBJECT_POINTER_MOBILE', 'mouse-pointer');
+        if (isMobile) {
+            mouse = ScratchBlocks.ScratchMsgs.translate('SENSING_TOUCHINGOBJECT_POINTER_MOBILE', 'touch-point');
         }
         const edge = ScratchBlocks.ScratchMsgs.translate('SENSING_TOUCHINGOBJECT_EDGE', 'edge');
         const json = jsonForMenuBlock('TOUCHINGOBJECTMENU', spriteMenu, sensingColors, [

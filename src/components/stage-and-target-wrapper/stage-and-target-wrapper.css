@@ -28,7 +28,8 @@
     flex-basis: 0;
 
     padding-top: $space;
-    min-height: 0; /* this makes it work in Firefox */
+    min-height: 0;
+    /* this makes it work in Firefox */
     /* margin-left: $space; */
 
     /*
@@ -45,16 +46,25 @@
     width: fit-content !important;
     height: auto;
     /* z-index: 1; */
+
+
+    /* height: 90%; */
+    flex-direction: column;
+    min-height: 10%;
+    max-width: 38%;
+    justify-content: flex-end;
 }
-.previewHide{
+
+.previewHide {
     /* z-index: -1; */
 }
+
 /* For Phone */
 @media screen and (max-width: $full-size) {
     [dir="ltr"] .stageWrapper {
         right: 3.25rem;
     }
-    
+
     .stage-and-target-wrapper {
         flex-direction: row;
         position: absolute;
@@ -62,10 +72,14 @@
         /* left: 5%; */
         width: -webkit-fill-available;
     }
+
     .target-wrapper {
         padding-left: $space;
+
+        min-height: 10rem;
     }
-    .target-wrapper.preview {
+
+    /* .target-wrapper.preview {
         display: none;
-    }
+    } */
 }
