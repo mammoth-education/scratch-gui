@@ -187,12 +187,13 @@ class SB3Downloader extends React.Component {
 					projectName += ".sb3";
 					this.saveProjectToFile(content, projectName);
 					localStorage.setItem("project-list", JSON.stringify(projectList));
+					this.props.onOpenProject(id, projectName);
 				})
 			}
 			if (!this.props.saveStatus) {
 				// 点击导出：移动端导出项目
 				if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android')) {
-					this.writeDirectory()
+					this.writeDirectory();
 					this.saveAs(content, this.props.projectFilename);
 					// path = cordova.file.dataDirectory
 					console.log(this)

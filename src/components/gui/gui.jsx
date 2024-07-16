@@ -284,6 +284,7 @@ const GUIComponent = props => {
                     onClickSoundsTab={onActivateSoundsTab}
                     onClickStageTab={onActivateStageTab}
                     onTabSelect={onActivateTab}
+                    onOpenProject={onOpenProject}
                     selectedTabIndex={activeTabIndex}
                     localProjectsVisible={localProjectsVisible}
                     editMenuVisible={false}
