@@ -316,7 +316,7 @@ export default function (vm) {
     var isMobile = false;
     if (window.cordova && (window.cordova.platformId === 'ios' || window.cordova.platformId === 'android') ||
         navigator.userAgent.indexOf('Mobile') > -1) {
-        isMobile = false;
+        isMobile = true;
     }
     ScratchBlocks.Blocks.sensing_touchingobjectmenu.init = function () {
         let mouse = ScratchBlocks.ScratchMsgs.translate('SENSING_TOUCHINGOBJECT_POINTER', 'mouse-pointer');
