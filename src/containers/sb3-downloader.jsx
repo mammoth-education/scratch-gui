@@ -188,6 +188,7 @@ class SB3Downloader extends React.Component {
 					this.saveProjectToFile(content, projectName);
 					localStorage.setItem("project-list", JSON.stringify(projectList));
 					this.props.onOpenProject(id, projectName);
+					return 3;
 				})
 			}
 			if (!this.props.saveStatus) {

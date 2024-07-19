@@ -44,6 +44,7 @@ import {
     remixProject,
     saveProjectAsCopy
 } from '../../reducers/project-state';
+import { setProjectTitle } from '../../reducers/project-title';
 import {
     openAboutMenu,
     closeAboutMenu,
@@ -135,7 +136,8 @@ MenuBarItemTooltip.propTypes = {
     className: PropTypes.string,
     enable: PropTypes.bool,
     id: PropTypes.string,
-    place: PropTypes.oneOf(['top', 'bottom', 'left', 'right'])
+    place: PropTypes.oneOf(['top', 'bottom', 'left', 'right']),
+    setProjectTitle: PropTypes.func,
 };
 
 const MenuItemTooltip = ({ id, isRtl, children, className }) => (
@@ -291,6 +293,11 @@ class MenuBar extends React.Component {
                     if (res !== 2) {
                         this.props.onShowSaveSuccessAlert();
                     }
+                }
+                if (res === 3) {
+                    let currentProject = JSON.parse(sessionStorage.getItem('currentID'));
+                    let name = currentProject.name.replace(".sb3", "");
+                    this.props.setProjectTitle(name);
                 }
                 if (this.props.onProjectTelemetryEvent) {
                     const metadata = collectMetadata(this.props.vm, this.props.projectTitle, this.props.locale);
@@ -1165,6 +1172,7 @@ const mapDispatchToProps = dispatch => ({
     onClickUserProjects: () => dispatch(openUserProjectsModal()),
     onShowSaveSuccessAlert: () => showAlertWithTimeout(dispatch, 'saveSuccess'),
     onShowAlert: alertType => dispatch(showStandardAlert(alertType)),
+    setProjectTitle: (title) => { dispatch(setProjectTitle(title)); },
 });
 
 export default compose(
