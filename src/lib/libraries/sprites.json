@@ -14009,6 +14009,36 @@
         "blocks": {}
     },
     {
+        "name": "Zeus Car",
+        "tags": [
+            "car"
+        ],
+        "isStage": false,
+        "variables": {},
+        "costumes": [
+            {
+                "assetId": "f880ebe7d9518c153714a0d70bc6491b",
+                "name": "ZeusCar-a",
+                "bitmapResolution": 1,
+                "md5ext": "f880ebe7d9518c153714a0d70bc6491b.svg",
+                "dataFormat": "svg",
+                "rotationCenterX": 38,
+                "rotationCenterY": 32
+            },
+            {
+                "assetId": "234e2c2645a215786dda5244cb670562",
+                "name": "ZeusCar-b",
+                "bitmapResolution": 1,
+                "md5ext": "234e2c2645a215786dda5244cb670562.svg",
+                "dataFormat": "svg",
+                "rotationCenterX": 37,
+                "rotationCenterY": 30
+            }
+        ],
+        "sounds": [],
+        "blocks": {}
+    },
+    {
         "name": "Block-A",
         "tags": [
             "alphabet",

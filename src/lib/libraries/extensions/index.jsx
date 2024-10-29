@@ -56,6 +56,11 @@ import galaxyRVRInsetIconURL from './galaxyRVR/galaxyRVR-small.svg';
 import galaxyRVRConnectionIconURL from './galaxyRVR/galaxyRVR-illustration.svg';
 import galaxyRVRConnectionSmallIconURL from './galaxyRVR/galaxyRVR-small.svg';
 
+import zeusCarIconURL from './zeusCar/zeusCar.jpg';
+import zeusCarInsetIconURL from './zeusCar/zeusCar-small.svg';
+import zeusCarConnectionIconURL from './zeusCar/zeusCar-illustration.svg';
+import zeusCarConnectionSmallIconURL from './zeusCar/zeusCar-small.svg';
+
 let platform = "browsers";
 if (window.cordova && window.cordova.platformId !== "browser") {
     platform = window.cordova.platformId;
@@ -65,47 +70,47 @@ if (window.cordova && window.cordova.platformId !== "browser") {
 
 // 添加拓展
 export default [
-    // {
-    //     name: (
-    //         <FormattedMessage
-    //             defaultMessage="Zeus-car"
-    //             description="长毛象 Zeus-car extension"
-    //             id="gui.extension.zeusCar.name"
-    //         />
-    //     ),
-    //     extensionId: 'zeusCar',
-    //     iconURL: galaxyRVRIconURL,
-    //     insetIconURL: galaxyRVRInsetIconURL,
-    //     description: (
-    //         <FormattedMessage
-    //             defaultMessage="zeusCar"
-    //             description="Description for the 'zeusCar' extension"
-    //             id="gui.extension.zeusCar.description"
-    //         />
-    //     ),
-    //     internetConnectionRequired: true,  //wifi图标
-    //     featured: true,
-    //     disabled: false,
-    //     // bluetoothRequired: true,  // 蓝牙图标
-    //     launchPeripheralConnectionFlow: true,
-    //     deviceNameEditable: true,
-    //     wireless: true, //WIFI连方式
-    //     firmwareFlashable: false, // 固件升级
-    //     deviceWifiEditable: true,
-    //     calibrationRequired: true,  //校准
-    //     useAutoScan: platform === "browser" ? true : false,
-    //     connectionIconURL: galaxyRVRConnectionIconURL,
-    //     connectionSmallIconURL: galaxyRVRConnectionSmallIconURL,
-    //     connectingMessage: (
-    //         <FormattedMessage
-    //             defaultMessage="Connecting"
-    //             description="Message to help people connect to their galaxyRVR."
-    //             id="gui.extension.zeusCar.connectingMessage"
-    //         />
-    //     ),
-    //     // 帮助链接
-    //     helpLink: 'https://kaka-kit.readthedocs.io/en/latest/quickstart.html#' // TODO  
-    // },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="Zeus-car"
+                description="长毛象 Zeus-car extension"
+                id="gui.extension.zeusCar.name"
+            />
+        ),
+        extensionId: 'zeusCar',
+        iconURL: zeusCarIconURL,
+        insetIconURL: zeusCarInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="zeusCar"
+                description="Description for the 'zeusCar' extension"
+                id="gui.extension.zeusCar.description"
+            />
+        ),
+        internetConnectionRequired: true,  //wifi图标
+        featured: true,
+        disabled: false,
+        // bluetoothRequired: true,  // 蓝牙图标
+        launchPeripheralConnectionFlow: true,
+        deviceNameEditable: true,
+        wireless: true, //WIFI连方式
+        firmwareFlashable: false, // 固件升级
+        deviceWifiEditable: true, // wifi可编辑
+        calibrationRequired: true,  //校准
+        useAutoScan: platform === "browser" ? true : false,
+        connectionIconURL: zeusCarConnectionIconURL,
+        connectionSmallIconURL: zeusCarConnectionSmallIconURL,
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their ZeusCar."
+                id="gui.extension.zeusCar.connectingMessage"
+            />
+        ),
+        // 帮助链接
+        helpLink: 'https://kaka-kit.readthedocs.io/en/latest/quickstart.html#' // TODO  
+    },
     {
         name: (
             <FormattedMessage
