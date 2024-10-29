@@ -59,7 +59,7 @@ const ScanningStep = props => (
         <Box className={styles.bottomArea}>
             <Box className={classNames(styles.bottomAreaItem, styles.instructions)}>
                 <FormattedMessage
-                    defaultMessage="Select your device in the list above."
+                    defaultMessage="Currently connected WiFi:"
                     description="Prompt for choosing a device to connect to"
                     id="gui.connection.curren-WIFI"
                 />

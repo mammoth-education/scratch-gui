@@ -45,6 +45,40 @@ const ConnectedStep = props => {
                             </Box>
                         </>
                     }
+                    {
+                        (props.compassCalibrationState === 0 || props.compassCalibrationState === 2) &&
+                        // 校准完成
+                        <Box className={styles.calibrateBox}>
+                            <FormattedMessage
+                                defaultMessage="校准完成 !"
+                                description="Calibrate device"
+                                id="gui.connection.calibrationComplete"
+                            />
+                        </Box>
+
+                    }
+                    {
+                        props.compassCalibrationState === 1 &&
+                        // 正在校准
+                        <Box className={styles.calibrateBox}>
+                            <FormattedMessage
+                                defaultMessage="正在校准 ..."
+                                description="Calibrate device"
+                                id="gui.connection.calibrating"
+                            />
+                        </Box>
+                    }
+                    {
+                        props.compassCalibrationState === 3 &&
+                        // 校准中断
+                        <Box className={styles.calibrateBox}>
+                            <FormattedMessage
+                                defaultMessage="校准中断,请重新校准 !"
+                                description="Calibrate device"
+                                id="gui.connection.calibrationInterrupted"
+                            />
+                        </Box>
+                    }
                 </Box>
             </Box>
             <Box className={styles.bottomArea}>
@@ -81,11 +115,32 @@ const ConnectedStep = props => {
                             className={styles.connectionButton}
                             onClick={props.onCalibration}
                         >
-                            <FormattedMessage
-                                defaultMessage="Calibrate device"
-                                description="Calibrate device"
-                                id="gui.connection.calibrate-device"
-                            />
+                            {/* {
+                                (props.compassCalibrationState === 0 || props.compassCalibrationState === 2) &&
+                                // 校准完成
+                                <FormattedMessage
+                                    defaultMessage="校准完成"
+                                    description="Calibrate device"
+                                    id="gui.connection.calibrate-a"
+                                />
+                            } */}
+                            {/* {
+                                props.compassCalibrationState === 1 &&
+                                // 正在校准
+                                <FormattedMessage
+                                    defaultMessage="正在校准"
+                                    description="Calibrate device"
+                                    id="gui.connection.calibrate-s"
+                                />
+                            } */}
+                            {
+                                props.compassCalibrationState === 4 &&
+                                <FormattedMessage
+                                    defaultMessage="Calibrate device"
+                                    description="Calibrate device"
+                                    id="gui.connection.calibrate-device"
+                                />
+                            }
                         </button>}
                     {/* 设置wifi */}
                     {props.deviceWifiEditable && props.wireless &&

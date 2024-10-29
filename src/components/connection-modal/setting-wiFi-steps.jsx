@@ -1,4 +1,4 @@
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Box from '../box/box.jsx';
@@ -19,7 +19,11 @@ const SettingWiFiSteps = props => {
           <Box className={styles.inputBox}>
             <input className={styles.deviceNameInput}
               type="text"
-              placeholder="请输入名称"
+              // placeholder="请输入名称"
+              placeholder={props.intl.formatMessage({
+                defaultMessage: "Please enter a name",
+                id: "gui.connection.ap-new-device-name"
+              })}
               defaultValue={props.deviceName}
               // maxlength="10"
               onChange={props.onRenameChanged}
@@ -51,7 +55,12 @@ const SettingWiFiSteps = props => {
           <Box className={styles.inputBox}>
             <input className={styles.deviceNameInput}
               type="text"
-              placeholder="请输入新密码"
+              // placeholder="请输入新密码"
+
+              placeholder={props.intl.formatMessage({
+                defaultMessage: "Please enter new password",
+                id: "gui.connection.ap-new-password"
+              })}
               defaultValue="123456789"
               // maxlength="10"
               onChange={props.onDevicePasswordChanged}
@@ -84,7 +93,11 @@ const SettingWiFiSteps = props => {
           <Box className={styles.inputBox}>
             <input className={styles.deviceNameInput}
               type="text"
-              placeholder="请输入SSID"
+              // placeholder="请输入SSID"
+              placeholder={props.intl.formatMessage({
+                defaultMessage: "Please enter SSID",
+                id: "gui.connection.sta-new-device-name"
+              })}
               value={props.staSsid}
               // maxlength="10"
               onChange={props.onWifiSSIDChanged}
@@ -137,7 +150,11 @@ const SettingWiFiSteps = props => {
           <Box className={styles.inputBox}>
             <input className={styles.deviceNameInput}
               type="text"
-              placeholder="请输入密码"
+              // placeholder="请输入密码"
+              placeholder={props.intl.formatMessage({
+                defaultMessage: "Please enter password",
+                id: "gui.connection.sta-new-password"
+              })}
               // value={props.deviceName}
               // maxlength="10"
               onChange={props.onWifiPasswordChanged}
@@ -198,4 +215,4 @@ SettingWiFiSteps.propTypes = {
   onRenameCancel: PropTypes.func.isRequired
 };
 
-export default SettingWiFiSteps;
+export default injectIntl(SettingWiFiSteps);

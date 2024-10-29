@@ -290,7 +290,9 @@
 
 .dropdown-menu {
     position: absolute;
-    background-color: antiquewhite;
+    /* background-color: hsla(163, 85%, 40%, 1); */
+    /* background-color: $motion-primary; */
+    background-color: $pen-primary;
     width: calc(100% - 4rem);
     max-height: 7rem;
     overflow: scroll;
@@ -298,6 +300,7 @@
     z-index: 1;
     scrollbar-width: none;
     left: 0;
+    color: white;
     /* background-color: $motion-light-transparent; */
 }
 
@@ -320,6 +323,10 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+}
+
+.calibrateBox {
+    padding: 0.5rem;
 }
 
 [dir="ltr"] .scratch-link-help-step {
