@@ -1,8 +1,8 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {showAlertWithTimeout} from '../../reducers/alerts';
+import { showAlertWithTimeout } from '../../reducers/alerts';
 
 /**
  * Higher Order Component to manage inputs that submit on blur and <enter>
@@ -11,7 +11,7 @@ import {showAlertWithTimeout} from '../../reducers/alerts';
  */
 const BufferedInput = function (Input) {
     class BufferedInput extends React.Component {
-        constructor (props) {
+        constructor(props) {
             super(props);
             bindAll(this, [
                 'handleChange',
@@ -22,28 +22,28 @@ const BufferedInput = function (Input) {
                 value: null
             };
         }
-        handleKeyPress (e) {
+        handleKeyPress(e) {
             if (e.key === 'Enter') {
                 this.handleFlush();
                 e.target.blur();
             }
         }
-        handleFlush () {
+        handleFlush() {
             const isNumeric = typeof this.props.value === 'number';
             const validatesNumeric = isNumeric ? !isNaN(this.state.value) : true;
-            if(this.state.value !== null && this.state.value.length > 15){
+            if (this.state.value !== null && this.state.value.length > 30) {
                 this.props.onShowDeletedSuccessfullyAlert();
-            }else{
+            } else {
                 if (this.state.value !== null && validatesNumeric) {
                     this.props.onSubmit(isNumeric ? Number(this.state.value) : this.state.value);
                 }
             }
-            this.setState({value: null});
+            this.setState({ value: null });
         }
-        handleChange (e) {
-            this.setState({value: e.target.value});
+        handleChange(e) {
+            this.setState({ value: e.target.value });
         }
-        render () {
+        render() {
             const bufferedValue = this.state.value === null ? this.props.value : this.state.value;
             return (
                 <Input
@@ -64,6 +64,6 @@ const BufferedInput = function (Input) {
         value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     };
 
-    return connect(null,mapDispatchToProps)(BufferedInput)
+    return connect(null, mapDispatchToProps)(BufferedInput)
 }
 export default BufferedInput

@@ -85,6 +85,7 @@ class ConnectionModal extends React.Component {
             staSsidState: false,
             networksList: [],
             showDropdown: false,
+            compassCalibrationState: 4,
         };
     }
     componentDidMount() {
@@ -146,6 +147,7 @@ class ConnectionModal extends React.Component {
         this.props.vm.removeListener('PERIPHERAL_CONNECTED', this.handleConnected);
         this.props.vm.removeListener('PERIPHERAL_REQUEST_ERROR', this.handleError);
         clearInterval(this.intervalId);
+        clearInterval(this.setIntervalID);
     }
     // 刷新
     handleScanning() {
@@ -508,7 +510,23 @@ class ConnectionModal extends React.Component {
     }
     // 校准设备
     handleCalibration() {
-        this.props.vm.calibration(this.props.extensionId, true);
+        this.props.vm.calibration(this.props.extensionId);
+        let receiveBuffer;
+        this.setState({ compassCalibrationState: 1 });
+        this.setIntervalID = setInterval(() => {
+            receiveBuffer = this.props.vm.getReceiveBuffer(this.props.extensionId);
+            console.log("receiveBuffer", receiveBuffer);
+            if (receiveBuffer) {
+                if ([0, 2, 3].includes(receiveBuffer.compassCalibration)) {
+                    // 校准完成
+                    this.setState({ compassCalibrationState: receiveBuffer.compassCalibration });
+                    clearInterval(this.setIntervalID);
+                }
+            } else {
+                this.setState({ compassCalibrationState: 4 });
+                clearInterval(this.setIntervalID);
+            }
+        }, 1000);
     }
 
     handleOptionClick = (option) => {
@@ -545,6 +563,20 @@ class ConnectionModal extends React.Component {
         }, 2000);
     }
 
+    handleMobileKeyboard() {
+        window.addEventListener('native.keyboardshow', (e) => {
+            console.log(e.keyboardHeight, "键盘高度");
+            if (window.device && window.device.platform !== "Android") {
+                return;
+            }
+            let keyboardHeight = e.keyboardHeight;
+            let screenHeight = window.screen.height;
+
+        });
+        // 键盘隐藏
+        window.addEventListener('native.keyboardhide', (e) => {
+        });
+    }
     render() {
         localStorage.setItem("deviceName", this.state.deviceName)
         return (
@@ -583,6 +615,7 @@ class ConnectionModal extends React.Component {
                         networksList={this.state.networksList}
                         showDropdown={this.state.showDropdown}
                         staSsid={this.state.ssid}
+                        compassCalibrationState={this.state.compassCalibrationState}
                         onScanWifi={this.handleScanWifi}
                         onOptionClick={this.handleOptionClick}
                         onSSIDInputBlur={this.handleSSIDInputBlur}
