@@ -125,7 +125,7 @@ const ConnectedStep = props => {
                                 />
                             } */}
                             {/* {
-                                props.compassCalibrationState === 1 &&
+                                props.compassCalibrationState === 1 && props.calibration !== 0 &&
                                 // 正在校准
                                 <FormattedMessage
                                     defaultMessage="正在校准"
@@ -134,11 +134,19 @@ const ConnectedStep = props => {
                                 />
                             } */}
                             {
-                                props.compassCalibrationState === 4 &&
+                                props.sendCalibrationState == 0 &&
                                 <FormattedMessage
                                     defaultMessage="Calibrate device"
                                     description="Calibrate device"
                                     id="gui.connection.calibrate-device"
+                                />
+                            }
+                            {
+                                (props.sendCalibrationState == 1) &&
+                                <FormattedMessage
+                                    defaultMessage="Cancel calibrate device"
+                                    description="Cancel calibrate device"
+                                    id="gui.connection.cancel-calibrate-device"
                                 />
                             }
                         </button>}

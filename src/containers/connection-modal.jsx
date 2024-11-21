@@ -47,6 +47,7 @@ class ConnectionModal extends React.Component {
             'handleConfirm',
             'handleRenameConfirm',
             'handleRenameChanged',
+            'handleSetApPassword',
             'handleWifiSSIDChanged',
             'handleWifiPasswordChanged',
             'handleDevicePasswordChanged',
@@ -86,6 +87,9 @@ class ConnectionModal extends React.Component {
             networksList: [],
             showDropdown: false,
             compassCalibrationState: 4,
+            sendCalibrationState: 0,
+            isApPasswordTooShort: false,
+            isStaPasswordTooShort: false,
         };
     }
     componentDidMount() {
@@ -124,10 +128,10 @@ class ConnectionModal extends React.Component {
         if (this.state.extension && this.state.extension.deviceNameEditable) {
             if (this.props.vm.getPeripheralIsConnected(this.props.extensionId)) {
                 let deviceName = this.props.vm.getPeripheralName(this.props.extensionId);
-                let info = this.props.vm.getDeviceInfo(this.props.extensionId);
+                let info = this.state.extension.deviceWifiEditable ? this.props.vm.getDeviceInfo(this.props.extensionId) : null;
                 this.setState({
                     deviceName: deviceName,
-                    currentWifiIP: info.ip,
+                    currentWifiIP: info ? info.ip : "",
                 });
             }
         }
@@ -299,20 +303,25 @@ class ConnectionModal extends React.Component {
         } else {
             this.setState({ staPasswordState: false });
         }
-        this.setState({
-            password: value
-        });
+        // 长度限制
+        if (value.length < 8) {
+            this.setState({ isStaPasswordTooShort: true });
+        } else {
+            this.setState({ isStaPasswordTooShort: false, password: value });
+        }
     }
     handleDevicePasswordChanged(e) {
         let value = e.target.value;
-        if (value != "" && value != "123456789") {
+        if (value != "") {
             this.setState({ apPasswordState: true });
         } else {
             this.setState({ apPasswordState: false });
         }
-        this.setState({
-            apNewPassword: e.target.value
-        });
+        if (value.length < 8) {
+            this.setState({ isApPasswordTooShort: true });
+        } else {
+            this.setState({ isApPasswordTooShort: false, apNewPassword: value });
+        }
     }
 
     handleSettingWifiConfirm() {
@@ -321,24 +330,46 @@ class ConnectionModal extends React.Component {
         this.props.vm.settingDeviceWiFi(this.props.extensionId, setWifiData);
         let restart = { "command": "restart-sta" };
         this.props.vm.settingDeviceWiFi(this.props.extensionId, restart);
-        console.log("getDevicesWifiData：", this.props.vm.getDevicesWifiData(this.props.extensionId));
-    }
-    handleRenameConfirm() {
-        // this.props.vm.renamePeripheral(this.props.extensionId, this.state.deviceName);
-        let newDeviceName = this.state.newDeviceName;
-        let name = { "name": newDeviceName };
-        this.props.vm.settingDeviceWiFi(this.props.extensionId, name);
-        let apSsid = { "apSsid": newDeviceName };
-        this.props.vm.settingDeviceWiFi(this.props.extensionId, apSsid);
         this.setState({
             phase: PHASES.renameDeviceSuccess,
-            deviceName: newDeviceName
+            deviceName: this.state.newDeviceName != "" ? this.state.newDeviceName : this.state.deviceName
         });
         analytics.event({
             category: 'extensions',
             action: 'confirmRenameDevice',
             label: this.props.extensionId
         });
+        console.log("getDevicesWifiData：", this.props.vm.getDevicesWifiData(this.props.extensionId));
+    }
+    handleRenameConfirm() {
+        let newDeviceName = this.state.newDeviceName;
+        if (!this.state.extension.deviceWifiEditable) {
+            this.props.vm.renamePeripheral(this.props.extensionId, this.state.newDeviceName);
+            this.setState({
+                phase: PHASES.renameDeviceSuccess,
+                deviceName: newDeviceName
+            });
+            analytics.event({
+                category: 'extensions',
+                action: 'confirmRenameDevice',
+                label: this.props.extensionId
+            });
+        } else {
+            // 修改AP模式的名称和WiFi名称
+            let name = { "name": newDeviceName };
+            this.props.vm.settingDeviceWiFi(this.props.extensionId, name);
+            let apSsid = { "apSsid": newDeviceName };
+            this.props.vm.settingDeviceWiFi(this.props.extensionId, apSsid);
+            this.setState({
+                phase: PHASES.settingWiFiSuccess,
+                deviceName: newDeviceName
+            });
+            analytics.event({
+                category: 'extensions',
+                action: 'confirmSettingWifi',
+                label: this.props.extensionId
+            });
+        }
     }
     // 点击取消
     handleRenameCancel() {
@@ -359,17 +390,31 @@ class ConnectionModal extends React.Component {
             label: this.props.extensionId
         });
     }
+
+    handleSetApPassword() {
+        let data = { "apPassword": this.state.apNewPassword };
+        this.props.vm.settingDeviceWiFi(this.props.extensionId, data);
+        this.setState({
+            phase: PHASES.settingWiFiSuccess,
+            deviceName: this.state.newDeviceName != "" ? this.state.newDeviceName : this.state.deviceName
+        });
+        analytics.event({
+            category: 'extensions',
+            action: 'confirmSettingWifi',
+            label: this.props.extensionId
+        });
+    }
+
     // 点击确定
     handleConfirm() {
         console.log("确认了");
         if (this.state.newDeviceName != this.state.deviceName && this.state.newDeviceName != "") {
             this.handleRenameConfirm();
         }
-        if (this.state.apNewPassword != "" && this.state.apNewPassword != "123456789") {
-            let data = { "apPassword": this.state.apNewPassword };
-            this.props.vm.settingDeviceWiFi(this.props.extensionId, data);
+        if (this.state.apNewPassword != "" && this.state.apNewPassword.length >= 8) {
+            this.handleSetApPassword();
         }
-        if (this.state.password && this.state.password != "" && this.state.ssid && this.state.ssid != "") {
+        if (this.state.password && this.state.password != "" && this.state.password.length >= 8 && this.state.ssid && this.state.ssid != "") {
             this.handleSettingWifiConfirm();
         }
         analytics.event({
@@ -510,20 +555,24 @@ class ConnectionModal extends React.Component {
     }
     // 校准设备
     handleCalibration() {
-        this.props.vm.calibration(this.props.extensionId);
+        let newCalibration = this.state.sendCalibrationState == 0 ? 1 : 0;
+        this.setState({ sendCalibrationState: newCalibration });
+        this.props.vm.calibration(this.props.extensionId, newCalibration);
         let receiveBuffer;
-        this.setState({ compassCalibrationState: 1 });
+        this.setState({ compassCalibrationState: newCalibration == 0 ? 4 : 1 });
         this.setIntervalID = setInterval(() => {
             receiveBuffer = this.props.vm.getReceiveBuffer(this.props.extensionId);
             console.log("receiveBuffer", receiveBuffer);
             if (receiveBuffer) {
-                if ([0, 2, 3].includes(receiveBuffer.compassCalibration)) {
-                    // 校准完成
+                if ([0, 1, 2, 3].includes(receiveBuffer.compassCalibration)) {
                     this.setState({ compassCalibrationState: receiveBuffer.compassCalibration });
-                    clearInterval(this.setIntervalID);
+                    if (receiveBuffer.compassCalibration == 2 || receiveBuffer.compassCalibration == 3) {
+                        this.setState({ sendCalibrationState: 0 });
+                        clearInterval(this.setIntervalID);
+                    }
                 }
             } else {
-                this.setState({ compassCalibrationState: 4 });
+                this.setState({ compassCalibrationState: 4, sendCalibrationState: 0 });
                 clearInterval(this.setIntervalID);
             }
         }, 1000);
@@ -588,6 +637,7 @@ class ConnectionModal extends React.Component {
                         connectionIconURL={this.state.extension && this.state.extension.connectionIconURL}
                         connectionSmallIconURL={this.state.extension && this.state.extension.connectionSmallIconURL}
                         connectionTipIconURL={this.state.extension && this.state.extension.connectionTipIconURL}
+                        deviceNameEditable={this.state.extension && this.state.extension.deviceNameEditable}
                         extensionId={this.props.extensionId}
                         isMobile={this.props.isMobile}
                         currentFirmwareVersion={this.state.currentFirmwareVersion}
@@ -616,6 +666,9 @@ class ConnectionModal extends React.Component {
                         showDropdown={this.state.showDropdown}
                         staSsid={this.state.ssid}
                         compassCalibrationState={this.state.compassCalibrationState}
+                        sendCalibrationState={this.state.sendCalibrationState}
+                        isApPasswordTooShort={this.state.isApPasswordTooShort}
+                        isStaPasswordTooShort={this.state.isStaPasswordTooShort}
                         onScanWifi={this.handleScanWifi}
                         onOptionClick={this.handleOptionClick}
                         onSSIDInputBlur={this.handleSSIDInputBlur}
@@ -633,7 +686,6 @@ class ConnectionModal extends React.Component {
                         onWifiPasswordChanged={this.handleWifiPasswordChanged}
                         onDevicePasswordChanged={this.handleDevicePasswordChanged}
                         onRenameConfirm={this.handleRenameConfirm}
-                        onChangedWifiConfirm={this.handleSettingWifiConfirm}
                         onReconnect={this.handleReconnect}
                         onConnected={this.handleConnected}
                         onConnecting={this.handleConnecting}

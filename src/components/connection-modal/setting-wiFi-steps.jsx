@@ -29,19 +29,7 @@ const SettingWiFiSteps = props => {
               onChange={props.onRenameChanged}
             />
             <Box className={styles.setTips}>
-              {
-                props.renameState ?
-                  <FormattedMessage
-                    defaultMessage="configured"
-                    description="configured"
-                    id="gui.connection.input-success"
-                  /> :
-                  <FormattedMessage
-                    defaultMessage="unchanged"
-                    description="configured"
-                    id="gui.connection.input-no"
-                  />
-              }
+              {props.renameState && <span>*</span>}
             </Box>
 
           </Box>
@@ -56,32 +44,17 @@ const SettingWiFiSteps = props => {
             <input className={styles.deviceNameInput}
               type="text"
               // placeholder="请输入新密码"
-
               placeholder={props.intl.formatMessage({
                 defaultMessage: "Please enter new password",
                 id: "gui.connection.ap-new-password"
               })}
-              defaultValue="123456789"
+              defaultValue=""
               // maxlength="10"
               onChange={props.onDevicePasswordChanged}
             />
             <Box className={styles.setTips}>
-              {
-                props.apPasswordState ?
-                  <FormattedMessage
-                    defaultMessage="configured"
-                    description="configured"
-                    id="gui.connection.input-success"
-                  /> :
-                  <FormattedMessage
-                    defaultMessage="unchanged"
-                    description="configured"
-                    id="gui.connection.input-no"
-                  />
-
-              }
+              {props.apPasswordState && <span>*</span>}
             </Box>
-
           </Box>
           <Box className={styles.setTitle}>
             <FormattedMessage
@@ -130,20 +103,7 @@ const SettingWiFiSteps = props => {
             )}
             {
               <Box className={styles.setTips}>
-                {
-                  props.staSsidState ?
-                    <FormattedMessage
-                      defaultMessage="configured"
-                      description="configured"
-                      id="gui.connection.input-success"
-                    /> :
-                    <FormattedMessage
-                      defaultMessage="unchanged"
-                      description="configured"
-                      id="gui.connection.input-no"
-                    />
-
-                }
+                {props.staSsidState && <span>*</span>}
               </Box>
             }
           </Box>
@@ -160,29 +120,25 @@ const SettingWiFiSteps = props => {
               onChange={props.onWifiPasswordChanged}
             />
             <Box className={styles.setTips}>
-              {
-                props.staPasswordState ?
-                  <FormattedMessage
-                    defaultMessage="configured"
-                    description="configured"
-                    id="gui.connection.input-success"
-                  /> :
-                  <FormattedMessage
-                    defaultMessage="unchanged"
-                    description="configured"
-                    id="gui.connection.input-no"
-                  />
-              }
+              {props.staPasswordState && <span>*</span>}
             </Box>
           </Box>
         </Box>
       </Box>
       <Box className={styles.bottomArea}>
-        <FormattedMessage
-          defaultMessage="Set your device Wifi"
-          description="Message indicating user to rename their device"
-          id={"gui.connection.set-your-device"}
-        />
+        {
+          (props.isStaPasswordTooShort || props.isApPasswordTooShort) ?
+            <FormattedMessage
+              defaultMessage="Password must be at least 8 characters long."
+              description="Password must be at least 8 characters long."
+              id={"gui.connection.password-length"}
+            /> :
+            <FormattedMessage
+              defaultMessage="Set your device Wifi"
+              description="Message indicating user to rename their device"
+              id={"gui.connection.set-your-device"}
+            />
+        }
         <div className={classNames(styles.bottomAreaItem, styles.cornerButtons)}>
           <button className={classNames(styles.connectionButton, styles.redButton)}
             onClick={props.onRenameCancel}>
