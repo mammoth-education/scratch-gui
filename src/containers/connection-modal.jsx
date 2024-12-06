@@ -424,6 +424,7 @@ class ConnectionModal extends React.Component {
         });
     }
     handleReconnect() {
+        handleDisconnect();
         this.setState({
             phase: PHASES.scanning
             // phase: PHASES.connected
@@ -604,7 +605,7 @@ class ConnectionModal extends React.Component {
         let intervalId = setInterval(() => {
             networks = this.props.vm.getWebSocketData(this.props.extensionId);
             console.log("webSocketData", networks);
-            if (networks) {
+            if (networks._networks.length > 0) {
                 this.setState({ networksList: networks._networks, });
                 //清除定时器
                 clearInterval(intervalId);
