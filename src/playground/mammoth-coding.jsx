@@ -10,6 +10,14 @@ const onClickLogo = () => {
     // window.location = 'https://scratch.mit.edu';
 };
 
+document.addEventListener("deviceready",onDeviceReady,false);
+onDeviceReady();
+const onDeviceReady = () =>{
+    if (window.cordova && device.manufacturer == "HUAWEI") {
+        document.body.style.width = 'calc(100% - env(safe-area-inset-left) )';
+        document.body.style.padding = '0';
+    }
+}
 const fixAndroidNotch = () => {
     console.log("fixAndroidNotch");
     console.log("window.AndroidNotch", window.AndroidNotch);
@@ -35,12 +43,21 @@ const fixAndroidNotch = () => {
     }
     // HUAWEI 设备能用 env ，所有防止重复设置 body 的 width 和 padding 
     // 添加 setTimeout 的原因是IOS加载需要时间,无法马上使用device
-    setTimeout(()=>{
-        if (window.cordova && device && device.manufacturer == "HUAWEI") {
+    if(window.cordova){
+        if (!window.device) return;
+        if (device.manufacturer == "HUAWEI") {
             document.body.style.width = 'calc(100% - env(safe-area-inset-left) )';
             document.body.style.padding = '0';
         }
-    },200);
+    }
+    
+    // setTimeout(()=>{
+    //     if (!window.device) return;
+    //     if (window.cordova && device && device.manufacturer == "HUAWEI") {
+    //         document.body.style.width = 'calc(100% - env(safe-area-inset-left) )';
+    //         document.body.style.padding = '0';
+    //     }
+    // },200);
     
 };
 
