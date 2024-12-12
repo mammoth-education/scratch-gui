@@ -10,14 +10,6 @@ const onClickLogo = () => {
     // window.location = 'https://scratch.mit.edu';
 };
 
-document.addEventListener("deviceready", onDeviceReady, false);
-const onDeviceReady = () => {
-    if (window.cordova && device.manufacturer == "HUAWEI") {
-        document.body.style.width = 'calc(100% - env(safe-area-inset-left) )';
-        document.body.style.padding = '0';
-    }
-}
-onDeviceReady();
 
 const fixAndroidNotch = () => {
     console.log("fixAndroidNotch");
@@ -52,13 +44,13 @@ const fixAndroidNotch = () => {
         }
     }
 
-    // setTimeout(()=>{
-    //     if (!window.device) return;
-    //     if (window.cordova && device && device.manufacturer == "HUAWEI") {
-    //         document.body.style.width = 'calc(100% - env(safe-area-inset-left) )';
-    //         document.body.style.padding = '0';
-    //     }
-    // },200);
+    setTimeout(()=>{
+        if (!window.device) return;
+        if (window.cordova && device && device.manufacturer == "HUAWEI") {
+            document.body.style.width = 'calc(100% - env(safe-area-inset-left) )';
+            document.body.style.padding = '0';
+        }
+    },500);
 
 };
 
