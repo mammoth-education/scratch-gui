@@ -6,7 +6,6 @@ import Box from '../box/box.jsx';
 
 import styles from './connection-modal.css';
 import classNames from 'classnames';
-import help from './icons/help.png';
 
 const HelpPage = props => (
     <Box className={styles.body}>
