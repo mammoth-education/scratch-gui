@@ -50,16 +50,19 @@ import kakaIconURL from './kaka/kaka.png';
 import kakaInsetIconURL from './kaka/kaka-small.svg';
 import kakaConnectionIconURL from './kaka/kaka-illustration.svg';
 import kakaConnectionSmallIconURL from './kaka/kaka-small.svg';
+import kakaHelpLink from './kaka/kakaHelpLink.png';
 
 import galaxyRVRIconURL from './galaxyRVR/galaxyRVR.jpg';
 import galaxyRVRInsetIconURL from './galaxyRVR/galaxyRVR-small.svg';
 import galaxyRVRConnectionIconURL from './galaxyRVR/galaxyRVR-illustration.svg';
 import galaxyRVRConnectionSmallIconURL from './galaxyRVR/galaxyRVR-small.svg';
+import galaxyRVRHelpLink from './galaxyRVR/galaxyRVRHelpLink.png';
 
 import zeusCarIconURL from './zeusCar/zeusCar.jpg';
 import zeusCarInsetIconURL from './zeusCar/zeusCar-small.svg';
 import zeusCarConnectionIconURL from './zeusCar/zeusCar-illustration.svg';
 import zeusCarConnectionSmallIconURL from './zeusCar/zeusCar-small.svg';
+import zeusCarHelpLink from './zeusCar/zeusCarHelpLink.png';
 
 let platform = "browsers";
 if (window.cordova && window.cordova.platformId !== "browser") {
@@ -109,7 +112,8 @@ export default [
             />
         ),
         // 帮助链接
-        helpLink: 'https://kaka-kit.readthedocs.io/en/latest/quickstart.html#' // TODO  
+        helpLink: 'https://zeus-car.rtfd.io',// TODO
+        helpLinkImage: zeusCarHelpLink,
     },
     {
         name: (
@@ -149,7 +153,8 @@ export default [
             />
         ),
         // 帮助链接
-        helpLink: 'https://kaka-kit.readthedocs.io/en/latest/quickstart.html#' // TODO  
+        helpLink: 'https://galaxy-rvr.rtfd.io', // TODO
+        helpLinkImage: galaxyRVRHelpLink,
     },
     {
         name: (
@@ -187,7 +192,9 @@ export default [
             />
         ),
         // 帮助链接
-        helpLink: 'https://kaka-kit.readthedocs.io/en/latest/quickstart.html#' // TODO  
+        // helpLink: 'https://kaka-kit.readthedocs.io/en/latest/quickstart.html#' // TODO  
+        helpLink: 'https://kaka-kit.rtfd.io', // TODO
+        helpLinkImage: kakaHelpLink,
     },
     {
         name: (

@@ -15,11 +15,11 @@ const HelpPage = props => (
                 <React.Fragment>
                     <img
                         className={styles.helpImg}
-                        src={help}
+                        src={props.helpLinkImage}
                     />
                 </React.Fragment>
                 {/* 由于APP上架不通过，原因好像是上架时设置为适用于儿童，无法使用跳转链接 */}
-                <p className={styles.helpLink}>kaka-kit.rtfd.io</p>
+                <p className={styles.helpLink}>{props.helpLink.replace("https://", "")}</p>
                 <button
                     className={styles.copyButton}
                     onClick={props.onCopy}

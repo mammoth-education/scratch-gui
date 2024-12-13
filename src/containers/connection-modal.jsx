@@ -62,6 +62,7 @@ class ConnectionModal extends React.Component {
             'handleSSIDInputClick',
             "determine",
             "cancel",
+            "handleCopyUrl"
         ]);
         this.state = {
             latestFirmwareVersion: "",
@@ -95,7 +96,7 @@ class ConnectionModal extends React.Component {
     componentDidMount() {
         this.props.vm.on('PERIPHERAL_CONNECTED', this.handleConnected);
         this.props.vm.on('PERIPHERAL_REQUEST_ERROR', this.handleError);
-        console.log("当前点击的拓展", this.props.extensionId)
+        console.log("当前点击的拓展", this.props.extensionId, this.state.extension);
         if (this.state.extension && this.state.extension.firmwareFlashable) {
             this.props.vm.getPeripheralFirmwareVersion(this.props.extensionId).then(version => {
                 this.setState({
@@ -522,10 +523,11 @@ class ConnectionModal extends React.Component {
         });
     }
     handleCopyUrl() {
+        const helpLink = this.state.extension.helpLink;
         if (window.cordova) {
-            cordova.plugins.clipboard.copy("kaka-kit.rtfd.io");
+            cordova.plugins.clipboard.copy(helpLink);
         } else {
-            navigator.clipboard.writeText("kaka-kit.rtfd.io")
+            navigator.clipboard.writeText(helpLink)
                 .then(function () {
                     console.log('文本已成功复制到剪贴板');
                 })
@@ -670,6 +672,8 @@ class ConnectionModal extends React.Component {
                         sendCalibrationState={this.state.sendCalibrationState}
                         isApPasswordTooShort={this.state.isApPasswordTooShort}
                         isStaPasswordTooShort={this.state.isStaPasswordTooShort}
+                        helpLink={this.state.extension && this.state.extension.helpLink}
+                        helpLinkImage={this.state.extension && this.state.extension.helpLinkImage}
                         onScanWifi={this.handleScanWifi}
                         onOptionClick={this.handleOptionClick}
                         onSSIDInputBlur={this.handleSSIDInputBlur}
