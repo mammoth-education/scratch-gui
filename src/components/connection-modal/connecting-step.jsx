@@ -1,4 +1,4 @@
-import {FormattedMessage} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
@@ -8,6 +8,7 @@ import Dots from './dots.jsx';
 
 import bluetoothIcon from './icons/bluetooth-white.svg';
 import closeIcon from '../close-button/icon--close.svg';
+import connectingIcon from './icons/internet-connection-white.svg';
 
 import styles from './connection-modal.css';
 
@@ -22,7 +23,7 @@ const ConnectingStep = props => (
                     />
                     <img
                         className={styles.bluetoothConnectingIcon}
-                        src={bluetoothIcon}
+                        src={props.internetConnectionRequired ? connectingIcon : bluetoothIcon}
                     />
                 </div>
             </Box>

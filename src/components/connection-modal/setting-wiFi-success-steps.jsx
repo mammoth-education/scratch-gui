@@ -18,7 +18,7 @@ const RenameDeviceSuccessStep = props => (
     </Box>
     <Box className={styles.bottomArea}>
       <FormattedMessage
-        defaultMessage="Rename device Success"
+        defaultMessage="Device set successfully. Please reset to apply changes."
         description="Message indicating rename device success"
         id="gui.connection.set-device-success"
       />
