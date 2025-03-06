@@ -284,6 +284,22 @@
     position: relative;
 }
 
+.selectBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    margin: 0.5rem;
+}
+
+.networkSelect {
+    width: 100%;
+    height: 2.2rem;
+    border: 1px dashed $ui-primary;
+    border-radius: $form-radius;
+}
+
 .dropdown-item {
     margin: 10px;
 }

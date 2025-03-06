@@ -63,8 +63,8 @@ const SettingWiFiSteps = props => {
               id="gui.connection.set-device-WIFI"
             />
           </Box>
-          <Box className={styles.inputBox}>
-            <input className={styles.deviceNameInput}
+          <Box className={styles.selectBox}>
+            {/* <input className={styles.deviceNameInput}
               type="text"
               // placeholder="请输入SSID"
               placeholder={props.intl.formatMessage({
@@ -77,8 +77,8 @@ const SettingWiFiSteps = props => {
               onClick={props.onSSIDInputClick}
               onFocus={props.onScanWifi}
               onBlur={props.onSSIDInputBlur}
-            />
-            {props.showDropdown && (
+            /> */}
+            {/* {props.showDropdown && (
               <div className={styles.dropdownMenu}>
                 {props.networksList.length > 0 ? (
                   props.networksList.map((network, index) => (
@@ -100,6 +100,25 @@ const SettingWiFiSteps = props => {
                   </div>
                 )}
               </div>
+            )} */}
+            {(
+              <select className={styles.networkSelect} onChange={props.onWifiSSIDChanged} onClick={props.onScanWifi}>
+                {props.networksList.length > 0 ? (
+                  props.networksList.map((network, index) => (
+                    <option key={index} value={network.ssid}>
+                      {network.ssid}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">
+                    <FormattedMessage
+                      defaultMessage="Searching..."
+                      description="Searching..."
+                      id="gui.connection.scan-wifi"
+                    />
+                  </option>
+                )}
+              </select>
             )}
             {
               <Box className={styles.setTips}>

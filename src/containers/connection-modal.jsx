@@ -97,6 +97,7 @@ class ConnectionModal extends React.Component {
         this.props.vm.on('PERIPHERAL_CONNECTED', this.handleConnected);
         this.props.vm.on('PERIPHERAL_REQUEST_ERROR', this.handleError);
         console.log("当前点击的拓展", this.props.extensionId, this.state.extension);
+        this.props.vm.setSendDataState(this.props.extensionId, true);
         if (this.state.extension && this.state.extension.firmwareFlashable) {
             this.props.vm.getPeripheralFirmwareVersion(this.props.extensionId).then(version => {
                 this.setState({
@@ -151,6 +152,7 @@ class ConnectionModal extends React.Component {
     componentWillUnmount() {
         this.props.vm.removeListener('PERIPHERAL_CONNECTED', this.handleConnected);
         this.props.vm.removeListener('PERIPHERAL_REQUEST_ERROR', this.handleError);
+        this.props.vm.setSendDataState(this.props.extensionId, false);
         clearInterval(this.intervalId);
         clearInterval(this.setIntervalID);
     }
@@ -332,12 +334,12 @@ class ConnectionModal extends React.Component {
         let restart = { "command": "restart-sta" };
         this.props.vm.settingDeviceWiFi(this.props.extensionId, restart);
         this.setState({
-            phase: PHASES.renameDeviceSuccess,
+            phase: PHASES.settingWiFiSuccess,
             deviceName: this.state.newDeviceName != "" ? this.state.newDeviceName : this.state.deviceName
         });
         analytics.event({
             category: 'extensions',
-            action: 'confirmRenameDevice',
+            action: 'confirmSettingWifi',
             label: this.props.extensionId
         });
         console.log("getDevicesWifiData：", this.props.vm.getDevicesWifiData(this.props.extensionId));
@@ -418,14 +420,9 @@ class ConnectionModal extends React.Component {
         if (this.state.password && this.state.password != "" && this.state.password.length >= 8 && this.state.ssid && this.state.ssid != "") {
             this.handleSettingWifiConfirm();
         }
-        analytics.event({
-            category: 'extensions',
-            action: 'confirmRenameDevice',
-            label: this.props.extensionId
-        });
     }
     handleReconnect() {
-        handleDisconnect();
+        this.handleDisconnect();
         this.setState({
             phase: PHASES.scanning
             // phase: PHASES.connected
@@ -604,31 +601,17 @@ class ConnectionModal extends React.Component {
         let restart = { "command": "scan-wifi" };
         this.props.vm.settingDeviceWiFi(this.props.extensionId, restart);
         let networks;
-        let intervalId = setInterval(() => {
+        this.intervalId = setInterval(() => {
             networks = this.props.vm.getWebSocketData(this.props.extensionId);
             console.log("webSocketData", networks);
-            if (networks._networks.length > 0) {
+            if (networks && networks._networks.length > 0) {
                 this.setState({ networksList: networks._networks, });
                 //清除定时器
-                clearInterval(intervalId);
+                clearInterval(this.intervalId);
             }
         }, 2000);
     }
 
-    handleMobileKeyboard() {
-        window.addEventListener('native.keyboardshow', (e) => {
-            console.log(e.keyboardHeight, "键盘高度");
-            if (window.device && window.device.platform !== "Android") {
-                return;
-            }
-            let keyboardHeight = e.keyboardHeight;
-            let screenHeight = window.screen.height;
-
-        });
-        // 键盘隐藏
-        window.addEventListener('native.keyboardhide', (e) => {
-        });
-    }
     render() {
         localStorage.setItem("deviceName", this.state.deviceName)
         return (
@@ -653,6 +636,7 @@ class ConnectionModal extends React.Component {
                         title={this.props.extensionId}
                         useAutoScan={this.state.extension && this.state.extension.useAutoScan}
                         bluetoothRequired={this.state.extension && this.state.extension.bluetoothRequired}
+                        internetConnectionRequired={this.state.extension && this.state.extension.internetConnectionRequired}
                         wireless={this.state.extension && this.state.extension.wireless}
                         bluetooth={this.state.extension && this.state.extension.bluetooth}
                         firmwareFlashable={this.state.extension && this.state.extension.firmwareFlashable}
