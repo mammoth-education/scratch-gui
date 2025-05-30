@@ -1,5 +1,5 @@
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import keyMirror from 'keymirror';
 
 import successImage from '../assets/icon--success.svg';
@@ -120,7 +120,7 @@ const alerts = [
                 defaultMessage="Could not create the project. Please try again!"
                 description="Message indicating that project could not be created"
                 id="gui.alerts.creatingError"
-                // 保存error
+            // 保存error
             />
         ),
         level: AlertLevels.WARN
@@ -135,10 +135,26 @@ const alerts = [
                 defaultMessage="Could not create the project. Please try again!"
                 description="Message indicating that project could not be created"
                 id="gui.alerts.duplicateNames"
-                // 名称重复error
+            // 名称重复error
             />
         ),
         level: AlertLevels.WARN
+    },
+    // ai初始化成功
+    {
+        alertId: 'aiSuccess',
+        clearList: [],
+        closeButton: true,
+        content: "AI initialized successfully",
+        level: AlertLevels.SUCCESS,
+    },
+    // ai初始化失败
+    {
+        alertId: 'aiError',
+        closeButton: true,
+        clearList: [],
+        content: sessionStorage.getItem('aiError'),
+        level: AlertLevels.WARN,
     },
     {
         alertId: 'deletedSuccessfully',
@@ -149,7 +165,7 @@ const alerts = [
                 defaultMessage="Could not create the project. Please try again!"
                 description="Message indicating that project could not be created"
                 id="gui.alerts.deletedSuccessfully"
-                // 删除成功提示
+            // 删除成功提示
             />
         ),
         iconURL: successImage,
@@ -166,7 +182,7 @@ const alerts = [
                 defaultMessage="Could not create the project. Please try again!"
                 description="Message indicating that project could not be created"
                 id="gui.alerts.characterLimit"
-                // 输入框过长提示
+            // 输入框过长提示
             />
         ),
         iconURL: successImage,
