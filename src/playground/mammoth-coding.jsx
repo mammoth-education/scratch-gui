@@ -44,13 +44,13 @@ const fixAndroidNotch = () => {
         }
     }
 
-    setTimeout(()=>{
+    setTimeout(() => {
         if (!window.device) return;
         if (window.cordova && device && device.manufacturer == "HUAWEI") {
             document.body.style.width = 'calc(100% - env(safe-area-inset-left) )';
             document.body.style.padding = '0';
         }
-    },500);
+    }, 500);
 
 };
 
@@ -82,6 +82,69 @@ export default appTarget => {
             // },100)
         }
     })
+    // 获取对应元素高度
+    // let currentInputTop = 0;
+    // let currentInputHeight = 0;
+    // let currentInputBottom = 0;
+    // let currentInputParentTop = 0;
+    // let currentInputParentBottom = 0;
+    // let parent = null;
+    // document.addEventListener('focusin', (event) => {
+    //     if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+    //         const target = event.target;
+    //         const rect = target.parentElement.getBoundingClientRect();
+    //         //console.log('当前元素信息:', rect);
+
+    //         // 距离视口顶部的距离
+    //         currentInputHeight = rect.height;
+    //         currentInputTop = rect.top;
+    //         currentInputBottom = rect.bottom;
+    //         console.log(`当前 INPUT 距离视口顶部: ${currentInputTop}px`);
+
+    //         let currentElement = event.target;
+    //         let level = 0; // 当前层级计数
+
+    //         // 向上找到第八层父元素
+    //         while (currentElement && level < 7) {
+    //             currentElement = currentElement.parentElement;
+    //             level++;
+    //         }
+
+    //         if (currentElement) {
+    //             //console.log('第七层父元素:', currentElement);
+    //             parent = currentElement;
+    //             // 获取第七层父元素距离视口顶部的距离
+    //             currentInputParentTop = currentElement.getBoundingClientRect().top;
+    //             currentInputParentBottom = currentElement.getBoundingClientRect().bottom
+    //             console.log(`父元素距离视口顶部: ${currentInputParentTop.top}px`);
+    //             console.log(`父元素距离视口顶部: ${currentInputParentTop.bottom}px`);
+
+
+    //         } else {
+    //             console.log('没有第七层父元素，已到顶层');
+    //         }
+    //     }
+    // });
+
+
+    // 键盘弹出
+    // window.addEventListener('native.keyboardshow', (e) => {
+    //     console.log(e);
+    //     console.log(e.keyboardHeight, "键盘高度");
+    //     if (window.device && window.device.platform !== "Android") {
+    //         return;
+    //     }
+    //     // const moveDistance = window.innerHeight - e.keyboardHeight - currentInputTop;
+    //     const moveDistance = currentInputParentTop - (currentInputTop - (window.innerHeight - e.keyboardHeight));
+    //     if (currentInputTop > window.innerHeight - e.keyboardHeight) {
+    //     }
+    //     parent.style.top = `${moveDistance}px`;
+    //     console.log(`需要移动的距离: ${moveDistance}px`);
+    // });
+    // // 键盘隐藏
+    // window.addEventListener('native.keyboardhide', (e) => {
+    //     parent.style.top = "50%";
+    // });
     // if(window.cordova && window.cordova.platformId == "android"){
     //     screen.orientation.lock('landscape-primary');
     // }

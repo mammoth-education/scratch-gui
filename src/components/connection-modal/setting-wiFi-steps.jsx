@@ -8,7 +8,7 @@ const SettingWiFiSteps = props => {
   return (
     <Box className={styles.body}>
       <Box className={styles.setActivityArea}>
-        <Box className={styles.centeredRow}>
+        <Box className={styles.wifiCenteredRow}>
           <Box className={styles.setTitle}>
             <FormattedMessage
               defaultMessage="Rename Device"
@@ -31,117 +31,108 @@ const SettingWiFiSteps = props => {
             <Box className={styles.setTips}>
               {props.renameState && <span>*</span>}
             </Box>
-
           </Box>
+
+          {/* AI */}
           <Box className={styles.setTitle}>
             <FormattedMessage
-              defaultMessage="Device Password"
-              description="Device Password"
-              id="gui.connection.set-device-password"
+              defaultMessage="AI Key"
+              description="AI Key"
+              id="gui.connection.set-ai-key"
             />
           </Box>
           <Box className={styles.inputBox}>
-            <input className={styles.deviceNameInput}
+            <textarea className={styles.deviceAiInput}
               type="text"
-              // placeholder="请输入新密码"
               placeholder={props.intl.formatMessage({
-                defaultMessage: "Please enter new password",
-                id: "gui.connection.ap-new-password"
+                defaultMessage: "Please enter AI Key",
+                id: "gui.connection.ai-key"
               })}
-              defaultValue=""
-              // maxlength="10"
-              onChange={props.onDevicePasswordChanged}
+              defaultValue={props.aiApiKey}
+              onChange={props.onAiKeyChanged}
             />
             <Box className={styles.setTips}>
               {props.apPasswordState && <span>*</span>}
             </Box>
           </Box>
-          <Box className={styles.setTitle}>
-            <FormattedMessage
-              defaultMessage="set WIFI"
-              description="set WIFI"
-              id="gui.connection.set-device-WIFI"
-            />
-          </Box>
-          <Box className={styles.selectBox}>
-            {/* <input className={styles.deviceNameInput}
-              type="text"
-              // placeholder="请输入SSID"
-              placeholder={props.intl.formatMessage({
-                defaultMessage: "Please enter SSID",
-                id: "gui.connection.sta-new-device-name"
-              })}
-              value={props.staSsid}
-              // maxlength="10"
-              onChange={props.onWifiSSIDChanged}
-              onClick={props.onSSIDInputClick}
-              onFocus={props.onScanWifi}
-              onBlur={props.onSSIDInputBlur}
-            /> */}
-            {/* {props.showDropdown && (
-              <div className={styles.dropdownMenu}>
-                {props.networksList.length > 0 ? (
-                  props.networksList.map((network, index) => (
-                    <div
-                      className={styles.dropdownItem}
-                      key={index}
-                      onClick={() => props.onOptionClick(network.ssid)}
-                    >
-                      {network.ssid}
-                    </div>
-                  ))
-                ) : (
-                  <div>
-                    <FormattedMessage
-                      defaultMessage="Searching..."
-                      description="Searching..."
-                      id="gui.connection.scan-wifi"
-                    />
-                  </div>
-                )}
-              </div>
-            )} */}
-            {(
-              <select className={styles.networkSelect} onChange={props.onWifiSSIDChanged} onClick={props.onScanWifi}>
-                {props.networksList.length > 0 ? (
-                  props.networksList.map((network, index) => (
-                    <option key={index} value={network.ssid}>
-                      {network.ssid}
-                    </option>
-                  ))
-                ) : (
-                  <option value="">
-                    <FormattedMessage
-                      defaultMessage="Searching..."
-                      description="Searching..."
-                      id="gui.connection.scan-wifi"
-                    />
-                  </option>
-                )}
-              </select>
-            )}
-            {
-              <Box className={styles.setTips}>
-                {props.staSsidState && <span>*</span>}
+
+          {/* wifi设置 */}
+          {
+            props.deviceWifiEditable &&
+            <>
+              <Box className={styles.setTitle}>
+                <FormattedMessage
+                  defaultMessage="Device Password"
+                  description="Device Password"
+                  id="gui.connection.set-device-password"
+                />
               </Box>
-            }
-          </Box>
-          <Box className={styles.inputBox}>
-            <input className={styles.deviceNameInput}
-              type="text"
-              // placeholder="请输入密码"
-              placeholder={props.intl.formatMessage({
-                defaultMessage: "Please enter password",
-                id: "gui.connection.sta-new-password"
-              })}
-              // value={props.deviceName}
-              // maxlength="10"
-              onChange={props.onWifiPasswordChanged}
-            />
-            <Box className={styles.setTips}>
-              {props.staPasswordState && <span>*</span>}
-            </Box>
-          </Box>
+              <Box className={styles.inputBox}>
+                <input className={styles.deviceNameInput}
+                  type="text"
+                  // placeholder="请输入新密码"
+                  placeholder={props.intl.formatMessage({
+                    defaultMessage: "Please enter new password",
+                    id: "gui.connection.ap-new-password"
+                  })}
+                  defaultValue=""
+                  // maxlength="10"
+                  onChange={props.onDevicePasswordChanged}
+                />
+                <Box className={styles.setTips}>
+                  {props.apPasswordState && <span>*</span>}
+                </Box>
+              </Box>
+
+              <Box className={styles.setTitle}>
+                <FormattedMessage
+                  defaultMessage="set WIFI"
+                  description="set WIFI"
+                  id="gui.connection.set-device-WIFI"
+                />
+              </Box>
+              <Box className={styles.selectBox}>
+                {(
+                  <select className={styles.networkSelect} onChange={props.onWifiSSIDChanged} onClick={props.onScanWifi}>
+                    {props.networksList.length > 0 ? (
+                      props.networksList.map((network, index) => (
+                        <option key={index} value={network.ssid}>
+                          {network.ssid}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="">
+                        <FormattedMessage
+                          defaultMessage="Searching..."
+                          description="Searching..."
+                          id="gui.connection.scan-wifi"
+                        />
+                      </option>
+                    )}
+                  </select>
+                )}
+                <Box className={styles.setTips}>
+                  {props.staSsidState && <span>*</span>}
+                </Box>
+              </Box>
+              <Box className={styles.inputBox}>
+                <input className={styles.deviceNameInput}
+                  type="text"
+                  // placeholder="请输入密码"
+                  placeholder={props.intl.formatMessage({
+                    defaultMessage: "Please enter password",
+                    id: "gui.connection.sta-new-password"
+                  })}
+                  // value={props.deviceName}
+                  // maxlength="10"
+                  onChange={props.onWifiPasswordChanged}
+                />
+                <Box className={styles.setTips}>
+                  {props.staPasswordState && <span>*</span>}
+                </Box>
+              </Box>
+            </>
+          }
         </Box>
       </Box>
       <Box className={styles.bottomArea}>

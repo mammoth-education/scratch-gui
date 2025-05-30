@@ -21,9 +21,18 @@
 .centered-row {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    /* justify-content: center; */
+    /* align-items: flex-start; */
     align-items: center;
     flex-direction: column;
+}
+
+.wifi-centered-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 70%;
 }
 
 .centered-col {
@@ -273,8 +282,10 @@
     background-color: $motion-light-transparent;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     padding: .5rem;
+    overflow: auto;
+    max-height: 310px;
 }
 
 .inputBox {
@@ -282,6 +293,7 @@
     justify-content: center;
     align-items: center;
     position: relative;
+    width: 100%;
 }
 
 .selectBox {
@@ -290,7 +302,13 @@
     align-items: center;
     position: relative;
     width: 100%;
-    margin: 0.5rem;
+    margin: 0.5rem 0;
+}
+
+.aiConfirmedSvg {
+    margin-left: 10px;
+    width: 1.5rem;
+    cursor: pointer;
 }
 
 .networkSelect {
@@ -319,6 +337,176 @@
     color: white;
     /* background-color: $motion-light-transparent; */
 }
+
+.piCalibrateSelection {
+    width: 60%;
+}
+
+.piCalibrate {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.picarXgear {
+    width: 200px;
+    height: 200px;
+    position: relative;
+}
+
+.leftFront {
+    position: absolute;
+    /* width: 50px;
+    height: 50px; */
+    /* border-radius: 50%; */
+    /* top: 50px; */
+    top: 28%;
+    left: 22%;
+    transform: rotate(-90deg);
+}
+
+.leftFront,
+.rightFront,
+.leftBack,
+.rightBack {
+    width: 3rem;
+    height: 3rem;
+    background-color: hsla(177, 100%, 32%, 1);
+    border-radius: 0.5rem;
+    border: none;
+}
+
+.leftFront:active {
+    transform: rotate(-90deg) scale(0.95);
+}
+
+.rightFront:active {
+    transform: rotate(90deg) scale(0.95);
+}
+
+.leftBack:active {
+    transform: scale(0.95);
+}
+
+.rightBack:active {
+    transform: rotate(-180deg) scale(0.95);
+}
+
+.cameraLeft,
+.cameraRight,
+.cameraUp,
+.cameraDown {
+    width: 3rem;
+    height: 3rem;
+    background-color: hsla(177, 100%, 32%, 1);
+    border-radius: 0.5rem;
+    border: none;
+}
+
+.cameraLeft {
+    position: absolute;
+    top: 40%;
+    left: 20%;
+    transform: rotate(-90deg);
+}
+
+.cameraRight {
+    position: absolute;
+    top: 40%;
+    right: 20%;
+    transform: rotate(90deg);
+}
+
+.cameraUp {
+    position: absolute;
+    top: 15%;
+    left: 45%;
+}
+
+.cameraDown {
+    position: absolute;
+    top: 64%;
+    right: 45%;
+    transform: rotate(-180deg);
+}
+
+.cameraLeft:active {
+    transform: rotate(-90deg) scale(0.95);
+}
+
+.cameraRight:active {
+    transform: rotate(90deg) scale(0.95);
+}
+
+.cameraUp:active {
+    transform: scale(0.95);
+}
+
+.cameraDown:active {
+    transform: rotate(-180deg) scale(0.95);
+}
+
+.rightFront {
+    position: absolute;
+    top: 52%;
+    right: 22%;
+}
+
+.rightFront {
+    position: absolute;
+    top: 28%;
+    right: 22%;
+    transform: rotate(90deg);
+}
+
+.leftBack {
+    position: absolute;
+    /* width: 50px;
+    height: 50px;
+    border-radius: 50%; */
+    top: 52%;
+    left: 22%;
+}
+
+.rightBack {
+    position: absolute;
+    /* width: 50px;
+    height: 50px;
+    border-radius: 50%; */
+    top: 52%;
+    right: 22%;
+    transform: rotate(-180deg);
+}
+
+.rightBackSpan {
+    display: inline-block;
+    transform: rotate(180deg);
+    /* 反向旋转 */
+}
+
+.servoCalibrationValue {
+    position: absolute;
+    bottom: 35%;
+    left: 2%;
+}
+
+.cameraCalibrationValue {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    left: 2%;
+    bottom: 30%;
+}
+
+.motorCalibrationValue {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 30%;
+    left: 2%;
+}
+
 
 .dropdown-menu::-webkit-scrollbar {
     width: 2px;
@@ -535,7 +723,8 @@
     background: $error-primary;
 }
 
-.device-name-input {
+.device-name-input,
+.deviceAiInput {
     border: 1px dashed $ui-primary;
     border-radius: $form-radius;
     -webkit-border-radius: $form-radius;
@@ -547,6 +736,12 @@
     padding: .5rem;
     font-weight: bold;
     font-size: .8rem;
+    width: 100%;
+}
+
+.deviceAiInput {
+    resize: none;
+    height: 3.5rem;
 }
 
 .device-name {

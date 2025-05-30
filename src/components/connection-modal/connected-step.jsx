@@ -45,40 +45,6 @@ const ConnectedStep = props => {
                             </Box>
                         </>
                     }
-                    {
-                        (props.compassCalibrationState === 0 || props.compassCalibrationState === 2) &&
-                        // 校准完成
-                        <Box className={styles.calibrateBox}>
-                            <FormattedMessage
-                                defaultMessage="校准完成 !"
-                                description="Calibrate device"
-                                id="gui.connection.calibrationComplete"
-                            />
-                        </Box>
-
-                    }
-                    {
-                        props.compassCalibrationState === 1 &&
-                        // 正在校准
-                        <Box className={styles.calibrateBox}>
-                            <FormattedMessage
-                                defaultMessage="正在校准 ..."
-                                description="Calibrate device"
-                                id="gui.connection.calibrating"
-                            />
-                        </Box>
-                    }
-                    {
-                        props.compassCalibrationState === 3 &&
-                        // 校准中断
-                        <Box className={styles.calibrateBox}>
-                            <FormattedMessage
-                                defaultMessage="校准中断,请重新校准 !"
-                                description="Calibrate device"
-                                id="gui.connection.calibrationInterrupted"
-                            />
-                        </Box>
-                    }
                 </Box>
             </Box>
             <Box className={styles.bottomArea}>
@@ -110,48 +76,24 @@ const ConnectedStep = props => {
                     </button>}
 
                     {/* 校准 */}
-                    {props.deviceWifiEditable && props.wireless && props.calibrationRequired &&
+                    {
+                        // props.deviceWifiEditable && props.wireless && props.calibrationRequired &&
+                        props.wireless && props.calibrationRequired &&
                         <button
                             className={styles.connectionButton}
                             onClick={props.onCalibration}
                         >
-                            {/* {
-                                (props.compassCalibrationState === 0 || props.compassCalibrationState === 2) &&
-                                // 校准完成
-                                <FormattedMessage
-                                    defaultMessage="校准完成"
-                                    description="Calibrate device"
-                                    id="gui.connection.calibrate-a"
-                                />
-                            } */}
-                            {/* {
-                                props.compassCalibrationState === 1 && props.calibration !== 0 &&
-                                // 正在校准
-                                <FormattedMessage
-                                    defaultMessage="正在校准"
-                                    description="Calibrate device"
-                                    id="gui.connection.calibrate-s"
-                                />
-                            } */}
-                            {
-                                props.sendCalibrationState == 0 &&
-                                <FormattedMessage
-                                    defaultMessage="Calibrate device"
-                                    description="Calibrate device"
-                                    id="gui.connection.calibrate-device"
-                                />
-                            }
-                            {
-                                (props.sendCalibrationState == 1) &&
-                                <FormattedMessage
-                                    defaultMessage="Cancel calibrate device"
-                                    description="Cancel calibrate device"
-                                    id="gui.connection.cancel-calibrate-device"
-                                />
-                            }
+                            <FormattedMessage
+                                defaultMessage="Calibrate device"
+                                description="Calibrate device"
+                                id="gui.connection.calibrate-device"
+                            />
+
                         </button>}
                     {/* 设置wifi */}
-                    {props.deviceWifiEditable && props.wireless &&
+                    {
+                        // props.deviceWifiEditable && props.wireless &&
+                        props.wireless &&
                         <button
                             className={styles.connectionButton}
                             onClick={props.onSetButton}

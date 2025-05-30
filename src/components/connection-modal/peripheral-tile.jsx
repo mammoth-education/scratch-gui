@@ -39,7 +39,8 @@ class PeripheralTile extends React.Component {
                     </Box>
                 </Box>
                 <Box className={styles.peripheralTileWidgets}>
-                    <Box className={styles.signalStrengthMeter}>
+                    {/* 信号强度 */}
+                    {/* <Box className={styles.signalStrengthMeter}>
                         <div
                             className={classNames(styles.signalBar, {
                                 [styles.greenBar]: this.props.rssi > -80
@@ -60,7 +61,7 @@ class PeripheralTile extends React.Component {
                                 [styles.greenBar]: this.props.rssi > -20
                             })}
                         />
-                    </Box>
+                    </Box> */}
                     <button
                         onClick={this.handleConnecting}
                     >

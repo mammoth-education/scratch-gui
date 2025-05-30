@@ -62,7 +62,22 @@ class ConnectionModal extends React.Component {
             'handleSSIDInputClick',
             "determine",
             "cancel",
-            "handleCopyUrl"
+            "handleCopyUrl",
+            "handleZeusCarCalibrationConfirm",
+            "handleZeusCarCalibrationCancel",
+            "handlePiCarXCalibration",
+            "handlepiCarXCalibration",
+            "handlepiCarXMotorCalibration",
+            "handlePiCarXCalibrationConfirm",
+            "handlePiCarXCalibrationCancel",
+            "handlePiCarXCalibrationSelectionCancel",
+            "handlePiCarXGrayscale",
+            "handleAIKeyChanged",
+            "handleAIAssistantIDChanged",
+            "handleAIKeyConfirm",
+            "handleAIAssistantIDConfirm",
+            "handlePiCarXServoCalibration",
+            "handlePiCarXCamerCalibration"
         ]);
         this.state = {
             latestFirmwareVersion: "",
@@ -91,13 +106,25 @@ class ConnectionModal extends React.Component {
             sendCalibrationState: 0,
             isApPasswordTooShort: false,
             isStaPasswordTooShort: false,
+            piCarXCalibration: 0,
+            // motorCalibration: { left: 1, right: 1 },
+            AIKey: "",
+            AIAssistantID: "",
+            receiveBuffer: null,
+            steeringCalibration: 0, //转向校准
+            cameraCalibrationX: 0, //摄像头校准
+            cameraCalibrationY: 0, //摄像头校准
+            motorCalibration: [0, 0], //电机校准
+            aiApiKey: "",
         };
     }
     componentDidMount() {
         this.props.vm.on('PERIPHERAL_CONNECTED', this.handleConnected);
         this.props.vm.on('PERIPHERAL_REQUEST_ERROR', this.handleError);
         console.log("当前点击的拓展", this.props.extensionId, this.state.extension);
-        this.props.vm.setSendDataState(this.props.extensionId, true);
+        // if (this.props.extensionId != "kaka") {
+        //     this.props.vm.setSendDataState(this.props.extensionId, true);
+        // }
         if (this.state.extension && this.state.extension.firmwareFlashable) {
             this.props.vm.getPeripheralFirmwareVersion(this.props.extensionId).then(version => {
                 this.setState({
@@ -130,10 +157,12 @@ class ConnectionModal extends React.Component {
         if (this.state.extension && this.state.extension.deviceNameEditable) {
             if (this.props.vm.getPeripheralIsConnected(this.props.extensionId)) {
                 let deviceName = this.props.vm.getPeripheralName(this.props.extensionId);
-                let info = this.state.extension.deviceWifiEditable ? this.props.vm.getDeviceInfo(this.props.extensionId) : null;
+                // let info = this.state.extension.deviceWifiEditable ? this.props.vm.getDeviceInfo(this.props.extensionId) : null;
+                let info = this.props.vm.getDeviceInfo(this.props.extensionId);
                 this.setState({
                     deviceName: deviceName,
                     currentWifiIP: info ? info.ip : "",
+                    aiApiKey: info ? info.AI_API_KEY : ""
                 });
             }
         }
@@ -146,16 +175,32 @@ class ConnectionModal extends React.Component {
                 this.setState({ error: error.message });
             });
         }
-
+        // 获取设备发来的数据
+        this.getReceiveBufferIntervalID = setInterval(() => {
+            const receiveBuffer = this.props.vm.getReceiveBuffer(this.props.extensionId);
+            if (receiveBuffer !== this.state.receiveBuffer) {
+                this.setState({
+                    receiveBuffer,
+                    steeringCalibration: receiveBuffer.steeringCalibration,
+                    motorCalibration: receiveBuffer.motorCalibration,
+                    cameraCalibrationX: receiveBuffer.cameraCalibrationX,
+                    cameraCalibrationY: receiveBuffer.cameraCalibrationY
+                });
+            }
+        }, 100)
     }
 
     componentWillUnmount() {
         this.props.vm.removeListener('PERIPHERAL_CONNECTED', this.handleConnected);
         this.props.vm.removeListener('PERIPHERAL_REQUEST_ERROR', this.handleError);
-        this.props.vm.setSendDataState(this.props.extensionId, false);
+        // if (this.props.extensionId != "kaka") {
+        //     this.props.vm.setSendDataState(this.props.extensionId, false);
+        // }
         clearInterval(this.intervalId);
         clearInterval(this.setIntervalID);
+        clearInterval(this.getReceiveBufferIntervalID);
     }
+
     // 刷新
     handleScanning() {
         this.setState({
@@ -210,10 +255,13 @@ class ConnectionModal extends React.Component {
         }
     }
     handleConnected() {
+        console.log("handleConnected")
         if (this.state.extension && this.state.extension.deviceNameEditable) {
             let name = this.props.vm.getPeripheralName(this.props.extensionId);
+            let info = this.props.vm.getDeviceInfo(this.props.extensionId);
             this.setState({
-                deviceName: name
+                deviceName: name,
+                aiApiKey: info ? info.AI_API_KEY : ""
             });
         }
         if (this.state.extension && this.state.extension.deviceWifiEditable) {
@@ -393,6 +441,28 @@ class ConnectionModal extends React.Component {
             label: this.props.extensionId
         });
     }
+    // PiCarX页面校准返回
+    handlePiCarXCalibrationCancel() {
+        this.setState({
+            phase: PHASES.piCarXCalibrationSelection,
+        });
+        analytics.event({
+            category: 'extensions',
+            action: 'piCarXCalibrationSelection',
+            label: this.props.extensionId
+        });
+    }
+    // PiCarX校准选择返回
+    handlePiCarXCalibrationSelectionCancel() {
+        this.setState({
+            phase: PHASES.connected,
+        });
+        analytics.event({
+            category: 'extensions',
+            action: 'connected',
+            label: this.props.extensionId
+        });
+    }
 
     handleSetApPassword() {
         let data = { "apPassword": this.state.apNewPassword };
@@ -408,7 +478,7 @@ class ConnectionModal extends React.Component {
         });
     }
 
-    // 点击确定
+    // wifi设置点击确定
     handleConfirm() {
         console.log("确认了");
         if (this.state.newDeviceName != this.state.deviceName && this.state.newDeviceName != "") {
@@ -419,6 +489,9 @@ class ConnectionModal extends React.Component {
         }
         if (this.state.password && this.state.password != "" && this.state.password.length >= 8 && this.state.ssid && this.state.ssid != "") {
             this.handleSettingWifiConfirm();
+        }
+        if (this.state.AIKey && this.state.AIKey != "") {
+            this.handleAIKeyConfirm();
         }
     }
     handleReconnect() {
@@ -553,8 +626,33 @@ class ConnectionModal extends React.Component {
     cancel() {
         this.setState({ settingPopup: false });
     }
-    // 校准设备
+    // 校准按钮
     handleCalibration() {
+        console.log("校准", this.props);
+        if (this.props.extensionId == "zeusCar") {
+            this.setState({
+                phase: PHASES.zeusCarCalibration,
+            });
+            analytics.event({
+                category: 'extensions',
+                action: 'zeusCarCalibration',
+                label: this.props.extensionId
+            });
+        };
+        if (this.props.extensionId == "piCarX") {
+            this.setState({
+                phase: PHASES.piCarXCalibrationSelection,
+            });
+            analytics.event({
+                category: 'extensions',
+                action: 'piCarXCalibrationSelection',
+                label: this.props.extensionId
+            });
+        };
+    }
+    // ZeusCar校准设备
+    handleZeusCarCalibrationConfirm() {
+        console.log("校准设备");
         let newCalibration = this.state.sendCalibrationState == 0 ? 1 : 0;
         this.setState({ sendCalibrationState: newCalibration });
         this.props.vm.calibration(this.props.extensionId, newCalibration);
@@ -576,6 +674,17 @@ class ConnectionModal extends React.Component {
                 clearInterval(this.setIntervalID);
             }
         }, 1000);
+    }
+    // ZeusCar校准返回
+    handleZeusCarCalibrationCancel() {
+        this.setState({
+            phase: PHASES.connected,
+        });
+        analytics.event({
+            category: 'extensions',
+            action: 'connected',
+            label: this.props.extensionId
+        });
     }
 
     handleOptionClick = (option) => {
@@ -610,10 +719,164 @@ class ConnectionModal extends React.Component {
                 clearInterval(this.intervalId);
             }
         }, 2000);
+    };
+
+    handlePiCarXCalibration(value) {
+        console.log(value);
+        // 复位方向舵机和摄像头
+        if (value == 0) {
+            this.props.vm.setSendData(this.props.extensionId, "steering", 0);
+        } else if (value == 1) {
+            this.props.vm.setSendData(this.props.extensionId, "camera_pan", 0);
+            this.props.vm.setSendData(this.props.extensionId, "camera_tilt", 0);
+        }
+        this.setState({
+            phase: PHASES.piCarXCalibration,
+            piCarXCalibration: value
+        });
+        analytics.event({
+            category: 'extensions',
+            action: 'piCarXCalibration',
+            label: this.props.extensionId
+        });
+    };
+
+    handlepiCarXCalibration(type, data) {
+        this.props.vm.setSendData(this.props.extensionId, type, data);
+    }
+
+    // 转向舵机
+    handlePiCarXServoCalibration(type) {
+        // if (this.state.receiveBuffer.steeringCalibration) {
+        let servoCalibration = Number(this.state.steeringCalibration);
+        if (type === "left") {
+            servoCalibration -= 0.1;
+            if (servoCalibration < -20) {
+                servoCalibration = -20;
+            };
+        } else {
+            servoCalibration += 0.1;
+            if (servoCalibration > 20) {
+                servoCalibration = 20;
+            };
+        };
+        this.props.vm.setSendData(this.props.extensionId, "steering_offset", servoCalibration);
+        // }
+    };
+
+    // 摄像头校准
+    handlePiCarXCamerCalibration(type) {
+        // if (this.state.receiveBuffer.cameraCalibration) {
+        if (type === "addX") {
+            let cameraCalibrationX = Number(this.state.cameraCalibrationX);
+            cameraCalibrationX += 0.1;
+            if (cameraCalibrationX > 20) {
+                cameraCalibrationX = 20;
+            };
+            this.props.vm.setSendData(this.props.extensionId, "camera_pan_offset", cameraCalibrationX);
+        } else if (type === "decreaseX") {
+            let cameraCalibrationX = Number(this.state.cameraCalibrationX);
+            cameraCalibrationX -= 0.1;
+            if (cameraCalibrationX < -20) {
+                cameraCalibrationX = -20;
+            };
+            this.props.vm.setSendData(this.props.extensionId, "camera_pan_offset", cameraCalibrationX);
+        } else if (type === "addY") {
+            let cameraCalibrationY = Number(this.state.cameraCalibrationY);
+            cameraCalibrationY += 0.1;
+            if (cameraCalibrationY > 20) {
+                cameraCalibrationY = 20;
+            };
+            this.props.vm.setSendData(this.props.extensionId, "camera_tilt_offset", cameraCalibrationY);
+        } else if (type === "decreaseY") {
+            let cameraCalibrationY = Number(this.state.cameraCalibrationY);
+            cameraCalibrationY -= 0.1;
+            if (cameraCalibrationY < -20) {
+                cameraCalibrationY = -20;
+            };
+            this.props.vm.setSendData(this.props.extensionId, "camera_tilt_offset", cameraCalibrationY);
+        }
+        // }
+
+    }
+
+    // handlepiCarXMotorCalibration(type) {
+    //     let data = this.state.motorCalibration;
+    //     if (type === "left") {
+    //         data.left = this.state.motorCalibration.left == 1 ? -1 : 1;
+    //         this.setState({ motorCalibration: data });
+    //     } else {
+    //         data.right = this.state.motorCalibration.right == 1 ? -1 : 1;
+    //         this.setState({ motorCalibration: data });
+    //     };
+    //     this.handlepiCarXCalibration("motorCalibration", data);
+    // }
+    handlepiCarXMotorCalibration(type) {
+        let data = this.state.motorCalibration;
+        if (type === "left") {
+            data[0] = this.state.motorCalibration[0] == 1 ? -1 : 1;
+        } else {
+            data[1] = this.state.motorCalibration[1] == 1 ? -1 : 1;
+            this.setState({ motorCalibration: data });
+        };
+        this.props.vm.setSendData(this.props.extensionId, "motor_reverse", data);
+    }
+
+    // PiCarX校准确认
+    handlePiCarXCalibrationConfirm(type, data) {
+        for (let i = 0; i < 3; i++) {
+            let calibrationData = { type: i, data: 2 };
+            this.handlepiCarXCalibration("servoCalibration", calibrationData);
+        }
+        this.setState({
+            phase: PHASES.settingWiFi,
+        });
+        analytics.event({
+            category: 'extensions',
+            action: 'settingWiFi',
+            label: this.props.extensionId
+        });
+    }
+
+    handlePiCarXGrayscale() {
+        this.handlepiCarXCalibration("grayscaleCalibration", 1);
+        // let grayscaleState;
+        this.setIntervalID = setInterval(() => {
+            grayscaleState = this.props.vm.getReceiveBuffer(this.props.extensionId);
+            if (grayscaleState && grayscaleState.grayscaleCalibration == 2) {
+                console.log("校准完成");
+                clearInterval(this.setIntervalID);
+            }
+            if (grayscaleState && grayscaleState.grayscaleCalibration == 3) {
+                console.log("校准失败");
+                clearInterval(this.setIntervalID);
+            }
+        })
+    }
+
+    handleAIKeyChanged(e) {
+        this.setState({ AIKey: e.target.value });
+    }
+
+    handleAIAssistantIDChanged(e) {
+        this.setState({ AIAssistantID: e.target.value });
+    }
+
+    handleAIKeyConfirm() {
+        // this.props.vm.setSendData(this.props.extensionId, "AIKey", this.state.AIKey);
+        let data = { "ai_api_key": this.state.AIKey };
+        this.props.vm.settingDeviceWiFi(this.props.extensionId, data);
+    }
+
+    handleAIAssistantIDConfirm() {
+        // this.props.vm.setSendData(this.props.extensionId, "AIAssistantID", this.state.AIAssistantID);
+        let data = { "ai_assistant_id": this.state.AIAssistantID };
+        this.props.vm.settingDeviceWiFi(this.props.extensionId, data);
     }
 
     render() {
-        localStorage.setItem("deviceName", this.state.deviceName)
+        localStorage.setItem("deviceName", this.state.deviceName);
+        console.log("render", this.state);
         return (
             <>
                 {this.state.settingPopup ? <UniversalPopup content={content} determine={this.determine} cancel={this.cancel} buttonShow={true} /> :
@@ -658,6 +921,9 @@ class ConnectionModal extends React.Component {
                         isStaPasswordTooShort={this.state.isStaPasswordTooShort}
                         helpLink={this.state.extension && this.state.extension.helpLink}
                         helpLinkImage={this.state.extension && this.state.extension.helpLinkImage}
+                        piCarXCalibration={this.state.piCarXCalibration}
+                        receiveBuffer={this.state.receiveBuffer}
+                        aiApiKey={this.state.aiApiKey}
                         onScanWifi={this.handleScanWifi}
                         onOptionClick={this.handleOptionClick}
                         onSSIDInputBlur={this.handleSSIDInputBlur}
@@ -683,6 +949,21 @@ class ConnectionModal extends React.Component {
                         onHelp={this.handleHelp}
                         onScanning={this.handleScanning}
                         onCopy={this.handleCopyUrl}
+                        onPiCarXCalibration={this.handlePiCarXCalibration}
+                        onPiCarXCalibrationSend={this.handlepiCarXCalibration}
+                        onPiCarXMotorCalibration={this.handlepiCarXMotorCalibration}
+                        onPiCarXCalibrationConfirm={this.handlePiCarXCalibrationConfirm}
+                        onPiCarXGrayscale={this.handlePiCarXGrayscale}
+                        onZeusCarCalibrationCancel={this.handleZeusCarCalibrationCancel}
+                        onZeusCarCalibrationConfirm={this.handleZeusCarCalibrationConfirm}
+                        onPiCarXCalibrationCancel={this.handlePiCarXCalibrationCancel}
+                        onPiCarXCalibrationSelectionCancel={this.handlePiCarXCalibrationSelectionCancel}
+                        onAiKeyChanged={this.handleAIKeyChanged}
+                        onAIAssistantIDChanged={this.handleAIAssistantIDChanged}
+                        onAIKeyConfirm={this.handleAIKeyConfirm}
+                        onAIAssistantIDConfirm={this.handleAIAssistantIDConfirm}
+                        onPiCarXServoCalibration={this.handlePiCarXServoCalibration}
+                        onPiCarXCamerCalibration={this.handlePiCarXCamerCalibration}
                     />
                 }
             </>

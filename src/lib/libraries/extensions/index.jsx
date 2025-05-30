@@ -76,6 +76,48 @@ export default [
     {
         name: (
             <FormattedMessage
+                defaultMessage="PiCar-X"
+                description="长毛象 PiCarX extension"
+                id="gui.extension.PiCarX.name"
+            />
+        ),
+        extensionId: 'piCarX',
+        iconURL: zeusCarIconURL,
+        insetIconURL: zeusCarInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="piCarX"
+                description="Description for the 'piCarX' extension"
+                id="gui.extension.PiCarX.description"
+            />
+        ),
+        internetConnectionRequired: true,  //wifi图标
+        featured: true,
+        disabled: false,
+        // bluetoothRequired: true,  // 蓝牙图标
+        launchPeripheralConnectionFlow: true,
+        deviceNameEditable: true,
+        wireless: true, //WIFI连方式
+        firmwareFlashable: false, // 固件升级
+        deviceWifiEditable: false, // wifi可编辑
+        calibrationRequired: true,  //校准
+        useAutoScan: platform === "browser" ? true : false,
+        connectionIconURL: zeusCarConnectionIconURL,
+        connectionSmallIconURL: zeusCarConnectionSmallIconURL,
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their PiCarX."
+                id="gui.extension.PiCarX.connectingMessage"
+            />
+        ),
+        // 帮助链接
+        helpLink: 'https://zeus-car.rtfd.io',// TODO
+        helpLinkImage: zeusCarHelpLink,
+    },
+    {
+        name: (
+            <FormattedMessage
                 defaultMessage="Zeus-car"
                 description="长毛象 Zeus-car extension"
                 id="gui.extension.zeusCar.name"
