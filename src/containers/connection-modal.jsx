@@ -71,7 +71,10 @@ class ConnectionModal extends React.Component {
             "handlePiCarXCalibrationConfirm",
             "handlePiCarXCalibrationCancel",
             "handlePiCarXCalibrationSelectionCancel",
-            "handlePiCarXGrayscale",
+            "handlePiCarxLightGrayscale",
+            "handlePiCarxDarkGrayscale",
+            "getPiCarXGrayscale",
+            "calculateMedian",
             "handleAIKeyChanged",
             "handleAIAssistantIDChanged",
             "handleAIKeyConfirm",
@@ -107,15 +110,16 @@ class ConnectionModal extends React.Component {
             isApPasswordTooShort: false,
             isStaPasswordTooShort: false,
             piCarXCalibration: 0,
-            // motorCalibration: { left: 1, right: 1 },
             AIKey: "",
             AIAssistantID: "",
             receiveBuffer: null,
             steeringCalibration: 0, //转向校准
             cameraCalibrationX: 0, //摄像头校准
             cameraCalibrationY: 0, //摄像头校准
-            motorCalibration: [0, 0], //电机校准
+            motorCalibration: [true, true], //电机校准
             aiApiKey: "",
+            grayscaleMedian: [], //灰度值的中位数
+            grayscaleCalibrationSuccess: false, // 灰度校准成功
         };
     }
     componentDidMount() {
@@ -162,7 +166,7 @@ class ConnectionModal extends React.Component {
                 this.setState({
                     deviceName: deviceName,
                     currentWifiIP: info ? info.ip : "",
-                    aiApiKey: info ? info.AI_API_KEY : ""
+                    aiApiKey: info ? info.ai_api_key : ""
                 });
             }
         }
@@ -179,6 +183,10 @@ class ConnectionModal extends React.Component {
         this.getReceiveBufferIntervalID = setInterval(() => {
             const receiveBuffer = this.props.vm.getReceiveBuffer(this.props.extensionId);
             if (receiveBuffer !== this.state.receiveBuffer) {
+                if (receiveBuffer.grayscale3ChannelData) {
+                    let data = receiveBuffer.grayscale3ChannelData;
+                    Math.max(...data) - Math.min(...data) > 50 ? this.setState({ grayscaleCalibrationSuccess: true }) : this.setState({ grayscaleCalibrationSuccess: false });
+                }
                 this.setState({
                     receiveBuffer,
                     steeringCalibration: receiveBuffer.steeringCalibration,
@@ -261,7 +269,7 @@ class ConnectionModal extends React.Component {
             let info = this.props.vm.getDeviceInfo(this.props.extensionId);
             this.setState({
                 deviceName: name,
-                aiApiKey: info ? info.AI_API_KEY : ""
+                aiApiKey: info ? info.ai_api_key : ""
             });
         }
         if (this.state.extension && this.state.extension.deviceWifiEditable) {
@@ -800,58 +808,94 @@ class ConnectionModal extends React.Component {
 
     }
 
-    // handlepiCarXMotorCalibration(type) {
-    //     let data = this.state.motorCalibration;
-    //     if (type === "left") {
-    //         data.left = this.state.motorCalibration.left == 1 ? -1 : 1;
-    //         this.setState({ motorCalibration: data });
-    //     } else {
-    //         data.right = this.state.motorCalibration.right == 1 ? -1 : 1;
-    //         this.setState({ motorCalibration: data });
-    //     };
-    //     this.handlepiCarXCalibration("motorCalibration", data);
-    // }
     handlepiCarXMotorCalibration(type) {
         let data = this.state.motorCalibration;
         if (type === "left") {
-            data[0] = this.state.motorCalibration[0] == 1 ? -1 : 1;
+            data[0] = this.state.motorCalibration[0] ? false : true;
         } else {
-            data[1] = this.state.motorCalibration[1] == 1 ? -1 : 1;
-            this.setState({ motorCalibration: data });
+            data[1] = this.state.motorCalibration[1] ? false : true;
         };
+        this.setState({ motorCalibration: data });
         this.props.vm.setSendData(this.props.extensionId, "motor_reverse", data);
     }
 
     // PiCarX校准确认
-    handlePiCarXCalibrationConfirm(type, data) {
-        for (let i = 0; i < 3; i++) {
-            let calibrationData = { type: i, data: 2 };
-            this.handlepiCarXCalibration("servoCalibration", calibrationData);
+    handlePiCarXCalibrationConfirm() {
+        if (this.state.grayscaleMedian.length < 2) {
+            console.warn("数据有问题！！！");
+            return;
         }
-        this.setState({
-            phase: PHASES.settingWiFi,
-        });
-        analytics.event({
-            category: 'extensions',
-            action: 'settingWiFi',
-            label: this.props.extensionId
-        });
+        this.props.vm.setSendData(this.props.extensionId, "grayscale_calibration", this.state.grayscaleMedian);
+        this.setState({ grayscaleMedian: [] });
+    }
+    // 计算中位数
+    calculateMedian(arr) {
+        if (!arr.length) return null;
+        const sorted = [...arr].sort((a, b) => a - b);
+        const mid = Math.floor(sorted.length / 2);
+        const median = sorted.length % 2 === 0
+            ? (sorted[mid - 1] + sorted[mid]) / 2
+            : sorted[mid];
+        return Number(median.toFixed(1));
     }
 
-    handlePiCarXGrayscale() {
-        this.handlepiCarXCalibration("grayscaleCalibration", 1);
-        // let grayscaleState;
-        this.setIntervalID = setInterval(() => {
-            grayscaleState = this.props.vm.getReceiveBuffer(this.props.extensionId);
-            if (grayscaleState && grayscaleState.grayscaleCalibration == 2) {
-                console.log("校准完成");
-                clearInterval(this.setIntervalID);
+    // 获取10个灰度值取中间值
+    getPiCarXGrayscale(type) {
+        console.log("getPiCarXGrayscale");
+        console.log("更新前", this.state.grayscaleMedian);
+        if (this.piCarXGrayscaleDataId) {
+            clearInterval(this.piCarXGrayscaleDataId);
+        }
+        let grayscaleHistory = [];
+        this.piCarXGrayscaleDataId = setInterval(() => {
+            let data = this.state.receiveBuffer.grayscale3Channel;
+            console.log("data", data);
+            if (this.state.receiveBuffer) {
+                grayscaleHistory.push([...data]);
+                if (grayscaleHistory.length === 10) {
+                    // 清除piCarXGrayscaleDataId
+                    clearInterval(this.piCarXGrayscaleDataId);
+                    const channelA = grayscaleHistory.map(item => item[0]);
+                    const channelB = grayscaleHistory.map(item => item[1]);
+                    const channelC = grayscaleHistory.map(item => item[2]);
+
+                    const aMedian = this.calculateMedian(channelA);
+                    const bMedian = this.calculateMedian(channelB);
+                    const cMedian = this.calculateMedian(channelC);
+                    const median = [aMedian, bMedian, cMedian];
+                    console.log("最近10组数据：", grayscaleHistory);
+                    console.log("中位数：", median);
+                    if (type === "light") {
+                        let data = this.state.grayscaleMedian;
+                        data[0] = median;
+                        // data.unshift(median);
+                        console.log("更新前后", data);
+                        this.setState({ grayscaleMedian: data });
+                    } else {
+                        let data = this.state.grayscaleMedian;
+                        data[1] = median;
+                        // data.push(median);
+                        console.log("更新前后", data);
+                        this.setState({ grayscaleMedian: data });
+                    }
+
+                }
+            } else {
+                clearInterval(this.piCarXGrayscaleDataId);
             }
-            if (grayscaleState && grayscaleState.grayscaleCalibration == 3) {
-                console.log("校准失败");
-                clearInterval(this.setIntervalID);
-            }
-        })
+
+        }, 100);
+    }
+    // PiCarX灰度校准
+    handlePiCarxLightGrayscale() {
+        this.getPiCarXGrayscale("light");
+        console.log("LightGrayscale", this.state.grayscaleMedian);
+
+    }
+
+    handlePiCarxDarkGrayscale() {
+        this.getPiCarXGrayscale("dark");
+        console.log("DarkGrayscale", this.state.grayscaleMedian);
     }
 
     handleAIKeyChanged(e) {
@@ -876,7 +920,6 @@ class ConnectionModal extends React.Component {
 
     render() {
         localStorage.setItem("deviceName", this.state.deviceName);
-        console.log("render", this.state);
         return (
             <>
                 {this.state.settingPopup ? <UniversalPopup content={content} determine={this.determine} cancel={this.cancel} buttonShow={true} /> :
@@ -924,6 +967,8 @@ class ConnectionModal extends React.Component {
                         piCarXCalibration={this.state.piCarXCalibration}
                         receiveBuffer={this.state.receiveBuffer}
                         aiApiKey={this.state.aiApiKey}
+                        grayscaleMedian={this.state.grayscaleMedian}
+                        grayscaleCalibrationSuccess={this.state.grayscaleCalibrationSuccess}
                         onScanWifi={this.handleScanWifi}
                         onOptionClick={this.handleOptionClick}
                         onSSIDInputBlur={this.handleSSIDInputBlur}
@@ -953,7 +998,8 @@ class ConnectionModal extends React.Component {
                         onPiCarXCalibrationSend={this.handlepiCarXCalibration}
                         onPiCarXMotorCalibration={this.handlepiCarXMotorCalibration}
                         onPiCarXCalibrationConfirm={this.handlePiCarXCalibrationConfirm}
-                        onPiCarXGrayscale={this.handlePiCarXGrayscale}
+                        onPiCarxLightGrayscale={this.handlePiCarxLightGrayscale}
+                        onPiCarxDarkGrayscale={this.handlePiCarxDarkGrayscale}
                         onZeusCarCalibrationCancel={this.handleZeusCarCalibrationCancel}
                         onZeusCarCalibrationConfirm={this.handleZeusCarCalibrationConfirm}
                         onPiCarXCalibrationCancel={this.handlePiCarXCalibrationCancel}

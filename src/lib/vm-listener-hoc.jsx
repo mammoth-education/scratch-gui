@@ -149,6 +149,8 @@ const vmListenerHOC = function (WrappedComponent) {
                 onTurboModeOff,
                 onTurboModeOn,
                 onShowExtensionAlert,
+                onBlockAlertButton,
+                onBlockAlert,
                 /* eslint-enable no-unused-vars */
                 ...props
             } = this.props;
@@ -172,6 +174,8 @@ const vmListenerHOC = function (WrappedComponent) {
         onTargetsUpdate: PropTypes.func.isRequired,
         onTurboModeOff: PropTypes.func.isRequired,
         onTurboModeOn: PropTypes.func.isRequired,
+        onBlockAlert: PropTypes.func.isRequired,
+        onBlockAlertButton: PropTypes.func.isRequired,
         projectChanged: PropTypes.bool,
         shouldUpdateTargets: PropTypes.bool,
         shouldUpdateProjectChanged: PropTypes.bool,

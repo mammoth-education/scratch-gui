@@ -54,20 +54,20 @@ const PiCarXCalibrationSelection = props => {
             </button>
           </Box>
           {/* 灰度校准 */}
-          {/* <Box className={styles.piCalibrate}>
-                <FormattedMessage
-                  defaultMessage="Grayscale"
-                  description="Grayscale Calibration"
-                  id="gui.piCarGrayscale"
-                />
-                <button onClick={props.onPiCarXGrayscale} className={styles.connectionButton}>
-                  <FormattedMessage
-                    defaultMessage="Calibration"
-                    description="Calibration"
-                    id="gui.connection.calibrate-device"
-                  />
-                </button>
-              </Box> */}
+          <Box className={styles.piCalibrate}>
+            <FormattedMessage
+              defaultMessage="Grayscale"
+              description="Grayscale Calibration"
+              id="gui.piCarGrayscale"
+            />
+            <button onClick={() => props.onPiCarXCalibration(3)} className={styles.connectionButton}>
+              <FormattedMessage
+                defaultMessage="Calibration"
+                description="Calibration"
+                id="gui.connection.calibrate-device"
+              />
+            </button>
+          </Box>
         </Box>
 
       </Box>

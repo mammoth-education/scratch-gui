@@ -13,91 +13,165 @@ const PiCarXCalibration = props => {
   return (
     <Box className={styles.body}>
       <Box className={styles.setActivityArea}>
-        <Box>
-          {
-            props.piCarXCalibration != 1 ?
-              <img className={styles.picarXgear} src={picarXgear} /> :
-              <img className={styles.camera} src={camera} />
-          }
-          {
-            props.piCarXCalibration === 0 &&
-            <>
-              {/* <button className={styles.leftFront} onClick={() => props.onPiCarXCalibrationSend("servoCalibration", { type: 2, data: -1 })}>
-                <img src={upArrowIcon} />
+        {
+          props.piCarXCalibration !== 3 &&
+          <Box className={styles.piCalibrateBox}>
+            {
+              props.piCarXCalibration != 1 && props.piCarXCalibration != 3 ?
+                <img className={styles.picarXgear} src={picarXgear} /> :
+                props.piCarXCalibration != 3 &&
+                <img className={styles.camera} src={camera} />
+            }
+
+            {
+              props.piCarXCalibration === 0 &&
+              <>
+                <button className={styles.leftFront} onClick={() => props.onPiCarXServoCalibration("left")}>
+                  <img src={upArrowIcon} />
+                </button>
+                <button className={styles.rightFront} onClick={() => props.onPiCarXServoCalibration("right")}>
+                  <img src={upArrowIcon} />
+                </button>
+              </>
+            }
+            {
+              props.piCarXCalibration === 1 &&
+              <>
+                <button className={styles.cameraLeft} onClick={() => props.onPiCarXCamerCalibration("decreaseX")}>
+                  <img src={upArrowIcon} />
+                </button>
+                <button className={styles.cameraRight} onClick={() => props.onPiCarXCamerCalibration("addX")}>
+                  <img src={upArrowIcon} />
+                </button>
+                <button className={styles.cameraUp} onClick={() => props.onPiCarXCamerCalibration("addY")}>
+                  <img src={upArrowIcon} />
+                </button >
+                <button className={styles.cameraDown} onClick={() => props.onPiCarXCamerCalibration("decreaseY")}>
+                  <img src={upArrowIcon} />
+                </button>
+              </>
+            }
+            {
+              props.piCarXCalibration === 2 &&
+              <>
+                <button className={styles.leftBack} onClick={() => props.onPiCarXMotorCalibration("left")}>
+                  L
+                </button >
+                <button className={styles.rightBack} onClick={() => props.onPiCarXMotorCalibration("right")}>
+                  <span className={styles.rightBackSpan}>R</span>
+                </button>
+              </>
+            }
+          </Box>
+        }
+        {
+          props.piCarXCalibration === 3 &&
+          <Box className={styles.wifiCenteredRow}>
+            <Box className={styles.setTitle}>
+              <FormattedMessage
+                defaultMessage="grayscale"
+                description="grayscale"
+                id="gui.connection.grayscale-value"
+              />
+            </Box>
+            <Box className={styles.grayscaleValueBox}>
+              <Box style={{ width: "4rem" }}>
+                <FormattedMessage
+                  defaultMessage="Pre-Cal: "
+                  description="Pre-Cal"
+                  id="gui.connection.grayscale-PreCal"
+                />
+              </Box>
+              <Box style={{ margin: "0 10px" }}>
+                <button className={styles.grayscaleValue}>{props.receiveBuffer.grayscale3Channel[0] || ""}</button>
+                <button className={styles.grayscaleValue}>{props.receiveBuffer.grayscale3Channel[1] || ""}</button>
+                <button className={styles.grayscaleValue}>{props.receiveBuffer.grayscale3Channel[2] || ""}</button>
+              </Box>
+            </Box>
+            <Box className={styles.grayscaleValueBox}>
+              <Box style={{ width: "4rem" }}>
+                <FormattedMessage
+                  defaultMessage="Post-Cal: "
+                  description="Post-Cal"
+                  id="gui.connection.grayscale-PostCal"
+                />
+              </Box>
+              <Box style={{ margin: "10px 10px" }}>
+                <button className={styles.grayscaleValue} style={{ backgroundColor: props.grayscaleCalibrationSuccess ? "red" : "white" }}>{props.receiveBuffer.grayscale3ChannelData[0] || ""}</button>
+                <button className={styles.grayscaleValue} style={{ backgroundColor: props.grayscaleCalibrationSuccess ? "red" : "white" }}>{props.receiveBuffer.grayscale3ChannelData[1] || ""}</button>
+                <button className={styles.grayscaleValue} style={{ backgroundColor: props.grayscaleCalibrationSuccess ? "red" : "white" }}>{props.receiveBuffer.grayscale3ChannelData[2] || ""}</button>
+              </Box>
+            </Box>
+            <Box className={styles.setTitle}>
+              <FormattedMessage
+                defaultMessage="Calibration"
+                description="Calibration"
+                id="gui.connection.grayscale-calibration"
+              />
+            </Box>
+            <Box className={styles.grayscaleValueBox}>
+              <Box style={{ width: "4rem" }}>
+                <FormattedMessage
+                  defaultMessage="Light: "
+                  description="Light"
+                  id="gui.connection.grayscale-light"
+                />
+              </Box>
+              <Box style={{ margin: "10px 10px" }}>
+                <button className={styles.grayscaleValue}>{props.grayscaleMedian[0] ? props.grayscaleMedian[0][0] : ""}</button>
+                <button className={styles.grayscaleValue}>{props.grayscaleMedian[0] ? props.grayscaleMedian[0][1] : ""}</button>
+                <button className={styles.grayscaleValue}>{props.grayscaleMedian[0] ? props.grayscaleMedian[0][2] : ""}</button>
+              </Box>
+              <button
+                className={styles.connectionButton}
+                style={{ marginLeft: "10px", position: "absolute", right: "-26px" }}
+                onClick={props.onPiCarxLightGrayscale}
+              >
+                <FormattedMessage
+                  defaultMessage="Retrieve"
+                  description="Retrieve"
+                  id="gui.connection.calibrate-retrieve"
+                />
               </button>
-              <button className={styles.rightFront} onClick={() => props.onPiCarXCalibrationSend("servoCalibration", { type: 2, data: 1 })}>
-                <img src={upArrowIcon} />
-              </button> */}
-              <button className={styles.leftFront} onClick={() => props.onPiCarXServoCalibration("left")}>
-                <img src={upArrowIcon} />
+            </Box>
+            <Box className={styles.grayscaleValueBox}>
+              <Box style={{ width: "4rem" }}>
+                <FormattedMessage
+                  defaultMessage="Dark: "
+                  description="Dark"
+                  id="gui.connection.grayscale-dark"
+                />
+              </Box>
+              <Box style={{ margin: "10px 10px" }}>
+                <button className={styles.grayscaleValue}>{props.grayscaleMedian[1] ? props.grayscaleMedian[1][0] : ""}</button>
+                <button className={styles.grayscaleValue}>{props.grayscaleMedian[1] ? props.grayscaleMedian[1][1] : ""}</button>
+                <button className={styles.grayscaleValue}>{props.grayscaleMedian[1] ? props.grayscaleMedian[1][2] : ""}</button>
+              </Box>
+              <button
+                className={styles.connectionButton}
+                style={{ marginLeft: "10px", position: "absolute", right: "-26px" }}
+                onClick={props.onPiCarxDarkGrayscale}
+              >
+                <FormattedMessage
+                  defaultMessage="Retrieve"
+                  description="Retrieve"
+                  id="gui.connection.calibrate-retrieve"
+                />
               </button>
-              <button className={styles.rightFront} onClick={() => props.onPiCarXServoCalibration("right")}>
-                <img src={upArrowIcon} />
-              </button>
-            </>
-          }
-          {
-            props.piCarXCalibration === 1 &&
-            <>
-              {/* <button className={styles.cameraLeft} onClick={() => props.onPiCarXCalibrationSend("servoCalibration", { type: 0, data: -1 })}>
-                <img src={upArrowIcon} />
-              </button>
-              <button className={styles.cameraRight} onClick={() => props.onPiCarXCalibrationSend("servoCalibration", { type: 0, data: 1 })}>
-                <img src={upArrowIcon} />
-              </button>
-              <button className={styles.cameraUp} onClick={() => props.onPiCarXCalibrationSend("servoCalibration", { type: 1, data: -1 })}>
-                <img src={upArrowIcon} />
-              </button >
-              <button className={styles.cameraDown} onClick={() => props.onPiCarXCalibrationSend("servoCalibration", { type: 1, data: 1 })}>
-                <img src={upArrowIcon} />
-              </button> */}
-              <button className={styles.cameraLeft} onClick={() => props.onPiCarXCamerCalibration("decreaseX")}>
-                <img src={upArrowIcon} />
-              </button>
-              <button className={styles.cameraRight} onClick={() => props.onPiCarXCamerCalibration("addX")}>
-                <img src={upArrowIcon} />
-              </button>
-              <button className={styles.cameraUp} onClick={() => props.onPiCarXCamerCalibration("addY")}>
-                <img src={upArrowIcon} />
-              </button >
-              <button className={styles.cameraDown} onClick={() => props.onPiCarXCamerCalibration("decreaseY")}>
-                <img src={upArrowIcon} />
-              </button>
-            </>
-          }
-          {
-            props.piCarXCalibration === 2 &&
-            <>
-              <button className={styles.leftBack} onClick={() => props.onPiCarXMotorCalibration("left")}>
-                L
-              </button >
-              <button className={styles.rightBack} onClick={() => props.onPiCarXMotorCalibration("right")}>
-                <span className={styles.rightBackSpan}>R</span>
-              </button>
-            </>
-          }
-        </Box>
+            </Box>
+          </Box>
+        }
+
+
+
+
       </Box>
       <Box className={styles.bottomArea}>
         <FormattedMessage
           defaultMessage="Current calibration value:"
           description="Message indicating user to rename their device"
-          // id={"gui.connection.set-your-device"}
           id="gui.connection.piCarX-calinateValue"
         />
-        {/* {
-          props.piCarXCalibration === 0 && Object.keys(props.receiveBuffer).length > 0 &&
-          props.receiveBuffer.servoCalibration.steeringServo
-        }
-        {
-          props.piCarXCalibration === 1 && Object.keys(props.receiveBuffer).length > 0 &&
-          "X " + props.receiveBuffer.servoCalibration.cameraX + " " + "Y " + props.receiveBuffer.servoCalibration.cameraY
-        }
-
-        {
-          props.piCarXCalibration === 2 && Object.keys(props.receiveBuffer).length > 0 &&
-          "L " + props.receiveBuffer.motorCalibration.leftMotor + " " + "R " + props.receiveBuffer.motorCalibration.rightMotor
-        } */}
         {
           props.piCarXCalibration === 0 && props.receiveBuffer.steeringCalibration &&
           props.receiveBuffer.steeringCalibration
@@ -121,19 +195,22 @@ const PiCarXCalibration = props => {
               id="gui.modal.back"
             />
           </button>
-          {/* <button
-            className={styles.connectionButton}
-            onClick={props.onPiCarXCalibrationConfirm}
-          >
-            <FormattedMessage
-              defaultMessage="Confirm"
-              description="Button to confirm renaming of device"
-              id="gui.connection.confirm"
-            />
-          </button> */}
+          {
+            props.piCarXCalibration === 3 &&
+            <button
+              className={styles.connectionButton}
+              onClick={props.onPiCarXCalibrationConfirm}
+            >
+              <FormattedMessage
+                defaultMessage="Calibration"
+                description="Calibration"
+                id="gui.connection.calibrate-device"
+              />
+            </button>
+          }
         </div>
       </Box>
-    </Box>
+    </Box >
   );
 }
 
