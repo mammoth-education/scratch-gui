@@ -155,7 +155,7 @@ const SettingWiFiSteps = props => {
             <FormattedMessage
               defaultMessage="Cancel"
               description="Button to cancel renaming of device"
-              id="gui.connection.cancel"
+              id="gui.modal.back"
             />
           </button>
           <button

@@ -32,7 +32,8 @@
     flex-direction: row;
     align-items: flex-start;
     flex-direction: column;
-    width: 70%;
+    /* width: 70%; */
+    width: 80%;
 }
 
 .centered-col {
@@ -301,6 +302,7 @@
     align-items: center;
     position: relative;
     width: 100%;
+    margin: 5px;
 }
 
 .selectBox {

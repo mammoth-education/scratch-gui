@@ -5,11 +5,11 @@ import Box from '../box/box.jsx';
 import styles from './connection-modal.css';
 import picarXgear from './icons/picarXgear.svg';
 import camera from './icons/camera.svg';
-// import upArrowIcon from './icons./icon--arrow-up.svg';
 import upArrowIcon from './icons/icon--arrow-up.svg';
 import classNames from 'classnames';
 
 const PiCarXCalibration = props => {
+  // console.log("props.receiveBuffer", props.receiveBuffer)
   return (
     <Box className={styles.body}>
       <Box className={styles.setActivityArea}>
@@ -67,98 +67,75 @@ const PiCarXCalibration = props => {
         {
           props.piCarXCalibration === 3 &&
           <Box className={styles.wifiCenteredRow}>
-            <Box className={styles.setTitle}>
-              <FormattedMessage
-                defaultMessage="grayscale"
-                description="grayscale"
-                id="gui.connection.grayscale-value"
-              />
-            </Box>
-            <Box className={styles.grayscaleValueBox}>
-              <Box style={{ width: "4rem" }}>
+            <Box style={{ width: "100%", display: "flex", justifyContent: "space-around" }}>
+              <Box style={{ display: "flex", alignItems: "center", heigth: '24px', lineHeight: '24px' }}>
                 <FormattedMessage
-                  defaultMessage="Pre-Cal: "
-                  description="Pre-Cal"
-                  id="gui.connection.grayscale-PreCal"
-                />
-              </Box>
-              <Box style={{ margin: "0 10px" }}>
-                <button className={styles.grayscaleValue}>{props.receiveBuffer.grayscale3Channel[0] || ""}</button>
-                <button className={styles.grayscaleValue}>{props.receiveBuffer.grayscale3Channel[1] || ""}</button>
-                <button className={styles.grayscaleValue}>{props.receiveBuffer.grayscale3Channel[2] || ""}</button>
-              </Box>
-            </Box>
-            <Box className={styles.grayscaleValueBox}>
-              <Box style={{ width: "4rem" }}>
-                <FormattedMessage
-                  defaultMessage="Post-Cal: "
-                  description="Post-Cal"
+                  defaultMessage="Post Cal: "
+                  description="Grayscale Post Cal"
                   id="gui.connection.grayscale-PostCal"
                 />
+                <span style={{ paddingLeft: "10px" }}>{props.receiveBuffer && props.receiveBuffer.grayscale3ChannelData[0] + ", " || ""}</span>
+                <span>{props.receiveBuffer && props.receiveBuffer.grayscale3ChannelData[1] + ", " || ""}</span>
+                <span>{props.receiveBuffer && props.receiveBuffer.grayscale3ChannelData[2] || ""}</span>
               </Box>
-              <Box style={{ margin: "10px 10px" }}>
-                <button className={styles.grayscaleValue} style={{ backgroundColor: props.grayscaleCalibrationSuccess ? "red" : "white" }}>{props.receiveBuffer.grayscale3ChannelData[0] || ""}</button>
-                <button className={styles.grayscaleValue} style={{ backgroundColor: props.grayscaleCalibrationSuccess ? "red" : "white" }}>{props.receiveBuffer.grayscale3ChannelData[1] || ""}</button>
-                <button className={styles.grayscaleValue} style={{ backgroundColor: props.grayscaleCalibrationSuccess ? "red" : "white" }}>{props.receiveBuffer.grayscale3ChannelData[2] || ""}</button>
+              <Box style={{ display: "flex", alignItems: "center", heigth: '24px', lineHeight: '24px' }}>
+                <FormattedMessage
+                  defaultMessage="Cliff Threshold: "
+                  description="Cliff Threshold"
+                  id="gui.connection.cliff-threshold"
+                />
+                <span style={{ paddingLeft: "10px" }}>{props.receiveBuffer && props.receiveBuffer.grayscale3ChannelThreshold}</span>
               </Box>
             </Box>
-            <Box className={styles.setTitle}>
-              <FormattedMessage
-                defaultMessage="Calibration"
-                description="Calibration"
-                id="gui.connection.grayscale-calibration"
-              />
+            <Box style={{ display: "flex", justifyContent: "center" }}>
+              <Box style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <img style={{ width: "70%" }} src={picarXgear} alt="" />
+                <div style={{ display: "flex", minHeight: "18px", minWidth: "120px", margin: "6px 0", }}>
+                  <span>{props.receiveBuffer && props.grayscaleMedian[0] ? props.grayscaleMedian[0][0] + ", " : ""}</span>
+                  <span>{props.receiveBuffer && props.grayscaleMedian[0] ? props.grayscaleMedian[0][1] + ", " : ""}</span>
+                  <span>{props.receiveBuffer && props.grayscaleMedian[0] ? props.grayscaleMedian[0][2] : ""}</span>
+                </div>
+                <button onClick={props.onPiCarxLightGrayscale}>
+                  <FormattedMessage
+                    defaultMessage="Light"
+                    description="Light"
+                    id="gui.connection.calibrate-light"
+                  />
+                </button>
+              </Box>
+              <Box style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <img style={{ width: "70%" }} src={picarXgear} alt="" />
+                <div style={{ display: "flex", minHeight: "18px", minWidth: "120px", margin: "6px 0", }}>
+                  <span>{props.receiveBuffer && props.grayscaleMedian[1] ? props.grayscaleMedian[1][0] + ", " : ""}</span>
+                  <span>{props.receiveBuffer && props.grayscaleMedian[1] ? props.grayscaleMedian[1][1] + ", " : ""}</span>
+                  <span>{props.receiveBuffer && props.grayscaleMedian[1] ? props.grayscaleMedian[1][2] : ""}</span>
+                </div>
+                <button onClick={props.onPiCarxDarkGrayscale}>
+                  <FormattedMessage
+                    defaultMessage="Dark"
+                    description="Dark"
+                    id="gui.connection.calibrate-dark"
+                  />
+                </button>
+              </Box>
+              <Box style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <img style={{ width: "70%" }} src={picarXgear} alt="" />
+                <span style={{ margin: "6px 0", minHeight: "18px", minWidth: "120px", textAlign: "center" }}>{props.piCarXCliff}</span>
+                <button onClick={props.onPiCarxCliffGrayscale}>
+                  <FormattedMessage
+                    defaultMessage="Cliff"
+                    description="cliff"
+                    id="gui.connection.grayscale-cliff-but"
+                  />
+                </button>
+              </Box>
             </Box>
-            <Box className={styles.grayscaleValueBox}>
-              <Box style={{ width: "4rem" }}>
-                <FormattedMessage
-                  defaultMessage="Light: "
-                  description="Light"
-                  id="gui.connection.grayscale-light"
-                />
-              </Box>
-              <Box style={{ margin: "10px 10px" }}>
-                <button className={styles.grayscaleValue}>{props.grayscaleMedian[0] ? props.grayscaleMedian[0][0] : ""}</button>
-                <button className={styles.grayscaleValue}>{props.grayscaleMedian[0] ? props.grayscaleMedian[0][1] : ""}</button>
-                <button className={styles.grayscaleValue}>{props.grayscaleMedian[0] ? props.grayscaleMedian[0][2] : ""}</button>
-              </Box>
-              <button
-                className={styles.connectionButton}
-                style={{ marginLeft: "10px", position: "absolute", right: "-26px" }}
-                onClick={props.onPiCarxLightGrayscale}
-              >
-                <FormattedMessage
-                  defaultMessage="Retrieve"
-                  description="Retrieve"
-                  id="gui.connection.calibrate-retrieve"
-                />
-              </button>
+            {/* <Box>
+              <span>当前灰度状态: Cliff detected!</span>
             </Box>
-            <Box className={styles.grayscaleValueBox}>
-              <Box style={{ width: "4rem" }}>
-                <FormattedMessage
-                  defaultMessage="Dark: "
-                  description="Dark"
-                  id="gui.connection.grayscale-dark"
-                />
-              </Box>
-              <Box style={{ margin: "10px 10px" }}>
-                <button className={styles.grayscaleValue}>{props.grayscaleMedian[1] ? props.grayscaleMedian[1][0] : ""}</button>
-                <button className={styles.grayscaleValue}>{props.grayscaleMedian[1] ? props.grayscaleMedian[1][1] : ""}</button>
-                <button className={styles.grayscaleValue}>{props.grayscaleMedian[1] ? props.grayscaleMedian[1][2] : ""}</button>
-              </Box>
-              <button
-                className={styles.connectionButton}
-                style={{ marginLeft: "10px", position: "absolute", right: "-26px" }}
-                onClick={props.onPiCarxDarkGrayscale}
-              >
-                <FormattedMessage
-                  defaultMessage="Retrieve"
-                  description="Retrieve"
-                  id="gui.connection.calibrate-retrieve"
-                />
-              </button>
-            </Box>
+            <Box>
+              <span>校准后: 2000,20000,2000</span>
+            </Box> */}
           </Box>
         }
 
@@ -167,11 +144,14 @@ const PiCarXCalibration = props => {
 
       </Box>
       <Box className={styles.bottomArea}>
-        <FormattedMessage
-          defaultMessage="Current calibration value:"
-          description="Message indicating user to rename their device"
-          id="gui.connection.piCarX-calinateValue"
-        />
+        {
+          props.piCarXCalibration != 3 &&
+          <FormattedMessage
+            defaultMessage="Current calibration value:"
+            description="Message indicating user to rename their device"
+            id="gui.connection.piCarX-calinateValue"
+          />
+        }
         {
           props.piCarXCalibration === 0 && props.receiveBuffer.steeringCalibration &&
           props.receiveBuffer.steeringCalibration
@@ -197,16 +177,28 @@ const PiCarXCalibration = props => {
           </button>
           {
             props.piCarXCalibration === 3 &&
-            <button
-              className={styles.connectionButton}
-              onClick={props.onPiCarXCalibrationConfirm}
-            >
-              <FormattedMessage
-                defaultMessage="Calibration"
-                description="Calibration"
-                id="gui.connection.calibrate-device"
-              />
-            </button>
+            <>
+              {
+                props.grayscaleCalibrationSuccessTip &&
+                <Box>
+                  <FormattedMessage
+                    defaultMessage="Cancel"
+                    description="Button to cancel renaming of device"
+                    id="gui.connection.calibrationComplete"
+                  />
+                </Box>
+              }
+              <button
+                className={styles.connectionButton}
+                onClick={props.onPiCarXCalibrationConfirm}
+              >
+                <FormattedMessage
+                  defaultMessage="Calibration"
+                  description="Calibration"
+                  id="gui.connection.calibrate-device"
+                />
+              </button>
+            </>
           }
         </div>
       </Box>

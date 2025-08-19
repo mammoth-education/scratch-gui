@@ -64,6 +64,12 @@ import zeusCarConnectionIconURL from './zeusCar/zeusCar-illustration.svg';
 import zeusCarConnectionSmallIconURL from './zeusCar/zeusCar-small.svg';
 import zeusCarHelpLink from './zeusCar/zeusCarHelpLink.png';
 
+import piCarXIconURL from './picar-x/piCarX.png';
+import piCarXInsetIconURL from './picar-x/piCarX-small.svg';
+import piCarXConnectionIconURL from './picar-x/piCarX-illustration.svg';
+import piCarXConnectionSmallIconURL from './picar-x/piCarX-small.svg';
+import piCarXHelpLink from './picar-x/piCarXHelpLink.png';
+
 let platform = "browsers";
 if (window.cordova && window.cordova.platformId !== "browser") {
     platform = window.cordova.platformId;
@@ -82,8 +88,8 @@ export default [
             />
         ),
         extensionId: 'piCarX',
-        iconURL: zeusCarIconURL,
-        insetIconURL: zeusCarInsetIconURL,
+        iconURL: piCarXIconURL,
+        insetIconURL: piCarXInsetIconURL,
         description: (
             <FormattedMessage
                 defaultMessage="piCarX"
@@ -102,18 +108,18 @@ export default [
         deviceWifiEditable: false, // wifi可编辑
         calibrationRequired: true,  //校准
         useAutoScan: platform === "browser" ? true : false,
-        connectionIconURL: zeusCarConnectionIconURL,
-        connectionSmallIconURL: zeusCarConnectionSmallIconURL,
+        connectionIconURL: piCarXConnectionIconURL,
+        connectionSmallIconURL: piCarXConnectionSmallIconURL,
         connectingMessage: (
             <FormattedMessage
                 defaultMessage="Connecting"
-                description="Message to help people connect to their PiCarX."
+                description="AI video robot car"
                 id="gui.extension.PiCarX.connectingMessage"
             />
         ),
         // 帮助链接
         helpLink: 'https://zeus-car.rtfd.io',// TODO
-        helpLinkImage: zeusCarHelpLink,
+        helpLinkImage: piCarXHelpLink,
     },
     {
         name: (

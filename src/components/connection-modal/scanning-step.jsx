@@ -37,11 +37,11 @@ const ScanningStep = props => (
                         (<PeripheralTile
                             connectionSmallIconURL={props.connectionSmallIconURL}
                             key={peripheral.peripheralId}
-                            name={peripheral.name}
+                            name={peripheral.Name}
                             ip={peripheral.ip}
                             peripheralId={peripheral.peripheralId}
                             rssi={peripheral.rssi}
-                            onConnecting={props.onConnecting}
+                            onConnecting={() => props.onConnecting(peripheral.ip)}
                         />)
                         )}
                     </div>

@@ -18,9 +18,11 @@ import FlashFirmwareSuccessStep from './flash-firmware-success-step.jsx';
 import FlashFirmwareErrorStep from './flash-firmware-error-step.jsx';
 import SettingWiFiSteps from './setting-wiFi-steps.jsx';
 import SettingWiFiStepsSuccessStep from './setting-wiFi-success-steps.jsx';
+import SettingPiCarXStepsSuccessStep from './setting-piCarx-success-steps.jsx';
 import PiCarXCalibrationSelection from './picar-X-calibration-selection.jsx';
 import ZeusCarCalibration from './zeusCar-calibration.jsx';
 import PiCarXCalibration from './picar-X-calibration.jsx';
+import PiCarXCalibrationTest from './picar-X-calibration-test.jsx';
 import HelpPage from './help-page.jsx';
 
 import styles from './connection-modal.css';
@@ -39,7 +41,9 @@ const PHASES = keyMirror({
     settingWiFi: null,
     settingWiFiSuccess: null,
     helpPage: null,
+    settingPiCarXSuccess: null,
     piCarXCalibrationSelection: null,
+    piCarXTest: null,
     zeusCarCalibration: null,
     piCarXCalibration: null
 });
@@ -69,7 +73,10 @@ const ConnectionModalComponent = props => (
             {props.phase === PHASES.settingWiFi && <SettingWiFiSteps {...props} />}
             {props.phase === PHASES.piCarXCalibrationSelection && <PiCarXCalibrationSelection {...props} />}
             {props.phase === PHASES.settingWiFiSuccess && <SettingWiFiStepsSuccessStep {...props} />}
+            {props.phase === PHASES.settingPiCarXSuccess && <SettingPiCarXStepsSuccessStep {...props} />}
             {props.phase === PHASES.piCarXCalibration && <PiCarXCalibration {...props} />}
+            {/* {<PiCarXCalibration {...props} />} */}
+            {/* {props.phase === PHASES.piCarXTest && <PiCarXCalibrationTest {...props} />} */}
             {props.phase === PHASES.zeusCarCalibration && <ZeusCarCalibration {...props} />}
             {props.phase === PHASES.helpPage && <HelpPage {...props} />}
         </Box>
