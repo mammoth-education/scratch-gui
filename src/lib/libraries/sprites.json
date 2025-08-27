@@ -14039,6 +14039,36 @@
         "blocks": {}
     },
     {
+        "name": "PiCar-X",
+        "tags": [
+            "car"
+        ],
+        "isStage": false,
+        "variables": {},
+        "costumes": [
+            {
+                "assetId": "0c44fb27f48ff87d836ecfa638e5819a",
+                "name": "PiCar-X-a",
+                "bitmapResolution": 1,
+                "md5ext": "0c44fb27f48ff87d836ecfa638e5819a.svg",
+                "dataFormat": "svg",
+                "rotationCenterX": 38,
+                "rotationCenterY": 32
+            },
+            {
+                "assetId": "4928847034b16cd9b3a310beabfd6650",
+                "name": "PiCar-X-b",
+                "bitmapResolution": 1,
+                "md5ext": "4928847034b16cd9b3a310beabfd6650.svg",
+                "dataFormat": "svg",
+                "rotationCenterX": 37,
+                "rotationCenterY": 30
+            }
+        ],
+        "sounds": [],
+        "blocks": {}
+    },
+    {
         "name": "Block-A",
         "tags": [
             "alphabet",
