@@ -22,7 +22,6 @@ import SettingPiCarXStepsSuccessStep from './setting-piCarx-success-steps.jsx';
 import PiCarXCalibrationSelection from './picar-X-calibration-selection.jsx';
 import ZeusCarCalibration from './zeusCar-calibration.jsx';
 import PiCarXCalibration from './picar-X-calibration.jsx';
-import PiCarXCalibrationTest from './picar-X-calibration-test.jsx';
 import HelpPage from './help-page.jsx';
 
 import styles from './connection-modal.css';
@@ -76,7 +75,6 @@ const ConnectionModalComponent = props => (
             {props.phase === PHASES.settingPiCarXSuccess && <SettingPiCarXStepsSuccessStep {...props} />}
             {props.phase === PHASES.piCarXCalibration && <PiCarXCalibration {...props} />}
             {/* {<PiCarXCalibration {...props} />} */}
-            {/* {props.phase === PHASES.piCarXTest && <PiCarXCalibrationTest {...props} />} */}
             {props.phase === PHASES.zeusCarCalibration && <ZeusCarCalibration {...props} />}
             {props.phase === PHASES.helpPage && <HelpPage {...props} />}
         </Box>
