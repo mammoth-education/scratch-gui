@@ -107,6 +107,7 @@ export default [
         firmwareFlashable: false, // 固件升级
         deviceWifiEditable: false, // wifi可编辑
         calibrationRequired: true,  //校准
+        ai: true,
         useAutoScan: platform === "browser" ? true : false,
         connectionIconURL: piCarXConnectionIconURL,
         connectionSmallIconURL: piCarXConnectionSmallIconURL,
@@ -171,6 +172,7 @@ export default [
                 id="gui.extension.galaxyRVR.name"
             />
         ),
+        ai: false,
         extensionId: 'galaxyRVR',
         iconURL: galaxyRVRIconURL,
         insetIconURL: galaxyRVRInsetIconURL,

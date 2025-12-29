@@ -972,6 +972,7 @@ class ConnectionModal extends React.Component {
                         connectionSmallIconURL={this.state.extension && this.state.extension.connectionSmallIconURL}
                         connectionTipIconURL={this.state.extension && this.state.extension.connectionTipIconURL}
                         deviceNameEditable={this.state.extension && this.state.extension.deviceNameEditable}
+                        extension={this.state.extension && this.state.extension}
                         extensionId={this.props.extensionId}
                         isMobile={this.props.isMobile}
                         currentFirmwareVersion={this.state.currentFirmwareVersion}

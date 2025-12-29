@@ -5,6 +5,12 @@ import Box from '../box/box.jsx';
 import styles from './connection-modal.css';
 import classNames from 'classnames';
 const SettingWiFiSteps = props => {
+  let searching = <FormattedMessage
+    defaultMessage="Searching..."
+    description="Searching..."
+    id="gui.connection.scan-wifi"
+  />
+  searching = searching.props.defaultMessage;
   return (
     <Box className={styles.body}>
       <Box className={styles.setActivityArea}>
@@ -34,27 +40,32 @@ const SettingWiFiSteps = props => {
           </Box>
 
           {/* AI */}
-          <Box className={styles.setTitle}>
-            <FormattedMessage
-              defaultMessage="AI Key"
-              description="AI Key"
-              id="gui.connection.set-ai-key"
-            />
-          </Box>
-          <Box className={styles.inputBox}>
-            <textarea className={styles.deviceAiInput}
-              type="text"
-              placeholder={props.intl.formatMessage({
-                defaultMessage: "Please enter AI Key",
-                id: "gui.connection.ai-key"
-              })}
-              defaultValue={props.aiApiKey}
-              onChange={props.onAiKeyChanged}
-            />
-            <Box className={styles.setTips}>
-              {props.apPasswordState && <span>*</span>}
-            </Box>
-          </Box>
+          {
+            props.extension.ai &&
+            <>
+              <Box className={styles.setTitle}>
+                <FormattedMessage
+                  defaultMessage="AI Key"
+                  description="AI Key"
+                  id="gui.connection.set-ai-key"
+                />
+              </Box>
+              <Box className={styles.inputBox}>
+                <textarea className={styles.deviceAiInput}
+                  type="text"
+                  placeholder={props.intl.formatMessage({
+                    defaultMessage: "Please enter AI Key",
+                    id: "gui.connection.ai-key"
+                  })}
+                  defaultValue={props.aiApiKey}
+                  onChange={props.onAiKeyChanged}
+                />
+                <Box className={styles.setTips}>
+                  {props.apPasswordState && <span>*</span>}
+                </Box>
+              </Box>
+            </>
+          }
 
           {/* wifi设置 */}
           {
@@ -94,7 +105,7 @@ const SettingWiFiSteps = props => {
               <Box className={styles.selectBox}>
                 {(
                   <select className={styles.networkSelect} onChange={props.onWifiSSIDChanged} onClick={props.onScanWifi}>
-                    {props.networksList.length > 0 ? (
+                    {props.networksList.length !== 0 ? (
                       props.networksList.map((network, index) => (
                         <option key={index} value={network.ssid}>
                           {network.ssid}
@@ -102,11 +113,7 @@ const SettingWiFiSteps = props => {
                       ))
                     ) : (
                       <option value="">
-                        <FormattedMessage
-                          defaultMessage="Searching..."
-                          description="Searching..."
-                          id="gui.connection.scan-wifi"
-                        />
+                        {searching}
                       </option>
                     )}
                   </select>
