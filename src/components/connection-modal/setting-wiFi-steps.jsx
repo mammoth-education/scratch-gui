@@ -5,12 +5,9 @@ import Box from '../box/box.jsx';
 import styles from './connection-modal.css';
 import classNames from 'classnames';
 const SettingWiFiSteps = props => {
-  let searching = <FormattedMessage
-    defaultMessage="Searching..."
-    description="Searching..."
-    id="gui.connection.scan-wifi"
-  />
-  searching = searching.props.defaultMessage;
+
+  const { intl } = props;
+
   return (
     <Box className={styles.body}>
       <Box className={styles.setActivityArea}>
@@ -104,18 +101,54 @@ const SettingWiFiSteps = props => {
               </Box>
               <Box className={styles.selectBox}>
                 {(
-                  <select className={styles.networkSelect} onChange={props.onWifiSSIDChanged} onClick={props.onScanWifi}>
-                    {props.networksList.length !== 0 ? (
-                      props.networksList.map((network, index) => (
-                        <option key={index} value={network.ssid}>
-                          {network.ssid}
-                        </option>
-                      ))
-                    ) : (
-                      <option value="">
-                        {searching}
+                  <select className={styles.networkSelect}
+                    onChange={props.onWifiSSIDChanged}
+                    onClick={(e) => {
+                      // 仅当点击下拉框本身（未展开）时触发扫描，而非点击option时
+                      if (e.target.tagName === 'SELECT') {
+                        props.onScanWifi?.();
+                      }
+                    }}
+                  // disabled={props.setWifiIsScanning} // 扫描中禁用下拉框，避免重复操作
+                  >
+                    {props.setWifiIsScanning ? (
+                      <option value="" disabled>
+                        {intl.formatMessage({
+                          id: "gui.connection.scan-wifi",
+                          defaultMessage: "Searching..."
+                        })}
                       </option>
-                    )}
+                    ) : !props.networksList ? (
+                      <option value="">
+                        {intl.formatMessage({
+                          id: "gui.controls.set-wifi-scanning",
+                          defaultMessage: "Click to start searching for WiFi"
+                        })}
+                      </option>
+                    ) : null}
+
+                    {props.networksList && props.networksList.length > 0 ? (
+                      props.networksList.map((network) => {
+                        if (!network.ssid) return null;
+                        return (
+                          <option
+                            key={network.ssid}
+                            value={network.ssid}
+                          >
+                            {network.ssid}
+                          </option>
+                        );
+                      })
+                    ) : props.networksList && props.networksList.length === 0 ? (
+                      <option value="" disabled>
+                        {/* 未搜索到WiFi，请重试 */}
+                        {intl.formatMessage({
+                          id: "gui.controls.set-wifi-scanning-error",
+                          defaultMessage: "No Wi-Fi found. Please try again."
+                        })}
+
+                      </option>
+                    ) : null}
                   </select>
                 )}
                 <Box className={styles.setTips}>

@@ -105,7 +105,7 @@ class ConnectionModal extends React.Component {
             apPasswordState: false,
             staPasswordState: false,
             staSsidState: false,
-            networksList: [],
+            networksList: null,
             showDropdown: false,
             compassCalibrationState: 4,
             sendCalibrationState: 0,
@@ -124,6 +124,10 @@ class ConnectionModal extends React.Component {
             piCarXCliff: "", //悬崖
             grayscaleCalibrationSuccess: false, // 灰度校准成功
             grayscaleCalibrationSuccessTip: false, // 灰度校准成功提示
+            setWifiIsScanning: false,
+            staIp: null,
+            setWifiError: null,
+            staLoading: true,
         };
     }
     componentDidMount() {
@@ -211,6 +215,7 @@ class ConnectionModal extends React.Component {
         clearInterval(this.intervalId);
         clearInterval(this.setIntervalID);
         clearInterval(this.getReceiveBufferIntervalID);
+        clearInterval(this.scanWifiIntervalId);
     }
 
     // 刷新
@@ -393,15 +398,31 @@ class ConnectionModal extends React.Component {
         this.props.vm.settingDeviceWiFi(this.props.extensionId, setWifiData);
         let restart = { "command": "restart-sta" };
         this.props.vm.settingDeviceWiFi(this.props.extensionId, restart);
-        this.setState({
-            phase: PHASES.settingWiFiSuccess,
-            deviceName: this.state.newDeviceName != "" ? this.state.newDeviceName : this.state.deviceName
-        });
-        analytics.event({
-            category: 'extensions',
-            action: 'confirmSettingWifi',
-            label: this.props.extensionId
-        });
+        this.setState({ staIp: null, setWifiError: null, staLoading: true });
+        let setWifiState;
+        this.intervalId = setInterval(() => {
+            setWifiState = this.props.vm.getWebSocketData(this.props.extensionId);
+            console.log("webSocketData", setWifiState);
+            if (setWifiState) {
+                if (setWifiState._staIp) {
+                    this.setState({ staIp: setWifiState._staIp.StaIp, staLoading: false });
+                    clearInterval(this.intervalId);
+                } else if (setWifiState._setWifiState) {
+                    console.log("没有扫描到wifi", setWifiState._setWifiState);
+                    this.setState({ setWifiError: setWifiState._setWifiState, staLoading: false });
+                    clearInterval(this.intervalId);
+                }
+            }
+            this.setState({
+                phase: PHASES.settingWiFiSuccess,
+                deviceName: this.state.newDeviceName != "" ? this.state.newDeviceName : this.state.deviceName
+            });
+            analytics.event({
+                category: 'extensions',
+                action: 'confirmSettingWifi',
+                label: this.props.extensionId
+            });
+        }, 1000);
         console.log("getDevicesWifiData：", this.props.vm.getDevicesWifiData(this.props.extensionId));
     }
     handleRenameConfirm() {
@@ -410,7 +431,8 @@ class ConnectionModal extends React.Component {
             this.props.vm.renamePeripheral(this.props.extensionId, this.state.newDeviceName);
             this.setState({
                 phase: PHASES.renameDeviceSuccess,
-                deviceName: newDeviceName
+                deviceName: newDeviceName,
+                staLoading: false
             });
             analytics.event({
                 category: 'extensions',
@@ -425,7 +447,8 @@ class ConnectionModal extends React.Component {
             this.props.vm.settingDeviceWiFi(this.props.extensionId, apSsid);
             this.setState({
                 phase: PHASES.settingWiFiSuccess,
-                deviceName: newDeviceName
+                deviceName: newDeviceName,
+                staLoading: false
             });
             analytics.event({
                 category: 'extensions',
@@ -493,7 +516,8 @@ class ConnectionModal extends React.Component {
         this.props.vm.settingDeviceWiFi(this.props.extensionId, data);
         this.setState({
             phase: PHASES.settingWiFiSuccess,
-            deviceName: this.state.newDeviceName != "" ? this.state.newDeviceName : this.state.deviceName
+            deviceName: this.state.newDeviceName != "" ? this.state.newDeviceName : this.state.deviceName,
+            staLoading: false
         });
         analytics.event({
             category: 'extensions',
@@ -732,15 +756,19 @@ class ConnectionModal extends React.Component {
 
     handleScanWifi() {
         let restart = { "command": "scan-wifi" };
+        this.setState({ setWifiIsScanning: true });
         this.props.vm.settingDeviceWiFi(this.props.extensionId, restart);
         let networks;
-        this.intervalId = setInterval(() => {
+        this.scanWifiIntervalId = setInterval(() => {
             networks = this.props.vm.getWebSocketData(this.props.extensionId);
             console.log("webSocketData", networks);
             if (networks && networks._networks.length > 0) {
-                this.setState({ networksList: networks._networks, });
-                //清除定时器
-                clearInterval(this.intervalId);
+                this.setState({ networksList: networks._networks, setWifiIsScanning: false });
+                clearInterval(this.scanWifiIntervalId);
+            } else if (networks && networks._networks.length == 0) {
+                console.log("没有扫描到wifi");
+                this.setState({ networksList: [], setWifiIsScanning: false });
+                clearInterval(this.scanWifiIntervalId);
             }
         }, 2000);
     };
@@ -1014,6 +1042,10 @@ class ConnectionModal extends React.Component {
                         piCarXCliff={this.state.piCarXCliff}
                         grayscaleCalibrationSuccess={this.state.grayscaleCalibrationSuccess}
                         grayscaleCalibrationSuccessTip={this.state.grayscaleCalibrationSuccessTip}
+                        setWifiIsScanning={this.state.setWifiIsScanning}
+                        setWifiError={this.state.setWifiError}
+                        staIp={this.state.staIp}
+                        staLoading={this.state.staLoading}
                         onScanWifi={this.handleScanWifi}
                         onOptionClick={this.handleOptionClick}
                         onSSIDInputBlur={this.handleSSIDInputBlur}
