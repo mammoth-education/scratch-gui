@@ -128,6 +128,7 @@ class ConnectionModal extends React.Component {
             staIp: null,
             setWifiError: null,
             staLoading: true,
+            setAPState: false,
         };
     }
     componentDidMount() {
@@ -433,7 +434,8 @@ class ConnectionModal extends React.Component {
             this.setState({
                 phase: PHASES.renameDeviceSuccess,
                 deviceName: newDeviceName,
-                staLoading: false
+                staLoading: false,
+                setAPState: true
             });
             analytics.event({
                 category: 'extensions',
@@ -449,7 +451,8 @@ class ConnectionModal extends React.Component {
             this.setState({
                 phase: PHASES.settingWiFiSuccess,
                 deviceName: newDeviceName,
-                staLoading: false
+                staLoading: false,
+                setAPState: true
             });
             analytics.event({
                 category: 'extensions',
@@ -530,6 +533,7 @@ class ConnectionModal extends React.Component {
     // wifi设置点击确定
     handleConfirm() {
         console.log("确认了");
+        this.setState({ setAPState: false });
         if (this.state.newDeviceName != this.state.deviceName && this.state.newDeviceName != "") {
             this.handleRenameConfirm();
         }
@@ -1047,6 +1051,7 @@ class ConnectionModal extends React.Component {
                         setWifiError={this.state.setWifiError}
                         staIp={this.state.staIp}
                         staLoading={this.state.staLoading}
+                        setAPState={this.state.setAPState}
                         onScanWifi={this.handleScanWifi}
                         onOptionClick={this.handleOptionClick}
                         onSSIDInputBlur={this.handleSSIDInputBlur}

@@ -28,11 +28,19 @@ const RenameDeviceSuccessStep = props => {
       </Box>
       <Box className={styles.bottomArea}>
         {
-          props.staIp && !props.setWifiError &&
+          props.setAPState &&
           <FormattedMessage
             defaultMessage="Device set successfully. Please reset to apply changes."
             description="Message indicating rename device success"
             id="gui.connection.set-device-success"
+          />
+        }
+        {
+          props.staIp && !props.setWifiError &&
+          <FormattedMessage
+            defaultMessage="Device set successfully."
+            description="Message indicating rename device success"
+            id="gui.connection.set-success"
           />
         }
         {
