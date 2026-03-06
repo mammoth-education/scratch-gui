@@ -8,8 +8,6 @@ import styles from './connection-modal.css';
 import classNames from 'classnames';
 
 const RenameDeviceSuccessStep = props => {
-  console.log('props', props.staLoading);
-
   return (
     <Box className={styles.body}>
       <Box className={styles.activityArea}>
@@ -30,8 +28,7 @@ const RenameDeviceSuccessStep = props => {
       </Box>
       <Box className={styles.bottomArea}>
         {
-          // props.staIp &&
-          !props.setWifiError &&
+          props.staIp && !props.setWifiError &&
           <FormattedMessage
             defaultMessage="Device set successfully. Please reset to apply changes."
             description="Message indicating rename device success"

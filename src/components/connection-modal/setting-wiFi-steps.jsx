@@ -100,7 +100,7 @@ const SettingWiFiSteps = props => {
                 />
               </Box>
               <Box className={styles.selectBox}>
-                {(
+                {/* {(
                   <select className={styles.networkSelect}
                     onChange={props.onWifiSSIDChanged}
                     onClick={(e) => {
@@ -141,7 +141,6 @@ const SettingWiFiSteps = props => {
                       })
                     ) : props.networksList && props.networksList.length === 0 ? (
                       <option value="" disabled>
-                        {/* 未搜索到WiFi，请重试 */}
                         {intl.formatMessage({
                           id: "gui.controls.set-wifi-scanning-error",
                           defaultMessage: "No Wi-Fi found. Please try again."
@@ -150,7 +149,15 @@ const SettingWiFiSteps = props => {
                       </option>
                     ) : null}
                   </select>
-                )}
+                )} */}
+                <input className={styles.deviceNameInput}
+                  type="text"
+                  placeholder={props.intl.formatMessage({
+                    defaultMessage: "Please enter ssid",
+                    id: "gui.connection.sta-new-device-name"
+                  })}
+                  onChange={props.onWifiSSIDChanged}
+                />
                 <Box className={styles.setTips}>
                   {props.staSsidState && <span>*</span>}
                 </Box>

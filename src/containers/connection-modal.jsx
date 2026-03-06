@@ -393,12 +393,21 @@ class ConnectionModal extends React.Component {
     }
 
     handleSettingWifiConfirm() {
-        let setWifiData = { "staSsid": this.state.ssid, "staPassword": this.state.password };
+        let setWifiData = { "staSsid": this.state.ssid, "staPassword": this.state.password, "command": "restart-sta" };
         console.log("setWifiData", setWifiData);
         this.props.vm.settingDeviceWiFi(this.props.extensionId, setWifiData);
-        let restart = { "command": "restart-sta" };
-        this.props.vm.settingDeviceWiFi(this.props.extensionId, restart);
-        this.setState({ staIp: null, setWifiError: null, staLoading: true });
+        this.setState({
+            phase: PHASES.settingWiFiSuccess,
+            deviceName: this.state.newDeviceName != "" ? this.state.newDeviceName : this.state.deviceName,
+            staIp: null,
+            setWifiError: null,
+            staLoading: true
+        });
+        analytics.event({
+            category: 'extensions',
+            action: 'confirmSettingWifi',
+            label: this.props.extensionId
+        });
         let setWifiState;
         this.intervalId = setInterval(() => {
             setWifiState = this.props.vm.getWebSocketData(this.props.extensionId);
@@ -413,16 +422,8 @@ class ConnectionModal extends React.Component {
                     clearInterval(this.intervalId);
                 }
             }
-            this.setState({
-                phase: PHASES.settingWiFiSuccess,
-                deviceName: this.state.newDeviceName != "" ? this.state.newDeviceName : this.state.deviceName
-            });
-            analytics.event({
-                category: 'extensions',
-                action: 'confirmSettingWifi',
-                label: this.props.extensionId
-            });
         }, 1000);
+
         console.log("getDevicesWifiData：", this.props.vm.getDevicesWifiData(this.props.extensionId));
     }
     handleRenameConfirm() {
@@ -762,10 +763,10 @@ class ConnectionModal extends React.Component {
         this.scanWifiIntervalId = setInterval(() => {
             networks = this.props.vm.getWebSocketData(this.props.extensionId);
             console.log("webSocketData", networks);
-            if (networks && networks._networks.length > 0) {
+            if (networks && networks._networks && networks._networks.length > 0) {
                 this.setState({ networksList: networks._networks, setWifiIsScanning: false });
                 clearInterval(this.scanWifiIntervalId);
-            } else if (networks && networks._networks.length == 0) {
+            } else if (networks && networks._networks && networks._networks.length == 0) {
                 console.log("没有扫描到wifi");
                 this.setState({ networksList: [], setWifiIsScanning: false });
                 clearInterval(this.scanWifiIntervalId);
