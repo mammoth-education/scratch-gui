@@ -129,6 +129,7 @@ class ConnectionModal extends React.Component {
             setWifiError: null,
             staLoading: true,
             setAPState: false,
+            isSTAMode: false,  // 是否是STA模式
         };
     }
     componentDidMount() {
@@ -328,6 +329,12 @@ class ConnectionModal extends React.Component {
         });
     }
     handleSetButton() {
+        const allWebSocketData = this.props.vm.getWebSocketData(this.props.extensionId);
+        if (allWebSocketData && allWebSocketData._isConnected && allWebSocketData._info.ip !== "192.168.4.1") {
+            this.setState({ isSTAMode: true });
+        } else {
+            this.setState({ isSTAMode: false });
+        };
         this.setState({
             phase: PHASES.settingWiFi,
         });
@@ -1052,6 +1059,7 @@ class ConnectionModal extends React.Component {
                         staIp={this.state.staIp}
                         staLoading={this.state.staLoading}
                         setAPState={this.state.setAPState}
+                        isSTAMode={this.state.isSTAMode}
                         onScanWifi={this.handleScanWifi}
                         onOptionClick={this.handleOptionClick}
                         onSSIDInputBlur={this.handleSSIDInputBlur}

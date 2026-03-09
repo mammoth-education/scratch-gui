@@ -2,6 +2,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Box from '../box/box.jsx';
+import helpIcon from './icons/help.svg';
 import styles from './connection-modal.css';
 import classNames from 'classnames';
 const SettingWiFiSteps = props => {
@@ -99,6 +100,23 @@ const SettingWiFiSteps = props => {
                   id="gui.connection.set-device-WIFI"
                 />
               </Box>
+              {
+                props.isSTAMode &&
+                <Box className={styles.staErrorTips}>
+                  {/* 请切换至AP模式下设置。 */}
+                  <FormattedMessage
+                    defaultMessage="Please switch to AP mode settings."
+                    description="Please switch to AP mode settings."
+                    id="gui.connection.set-staMode-error"
+                  />
+                  <Box className={styles.staErrorTipsIconBox} onClick={props.onHelp}>
+                    <img
+                      className={styles.staErrorTipsIcon}
+                      src={helpIcon}
+                    />
+                  </Box>
+                </Box>
+              }
               <Box className={styles.selectBox}>
                 {/* {(
                   <select className={styles.networkSelect}
@@ -157,6 +175,7 @@ const SettingWiFiSteps = props => {
                     id: "gui.connection.sta-new-device-name"
                   })}
                   onChange={props.onWifiSSIDChanged}
+                  disabled={props.isSTAMode}
                 />
                 <Box className={styles.setTips}>
                   {props.staSsidState && <span>*</span>}
@@ -173,6 +192,7 @@ const SettingWiFiSteps = props => {
                   // value={props.deviceName}
                   // maxlength="10"
                   onChange={props.onWifiPasswordChanged}
+                  disabled={props.isSTAMode}
                 />
                 <Box className={styles.setTips}>
                   {props.staPasswordState && <span>*</span>}
