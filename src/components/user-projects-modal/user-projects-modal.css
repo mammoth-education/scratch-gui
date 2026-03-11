@@ -2,28 +2,30 @@
 @import "../../css/units.css";
 
 .modal-content {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    padding: 1rem;
-    height: calc(100% - $library-header-height);
-    overflow-y: auto;
-    align-content: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 1rem;
+  height: calc(100% - $library-header-height);
+  overflow-y: auto;
+  align-content: flex-start;
 }
+
 .item {
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 0.8rem;
-    border: 1px solid $ui-black-transparent;
-    border-radius: 0.5rem;
-    background-color: $ui-white;
-    cursor: pointer;
-    /* max-width: 19rem; */
-    width: 19rem;
-    height: 4rem;
-    margin: 0 3% 0.5rem 0;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid $ui-black-transparent;
+  border-radius: 0.5rem;
+  background-color: $ui-white;
+  cursor: pointer;
+  /* max-width: 19rem; */
+  width: 19rem;
+  height: 4rem;
+  margin: 0 3% 0.5rem 0;
 }
-.item-action{
+
+.item-action {
   margin-left: 1rem;
   display: flex;
   align-content: center;
@@ -43,24 +45,28 @@
   margin-left: 0.5rem;
   height: 2.5rem;
 }
+
 .item-action button.delete {
   background: $red-primary;
   border: $red-tertiary;
 }
+
 .item-name {
   font-weight: 600;
-  max-width: 8rem;
+  max-width: 7rem;
   font-size: 1rem;
   margin: 0 0 0.5rem 0;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
 }
+
 .item-time {
   font-size: 0.85rem;
   margin: 0;
 }
-.item-describe{
+
+.item-describe {
   /* margin-left: 1rem; */
   width: 100%;
   display: flex;
@@ -69,6 +75,7 @@
   justify-content: space-between;
 
 }
+
 /* Alerts */
 
 .alerts-container {
