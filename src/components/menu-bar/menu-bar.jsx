@@ -556,8 +556,8 @@ class MenuBar extends React.Component {
                         defaultMessage="version"
                         description="Used to display the version number"
                         id="gui.about.version"
-                    />1.1.2
-                    <span>2026-04-02</span>
+                    />1.1.3
+                    <span>2026-04-08</span>
                 </div>
                 {/* {this.state.updateShow ? <div className={styles.checkBox} >{this.state.loading ? loading : (this.state.updateTips ? latestVersion : updateTips)}</div> : null} */}
                 <div><span className={styles.copyright}>2026@SunFounder</span></div>
