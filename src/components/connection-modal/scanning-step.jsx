@@ -57,14 +57,17 @@ const ScanningStep = props => (
             )}
         </Box>
         <Box className={styles.bottomArea}>
-            <Box className={classNames(styles.bottomAreaItem, styles.instructions)}>
-                <FormattedMessage
-                    defaultMessage="Currently connected WiFi:"
-                    description="Prompt for choosing a device to connect to"
-                    id="gui.connection.curren-WIFI"
-                />
-                <span>{props.currentWifiName}</span>
-            </Box>
+            {
+                props.extension.internetConnectionRequired && window.cordova && window.cordova.platformId != "ios" &&
+                <Box className={classNames(styles.bottomAreaItem, styles.instructions)}>
+                    <FormattedMessage
+                        defaultMessage="Currently connected WiFi:"
+                        description="Prompt for choosing a device to connect to"
+                        id="gui.connection.curren-WIFI"
+                    />
+                    <span>{props.currentWifiName}</span>
+                </Box>
+            }
             <Box className={classNames(styles.bottomAreaItem, styles.instructions)}>
                 <FormattedMessage
                     defaultMessage="Select your device in the list above."

@@ -78,6 +78,7 @@ class ScanningStep extends React.Component {
                 onRefresh={this.handleRefresh}
                 isMobile={this.props.isMobile}
                 currentWifiName={this.props.currentWifiName}
+                extension={this.props.extension}
             />
         );
     }

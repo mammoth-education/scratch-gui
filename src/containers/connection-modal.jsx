@@ -147,10 +147,10 @@ class ConnectionModal extends React.Component {
             }, () => { });
             this.setState({
                 latestFirmwareVersion: this.props.vm.getLatestFirmwareVersion(this.props.extensionId),
-            });
+            });                                                
 
         }
-        if (this.props.isMobile && window.cordova) {
+        if (this.state.extension.bluetoothRequired && this.props.isMobile && window.cordova) {
             if (device.platform === "Android" && parseInt(device.version) <= 11) {
                 cordova.plugins.diagnostic.isLocationEnabled((enabled) => {
                     if (!enabled) {
