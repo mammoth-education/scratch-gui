@@ -55,7 +55,7 @@ const getStageDimensions = (stageSize, isFullScreen, isMobile, isPreview) => {
         scale: 0
     };
     let isSmallDevice = false;
-    if (window.screen.width < layout.fullSizeMinWidth || window.innerWidth < layout.fullSizeMinWidth) {
+    if (window.innerWidth < layout.fullSizeMinWidth) {
         isSmallDevice = true;
     }
     if (isFullScreen) {

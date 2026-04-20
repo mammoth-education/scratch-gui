@@ -153,7 +153,7 @@ const GUIComponent = props => {
     }
 
     let isSmallDevice = false;
-    if (window.screen.width < layout.fullSizeMinWidth || window.innerWidth < layout.fullSizeMinWidth) {
+    if ( window.innerWidth< layout.fullSizeMinWidth) {
         isSmallDevice = true;
     }
 
