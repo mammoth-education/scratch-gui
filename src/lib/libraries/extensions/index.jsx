@@ -206,46 +206,46 @@ export default [
         helpLink: 'https://galaxy-rvr.rtfd.io', // TODO
         helpLinkImage: galaxyRVRHelpLink,
     },
-    {
-        name: (
-            <FormattedMessage
-                defaultMessage="卡卡"
-                description="长毛象 卡卡 extension"
-                id="gui.extension.kaka.name"
-            />
-        ),
-        extensionId: 'kaka',
-        iconURL: kakaIconURL,
-        insetIconURL: kakaInsetIconURL,
-        description: (
-            <FormattedMessage
-                defaultMessage="积木套件"
-                description="Description for the 'Music' extension"
-                id="gui.extension.kaka.description"
-            />
-        ),
-        featured: true,
-        disabled: false,
-        bluetoothRequired: true,
-        launchPeripheralConnectionFlow: true,
-        // setWifiButton: true,
-        deviceNameEditable: true,
-        firmwareFlashable: true,
-        useAutoScan: platform === "browser" ? true : false,
-        connectionIconURL: kakaConnectionIconURL,
-        connectionSmallIconURL: kakaConnectionSmallIconURL,
-        connectingMessage: (
-            <FormattedMessage
-                defaultMessage="Connecting"
-                description="Message to help people connect to their Kaka."
-                id="gui.extension.kaka.connectingMessage"
-            />
-        ),
-        // 帮助链接
-        // helpLink: 'https://kaka-kit.readthedocs.io/en/latest/quickstart.html#' // TODO  
-        helpLink: 'https://kaka-kit.rtfd.io', // TODO
-        helpLinkImage: kakaHelpLink,
-    },
+    // {
+    //     name: (
+    //         <FormattedMessage
+    //             defaultMessage="卡卡"
+    //             description="长毛象 卡卡 extension"
+    //             id="gui.extension.kaka.name"
+    //         />
+    //     ),
+    //     extensionId: 'kaka',
+    //     iconURL: kakaIconURL,
+    //     insetIconURL: kakaInsetIconURL,
+    //     description: (
+    //         <FormattedMessage
+    //             defaultMessage="积木套件"
+    //             description="Description for the 'Music' extension"
+    //             id="gui.extension.kaka.description"
+    //         />
+    //     ),
+    //     featured: true,
+    //     disabled: false,
+    //     bluetoothRequired: true,
+    //     launchPeripheralConnectionFlow: true,
+    //     // setWifiButton: true,
+    //     deviceNameEditable: true,
+    //     firmwareFlashable: true,
+    //     useAutoScan: platform === "browser" ? true : false,
+    //     connectionIconURL: kakaConnectionIconURL,
+    //     connectionSmallIconURL: kakaConnectionSmallIconURL,
+    //     connectingMessage: (
+    //         <FormattedMessage
+    //             defaultMessage="Connecting"
+    //             description="Message to help people connect to their Kaka."
+    //             id="gui.extension.kaka.connectingMessage"
+    //         />
+    //     ),
+    //     // 帮助链接
+    //     // helpLink: 'https://kaka-kit.readthedocs.io/en/latest/quickstart.html#' // TODO  
+    //     helpLink: 'https://kaka-kit.rtfd.io', // TODO
+    //     helpLinkImage: kakaHelpLink,
+    // },
     {
         name: (
             <FormattedMessage

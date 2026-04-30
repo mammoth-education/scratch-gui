@@ -3,7 +3,7 @@ body,
 .app {
     /* probably unecessary, transitional until layout is refactored */
     width: 100%; 
-    height: 100dvh;
+    height: 100vh;
     margin: 0;
     -webkit-user-select: none;
     /* Setting min height/width makes the UI scroll below those sizes */
